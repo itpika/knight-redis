@@ -36,7 +36,7 @@ export default {
     line-height: 60px;
   }
   .el-aside {
-    background-color: #414952;
+    background-color: #253b54;
     color: #c9ced4;
     text-align: center;
     line-height: 200px;

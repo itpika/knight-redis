@@ -1,7 +1,7 @@
 <template>
   <div class="box" v-on:click="click">
-    <div>
-      {{val}}
+    <div v-bind:class="{active: box.isActive}" :id="box.id">
+      {{box.name}}
     </div>
   </div>
 </template>
@@ -10,15 +10,18 @@
 export default {
   name: 'SelectBox',
   props: {
-    val: String,
-    color: String
+    box: Object
   },
   data: () => {
     return {
+      isActive: false
     }
   },
   methods: {
-    click: function () {
+    click: function (event) {
+      // this.$data.isActive = !this.$props.box.isActive
+      this.$props.box.isActive = !this.$props.box.isActive
+      this.$emit('active', this.$props.box.id)
     }
   }
 }
@@ -28,9 +31,12 @@ export default {
   .box {
     height: 50px;
     line-height: 50px;
-    cursor: default;
     div:hover {
-      background-color: #657180;
+      background-color: #4a5868;
+      cursor: pointer;
     }
+  }
+  .active {
+    background-color: #102846 !important;
   }
 </style>
