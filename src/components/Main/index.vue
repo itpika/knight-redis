@@ -2,7 +2,8 @@
 
 <template>
   <div :class="[{main: isMain}, mainClass]">
-    Main---
+    <!-- <router-link to="/about">About</router-link> -->
+    <router-view/>
   </div>
 </template>
 

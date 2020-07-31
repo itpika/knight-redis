@@ -1,12 +1,14 @@
 <template>
   <div id="app">
-      <!-- <router-link to="/about">About</router-link> -->
-    <router-view/>
+    <Home></Home>
   </div>
 </template>
 <script>
+import Home from '@/views/Home.vue'
 export default {
-// import Main from '@/components/Main/index.vue'
+  components: {
+    Home
+  }
 }
 </script>
 
