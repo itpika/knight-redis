@@ -3,7 +3,7 @@
   <el-container>
     <el-header><Header/></el-header>
     <el-container>
-      <el-aside width="200px"><Aside></Aside></el-aside>
+      <el-aside width="250px"><Aside></Aside></el-aside>
       <el-main><Main></Main></el-main>
     </el-container>
   </el-container>
@@ -32,14 +32,15 @@ export default {
     }
   }
   .el-header, .el-footer {
-    background-color: #d5dfec;
-    color: #333;
+    background-color: #253b54;
+    color: #c9ced4;
     text-align: center;
     line-height: 60px;
   }
   .el-aside {
     background-color: #253b54;
     color: #c9ced4;
+    border-top: solid 1px rgb(33, 44, 60);
     text-align: center;
     line-height: 200px;
   }

@@ -2,6 +2,7 @@
 
 <template>
   <div class="Aside">
+    <SelectBox :box="host"></SelectBox>
     <div v-for="(item, i)  of openSelect" v-bind:key="i">
       <SelectBox :box="item" v-on:active="active"></SelectBox>
     </div>
@@ -17,25 +18,29 @@ export default {
   },
   data: () => {
     return {
+      host: {
+        name: 'Host',
+        icon: 'el-icon-s-platform'
+      },
       openSelect: [{
         id: '1',
         name: '10.10.1.12',
+        icon: 'el-icon-s-platform',
         isActive: false
       }, {
         id: '2',
         name: '10.10.1.13',
+        icon: 'el-icon-s-platform',
         isActive: false
       }, {
         id: '3',
         name: '10.10.1.13',
+        icon: 'el-icon-s-platform',
         isActive: false
       }, {
         id: '4',
         name: '10.10.1.13',
-        isActive: false
-      }, {
-        id: '5',
-        name: '10.10.1.13',
+        icon: 'el-icon-s-platform',
         isActive: false
       }]
     }
