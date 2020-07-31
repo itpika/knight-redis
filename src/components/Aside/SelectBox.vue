@@ -1,3 +1,5 @@
+<!-- 左侧项组件-->
+
 <template>
   <div class="box" v-on:click="click">
     <div v-bind:class="{active: box.isActive}" :id="box.id">
@@ -14,12 +16,10 @@ export default {
   },
   data: () => {
     return {
-      isActive: false
     }
   },
   methods: {
     click: function (event) {
-      // this.$data.isActive = !this.$props.box.isActive
       this.$props.box.isActive = !this.$props.box.isActive
       this.$emit('active', this.$props.box.id)
     }

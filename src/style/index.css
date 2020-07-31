@@ -2,3 +2,7 @@
 html, body {
     height: 100%;
 }
+
+.main_bgd_color {
+    background-color: rgb(62, 161, 211);
+}

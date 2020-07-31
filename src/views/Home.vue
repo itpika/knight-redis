@@ -4,7 +4,7 @@
     <el-header><Header/></el-header>
     <el-container>
       <el-aside width="200px"><Aside></Aside></el-aside>
-      <el-main>Main</el-main>
+      <el-main><Main></Main></el-main>
     </el-container>
   </el-container>
   </div>
@@ -13,12 +13,14 @@
 <script>
 import Header from '@/components/Header.vue'
 import Aside from '@/components/Aside/index.vue'
+import Main from '@/components/Main/index.vue'
 
 export default {
   name: 'Home',
   components: {
     Header,
-    Aside
+    Aside,
+    Main
   }
 }
 </script>
@@ -45,7 +47,7 @@ export default {
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
-    line-height: 160px;
+    height: 100%;
   }
   body > .el-container {
     margin-bottom: 40px;

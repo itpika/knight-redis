@@ -1,3 +1,5 @@
+<!-- 左侧边栏组件-->
+
 <template>
   <div class="Aside">
     <div v-for="(item, i)  of openSelect" v-bind:key="i">
@@ -46,7 +48,6 @@ export default {
         } else {
           this.$data.openSelect[i].isActive = false
         }
-        console.log(this.$data.openSelect[i].isActive)
       }
     }
   }
