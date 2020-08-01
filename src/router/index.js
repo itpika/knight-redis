@@ -11,12 +11,12 @@ const routes = [
     component: Main
   },
   {
-    path: '/about',
-    name: 'About',
+    path: '/host',
+    name: 'host',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/host/index.vue')
   }
 ]
 
@@ -24,4 +24,8 @@ const router = new VueRouter({
   routes
 })
 
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 export default router

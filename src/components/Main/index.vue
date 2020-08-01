@@ -27,5 +27,6 @@ export default {
 <style scoped lang="less">
 .main {
   height: 100%;
+  background: #fff;
 }
 </style>

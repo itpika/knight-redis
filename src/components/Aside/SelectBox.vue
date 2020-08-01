@@ -2,10 +2,15 @@
 
 <template>
   <div :class="[selectBox, {active: box.isActive}]" v-on:click="click" :id="box.id">
-    <span class="icon">
-      <i :class="box.icon"/>
-    </span>
-    <span class="text">{{box.name}}</span>
+    <div class="left">
+      <div :class="{iconActive: box.isActive}">
+        <i :class="box.icon"/>
+      </div>
+      {{box.name}}
+    </div>
+    <div v-if="box.close" class="closeIcon">
+      <i class="el-icon-close"/>
+    </div>
   </div>
 </template>
 
@@ -24,29 +29,70 @@ export default {
     click: function (event) {
       this.$props.box.isActive = !this.$props.box.isActive
       this.$emit('active', this.$props.box.id)
+      this.$router.push('/host')
     }
   }
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less" scoped>
   .selectBox:hover {
-    background-color: #4a5868;
+    background-color: #416080;
     cursor: pointer;
+    color: #fff;
+    .left > div {
+      border-color: #fff;
+    }
   }
   .selectBox {
-    height: 50px;
+    font-size: 14px;
+    height: 40px;
+    padding: 0 10px;
     display: flex;
-    justify-content: flex-start;
     align-items: center;
-    .icon {
-      padding: 0 10px;
+    justify-content: space-between;
+    .left {
+      .iconActive {
+        border: solid 1px #fff;
+      }
+      height: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      div {
+        height: 25px;
+        width: 25px;
+        border-radius: 6px;
+        border: solid 1px #a9a9a9;
+        margin: 0 10px 0 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      > i{
+        font-size: 14px;
+        height: 14px;
+      }
     }
-    // .text {
-    //   flex-grow: 2;
-    // }
+    .closeIcon:hover {
+      background-color: #334460;
+    }
+    .closeIcon {
+      height: 25px;
+      width: 25px;
+      border-radius: 6px;
+      > i {
+        font-size: 14px;
+        height: 14px;
+      }
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
   .active {
-    background-color: #102846 !important;
+    // background-color: #102846 !important;
+    background-color: #416080;
+    color: #fff;
   }
 </style>
