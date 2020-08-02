@@ -91,7 +91,6 @@ export default {
     }
   }
   .active {
-    // background-color: #102846 !important;
     background-color: #416080;
     color: #fff;
   }

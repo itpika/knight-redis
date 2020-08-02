@@ -3,7 +3,7 @@
   <el-container>
     <el-header><Header/></el-header>
     <el-container>
-      <el-aside width="240px"><Aside></Aside></el-aside>
+      <el-aside width="240px" class="fontColor"><Aside></Aside></el-aside>
       <el-main><Main></Main></el-main>
     </el-container>
   </el-container>
@@ -40,7 +40,6 @@ export default {
   }
   .el-aside {
     background-color: #1c3046;
-    color: #a9a9a9;
     text-align: center;
   }
   .el-main {
