@@ -6,9 +6,9 @@
       <div :class="{iconActive: box.isActive}">
         <i :class="box.icon"/>
       </div>
-      {{box.name}}
+      {{box.label}}
     </div>
-    <div v-if="box.close" class="closeIcon" @click="this.$emit('closeHost')">
+    <div v-if="box.close" class="closeIcon" @click="closeHost(box.time)">
       <i class="el-icon-close"/>
     </div>
   </div>
@@ -31,7 +31,8 @@ export default {
       this.$emit('active', this.$props.box.id)
       this.$router.push(this.box.router)
     },
-    closeBox() {
+    closeHost(time) {
+      this.$store.commit('host/closeHost', time)
     }
   }
 }

@@ -3,43 +3,39 @@
 <template>
   <div class="Aside">
     <SelectBox :box="host" v-on:active="active"></SelectBox>
-    <SelectBox v-for="(item, i)  of openSelect" v-bind:key="i" :box="item" v-on:active="active"></SelectBox>
+    <SelectBox v-for="(item, i)  of hosts" v-bind:key="i" :box="item" v-on:active="active"></SelectBox>
   </div>
 </template>
 
 <script>
 import SelectBox from './SelectBox'
+import { mapState } from 'vuex'
 export default {
   name: 'Aside',
   components: {
     SelectBox
   },
+  computed: mapState({
+    hosts: state => state.host.openHost
+  }),
   data: () => {
     return {
       host: {
         id: '0',
-        name: 'Host',
+        label: 'Host',
         icon: 'el-icon-s-platform',
         isActive: false,
         router: '/host'
-      },
-      openSelect: [{
-        id: '1',
-        name: '10.10.1.12',
-        icon: 'el-icon-s-platform',
-        isActive: false,
-        close: true,
-        router: '/hostView'
-      }]
+      }
     }
   },
   methods: {
     active: function (id) {
-      for (let i = 0; i < this.$data.openSelect.length; i++) {
-        if (this.$data.openSelect[i].id === id) {
-          this.$data.openSelect[i].isActive = true
+      for (let i = 0; i < this.hosts.length; i++) {
+        if (this.hosts[i].id === id) {
+          this.hosts[i].isActive = true
         } else {
-          this.$data.openSelect[i].isActive = false
+          this.hosts[i].isActive = false
         }
       }
     }

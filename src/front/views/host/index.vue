@@ -12,7 +12,7 @@
           <span>{{item.label}}</span>
         </div>
         <div class="lineRight">
-          <div class="lineRightOper rotating90 connect">
+          <div class="lineRightOper rotating90 connect" @click="connectionHost(item.id)">
             <i class="el-icon-sort"></i>
           </div>
           <div class="lineRightOper edit" @click="editHost(item.id)">
@@ -65,8 +65,7 @@
 </template>
 
 <script>
-// import Header from '@/front/components/Header.vue'
-
+import { mapState } from 'vuex'
 export default {
   name: 'host',
   data () {
@@ -76,10 +75,6 @@ export default {
       fromOperation: 0,
       visible: false,
       host: {},
-      hosts: [
-        { id: '1', label: '外网', address: '127.0.0.1', port: 1, passwd: '' },
-        { id: '2', label: '内网', address: '127.0.0.2', port: 2, passwd: '' }
-      ],
       rules: {
         address: [
           { required: true, message: 'Please enter the address', trigger: 'blur' }
@@ -91,6 +86,9 @@ export default {
       }
     }
   },
+  computed: mapState({
+    hosts: state => state.host.hosts
+  }),
   components: {
   },
   methods: {
@@ -146,6 +144,23 @@ export default {
         }
       }
       this.hosts = arr
+    },
+    // 连接host,打开一个页面
+    connectionHost(id) {
+      for (const h of this.hosts) {
+        if (h.id === id) {
+          this.$store.commit('host/connectionHost', {
+            id: h.id,
+            label: h.label,
+            time: Date.now(),
+            icon: 'el-icon-s-platform',
+            isActive: false,
+            close: true,
+            router: '/hostView'
+          })
+          break
+        }
+      }
     }
   }
 }

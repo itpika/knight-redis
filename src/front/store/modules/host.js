@@ -1,20 +1,28 @@
 export default {
   namespaced: true,
   state: {
-    hosts: []
+    hosts: [{
+      id: '1',
+      label: '外网',
+      address: '127.0.0.1',
+      port: 1,
+      passwd: ''
+    }],
+    openHost: []
   },
   mutations: {
-    openHost (state, host) {
-      state.hosts.push(host)
+    connectionHost (state, host) {
+      state.openHost.push(host)
     },
-    closeHost (state, id) {
+    closeHost (state, time) {
+      console.log(time)
       const arr = []
-      for (const h of state.hosts) {
-        if (h.id !== id) {
-          arr.push(arr)
+      for (const h of state.openHost) {
+        if (h.time !== time) {
+          arr.push(h)
         }
       }
-      state.hosts = arr
+      state.openHost = arr
     }
   },
   actions: {
