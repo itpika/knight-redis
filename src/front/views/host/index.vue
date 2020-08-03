@@ -65,7 +65,7 @@
 </template>
 
 <script>
-// import Header from '@/components/Header.vue'
+// import Header from '@/front/components/Header.vue'
 
 export default {
   name: 'host',

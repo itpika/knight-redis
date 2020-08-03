@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import Header from '@/components/Header.vue'
-import Aside from '@/components/Aside/index.vue'
-import Main from '@/components/Main/index.vue'
+import Header from '@/front/components/Header.vue'
+import Aside from '@/front/components/Aside/index.vue'
+import Main from '@/front/components/Main/index.vue'
 
 export default {
   name: 'Home',
