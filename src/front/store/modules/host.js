@@ -15,7 +15,6 @@ export default {
       state.openHost.push(host)
     },
     closeHost (state, time) {
-      console.log(time)
       const arr = []
       for (const h of state.openHost) {
         if (h.time !== time) {
