@@ -5,6 +5,26 @@
       @click="drawer = true" size="mini" round>NEW HOST</el-button>
       <el-button type="primary" icon="el-icon-plus" size="mini" round>NEW GROUP</el-button>
     </div>
+    <div class="body">
+      <div class="line" v-for="(item, index) of hosts"  :key="index">
+        <div class="lineLeft">
+          <div class="lineLeftIcon bgdColor"><i class="el-icon-s-platform"></i></div>
+          <span>{{item.label}}</span>
+        </div>
+        <div class="lineRight">
+          <div class="lineRightOper rotating90 connect">
+            <i class="el-icon-sort"></i>
+          </div>
+          <div class="lineRightOper edit" @click="editHost(item.id)">
+            <i class="el-icon-edit"></i>
+          </div>
+          <div class="lineRightOper delete" @click="deleteHost(item.id)">
+            <i class="el-icon-delete"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 右侧From表单弹出抽屉 -->
     <el-drawer
       custom-class="pageColor"
       :visible.sync="drawer"
@@ -15,25 +35,28 @@
       <div class="addHostHead">
         <div>
           <div class="closeLeft fontColor">
-            <i class="el-icon-back" @click="drawer = false"></i>
+            <i class="el-icon-back" @click="leftBack"></i>
           </div>
           <div class="addTitle">addHost</div>
         </div>
         <div>
-          <el-button @click="submitForm('host')" type="success" size="mini" round>SAVE</el-button>
+          <el-button @click="submitForm" type="success" size="mini" round>SAVE</el-button>
         </div>
       </div>
       <!-- 右侧抽屉主体 -->
       <div class="addHostBody">
         <el-form ref="host" label-position="left" label-width="80px" :model="host" :rules="rules">
-          <el-form-item label="Lable" prop="name">
-            <el-input v-model="host.name" clearable></el-input>
+          <el-form-item label="Lable" prop="label">
+            <el-input v-model="host.label" clearable></el-input>
           </el-form-item>
           <el-form-item label="Address" prop="address" clearable>
             <el-input v-model="host.address" clearable></el-input>
           </el-form-item>
           <el-form-item label="Port" prop="port">
             <el-input v-model.number="host.port" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="Passwd" prop="passwd">
+            <el-input v-model="host.passwd" clearable></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -50,7 +73,13 @@ export default {
     return {
       drawer: false,
       saveType: 'info',
+      fromOperation: 0,
+      visible: false,
       host: {},
+      hosts: [
+        { id: '1', label: '外网', address: '127.0.0.1', port: 1, passwd: '' },
+        { id: '2', label: '内网', address: '127.0.0.2', port: 2, passwd: '' }
+      ],
       rules: {
         address: [
           { required: true, message: 'Please enter the address', trigger: 'blur' }
@@ -66,21 +95,57 @@ export default {
   },
   methods: {
     handleClose (done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done()
-        })
-        .catch(_ => {})
+      this.$refs.host.resetFields()
+      this.fromOperation = 0
+      this.host = {}
+      done()
     },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+    leftBack () {
+      this.$refs.host.resetFields()
+      this.fromOperation = 0
+      this.host = {}
+      this.drawer = false
+    },
+    submitForm() {
+      this.$refs.host.validate((valid) => {
         if (valid) {
-          console.log(this.$data.host)
+          if (this.fromOperation === 0) { // add
+            this.$data.hosts.push(Object.assign({ id: Date.now() + '' }, this.$data.host))
+          } else { // edit
+            for (let i = 0; i < this.hosts.length; i++) {
+              if (this.hosts[i].id === this.host.id) {
+                this.hosts[i] = Object.assign({}, this.host)
+                break
+              }
+            }
+          }
           this.$data.drawer = false
+          this.$refs.host.resetFields()
+          this.host = {}
         } else {
           return false
         }
       })
+      this.fromOperation = 0
+    },
+    editHost(id) {
+      this.fromOperation = 1
+      this.drawer = true
+      for (let i = 0; i < this.hosts.length; i++) {
+        if (this.hosts[i].id === id) {
+          this.host = Object.assign({}, this.hosts[i])
+          break
+        }
+      }
+    },
+    deleteHost(id) {
+      const arr = []
+      for (let i = 0; i < this.hosts.length; i++) {
+        if (this.hosts[i].id !== id) {
+          arr.push(this.hosts[i])
+        }
+      }
+      this.hosts = arr
     }
   }
 }
@@ -93,7 +158,62 @@ export default {
     align-items: center;
     justify-content: flex-start;
     height: 40px;
-    background-color: rgb(180, 200, 216);
+    background-color: rgb(208, 218, 226);
+  }
+  > .body {
+    padding: 40px 0;
+    .line {
+      padding: 0 40px;
+      height: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .lineLeft {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        .lineLeftIcon {
+          margin-right: 10px;
+          border-radius: 50%;
+          height: 40px;
+          width: 40px;
+          line-height: 40px;
+          font-size: 20px;
+          color: #fff;
+        }
+      }
+      .lineRight {
+        display: flex;
+        .lineRightOper {
+          margin-left: 10px;
+          border-radius: 50%;
+          height: 40px;
+          width: 40px;
+          line-height: 40px;
+          font-size: 18px;
+          background-color: rgb(208, 218, 226);
+        }
+        .lineRightOper {
+          cursor: pointer;
+        }
+        .connect:hover {
+          color: rgb(4, 209, 4);
+        }
+        .edit:hover {
+          color: #409EFF;
+        }
+        .delete:hover {
+          color: rgb(250, 76, 76);
+        }
+      }
+      .lineRightOper:hover {
+        background-color: #1c3046;
+      }
+    }
+    .line:hover {
+      background-color: rgb(94, 126, 189);
+      color: #fff;
+    }
   }
   .addHostHead {
     height: 60px;

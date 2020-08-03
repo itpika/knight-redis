@@ -5,3 +5,10 @@
 .pageColor {
     background-color: #dedfe6;
 }
+
+.bgdColor {
+    background-color: #1c3046;
+}
+.rotating90 {
+    transform: rotate(90deg);
+}

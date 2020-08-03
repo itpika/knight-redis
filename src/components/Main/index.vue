@@ -1,7 +1,7 @@
 <!-- 左侧边栏组件-->
 
 <template>
-  <div :class="[{main: isMain}, mainClass]">
+  <div :class="[{main: isMain}, mainClass ]">
     <!-- <router-link to="/about">About</router-link> -->
     <router-view/>
   </div>

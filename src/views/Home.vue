@@ -28,7 +28,7 @@ export default {
   .home {
     height: 100%;
     .el-container {
-    height: 100%;
+      height: 100%;
     }
   }
   .el-header, .el-footer {
@@ -45,11 +45,11 @@ export default {
   .el-main {
     background-color: #E9EEF3;
     color: #333;
-    text-align: center;
+    // text-align: center;
     height: 100%;
     padding: 0;
   }
-  body > .el-container {
-    margin-bottom: 40px;
-  }
+  // body > .el-container {
+  //   margin-bottom: 40px;
+  // }
 </style>
