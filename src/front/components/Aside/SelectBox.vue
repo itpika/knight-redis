@@ -8,7 +8,7 @@
       </div>
       {{box.name}}
     </div>
-    <div v-if="box.close" class="closeIcon">
+    <div v-if="box.close" class="closeIcon" @click="this.$emit('closeHost')">
       <i class="el-icon-close"/>
     </div>
   </div>
@@ -29,7 +29,9 @@ export default {
     click: function (event) {
       this.$props.box.isActive = !this.$props.box.isActive
       this.$emit('active', this.$props.box.id)
-      this.$router.push('/host')
+      this.$router.push(this.box.router)
+    },
+    closeBox() {
     }
   }
 }
