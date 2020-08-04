@@ -108,14 +108,9 @@ export default {
       this.$refs.host.validate((valid) => {
         if (valid) {
           if (this.fromOperation === 0) { // add
-            this.$data.hosts.push(Object.assign({ id: Date.now() + '' }, this.$data.host))
+            this.$store.commit('host/addHost', Object.assign({ id: Date.now() + '' }, this.$data.host))
           } else { // edit
-            for (let i = 0; i < this.hosts.length; i++) {
-              if (this.hosts[i].id === this.host.id) {
-                this.hosts[i] = Object.assign({}, this.host)
-                break
-              }
-            }
+            this.$store.commit('host/editHost', Object.assign({ id: Date.now() + '' }, Object.assign({}, this.host)))
           }
           this.$data.drawer = false
           this.$refs.host.resetFields()

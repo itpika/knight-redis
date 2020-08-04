@@ -1,7 +1,7 @@
 <!-- 左侧项组件-->
 
 <template>
-  <div :class="[selectBox, {active: box.isActive}]" v-on:click="click" :id="box.id">
+  <div :class="[selectBox, {active: box.isActive}]" @click="click" :id="box.id">
     <div class="left">
       <div :class="{iconActive: box.isActive}">
         <i :class="box.icon"/>
@@ -28,7 +28,7 @@ export default {
   methods: {
     click: function (event) {
       this.$props.box.isActive = !this.$props.box.isActive
-      this.$emit('active', this.$props.box.id)
+      this.$emit('active', this.$props.box.time)
       this.$router.push(this.box.router)
     },
     closeHost(time) {

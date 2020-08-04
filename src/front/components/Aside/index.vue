@@ -30,9 +30,9 @@ export default {
     }
   },
   methods: {
-    active: function (id) {
+    active: function (time) {
       for (let i = 0; i < this.hosts.length; i++) {
-        if (this.hosts[i].id === id) {
+        if (this.hosts[i].time === time) {
           this.hosts[i].isActive = true
         } else {
           this.hosts[i].isActive = false
