@@ -20,20 +20,25 @@
           </div>
           <div class="opertionsBox">
             <el-tooltip class="item" effect="light" content="NEW KEY" placement="top">
-              <i class="el-icon-plus greenColor add"></i>
+              <i class="el-icon-plus add"></i>
             </el-tooltip>
             <el-tooltip class="item" effect="light" content="REFRESH" placement="top">
-              <i class="el-icon-refresh refresh" style="color: #00fff3"></i>
+              <i class="el-icon-refresh refresh"></i>
             </el-tooltip>
             <el-tooltip class="item" effect="light" content="CLEAR ALL" placement="top">
-              <i class="el-icon-delete redColor delete"></i>
+              <i class="el-icon-delete delete"></i>
             </el-tooltip>
           </div>
         </div>
         <!-- 数据展示body -->
         <div class="dbBoxBody bgkColor">
           <ul>
-            <li v-for="(k, i) of keys" :key="i">{{ k }}</li>
+            <li v-for="(k, i) of keys" :key="i">
+              <span>{{ k }}</span>
+              <div>
+                <i class="el-icon-close"></i>
+              </div>
+            </li>
           </ul>
         </div>
       </div>
@@ -67,12 +72,16 @@ export default {
         { value: 14, label: 'DB14' },
         { value: 15, label: 'DB15' }
       ],
-      keys: [1, 2, 3, 4]
+      keys: ['pika', '1000', 20002, 20003, 'name', '1000', 20002, 20003, '1000', 20002, 20003, '1000', 20002, 20003, '1000', 20002, 20003, '1000', 20002, 20003, '1000', 20002, 20003, '1000', 20002, 20003]
     }
   },
   components: {
   },
   methods: {
+  },
+  // 改变中间内容块的背景颜色
+  beforeCreate: function() {
+    this.$store.commit('app/setMainClass', 'menu_bgd_color')
   }
 }
 </script>
@@ -93,14 +102,15 @@ export default {
     box-sizing: border-box;
     .dbBox {
       padding: 10px;
-      width: 20%;
+      width: 25%;
       height: 80%;
       border-radius: 6px;
       background-color: #1c3046;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
+      box-sizing: border-box;
       .dbBoxHeader {
+        height: 28px;
         width: 100%;
         display: flex;
         justify-content: space-between;
@@ -108,7 +118,8 @@ export default {
           margin-left: 10px;
           padding: 0 10px;
           width: 50%;
-          color: red;
+          // color: #a9a9a9;
+          color: #fff;
           box-sizing: border-box;
           display: flex;
           justify-content: space-between;
@@ -119,6 +130,7 @@ export default {
             transition: all 500ms;
             &:hover {
               cursor: pointer;
+              color: #02f32b;
               transform: rotate(90deg);
             }
           }
@@ -126,12 +138,14 @@ export default {
             transition: all 500ms ease-out;
             &:hover {
               cursor: pointer;
+              color: #00fff3;
               transform: rotate(180deg);
             }
           }
           .delete {
             transition: all 200ms ease-out;
             &:hover {
+              color: #fa4c4c;
               cursor: pointer;
               transform: rotate(45deg);
             }
@@ -148,14 +162,47 @@ export default {
         }
       }
       .dbBoxBody {
-        height: 100%;
+        // height: 100%;
+        flex: 1;
         margin-top: 10px;
         border-radius: 5px;
         box-sizing: border-box;
-        > ul > li {
-          padding:0;
+        overflow: scroll;
+        > ul {
+          box-sizing: border-box;
+          height: 100%;
+          padding: 10px 10px;
           margin:0;
-          list-style:none
+          list-style:none;
+          li {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            padding: 0 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+            border-radius: 5px;
+            // margin-bottom: 2px;
+            height: 25px;
+            > div {
+              height: 18px;
+              line-height: 18px;
+              width: 18px;
+              border-radius: 50%;
+              font-size: 10px;
+              &:hover {
+                background-color: #416080;
+                color: #02f32b;
+              }
+            }
+            &:hover {
+              background-color: #1c3046;
+              transition: all 500ms;
+              cursor: pointer;
+            }
+          }
         }
       }
     }

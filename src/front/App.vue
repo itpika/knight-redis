@@ -24,8 +24,5 @@ export default {
   color: #2c3e50;
   height: 100%;
 }
-.bgkColor {
-  background-color: #416080;
-}
 
 </style>
