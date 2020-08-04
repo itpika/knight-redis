@@ -1,5 +1,6 @@
 <template>
   <div class="hostView">
+    aa
   </div>
 </template>
 
@@ -20,5 +21,8 @@ export default {
 </script>
 <style scoped lang="less">
 .hostView {
+  padding: 20px;
+  height: 100%;
+  background-color: #416080;
 }
 </style>

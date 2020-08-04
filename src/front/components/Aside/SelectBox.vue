@@ -1,9 +1,9 @@
 <!-- 左侧项组件-->
 
 <template>
-  <div :class="[selectBox, {active: box.isActive}]" @click="click" :id="box.id">
+  <div :class="[selectBox, {active: box.isActive, activeMenu: box.activeMenu} ]" @click="click" :id="box.id">
     <div class="left">
-      <div :class="{iconActive: box.isActive}">
+      <div :class="{iconActive: box.isActive, iconActiveMenu: box.activeMenu}">
         <i :class="box.icon"/>
       </div>
       {{box.label}}
@@ -27,7 +27,10 @@ export default {
   },
   methods: {
     click: function (event) {
-      this.$props.box.isActive = !this.$props.box.isActive
+      if (this.$props.box.type !== 'menu') {
+        // 不是菜单项目才设置 isActive 属性
+        this.$props.box.isActive = !this.$props.box.isActive
+      }
       this.$emit('active', this.$props.box.time)
       this.$router.push(this.box.router)
     },
@@ -56,7 +59,10 @@ export default {
     justify-content: space-between;
     .left {
       .iconActive {
-        border: solid 1px #fff;
+        border: solid 1px #04d104 !important;
+      }
+      .iconActiveMenu {
+        border: solid 1px #fff !important;
       }
       height: 100%;
       display: flex;
@@ -95,6 +101,10 @@ export default {
   }
   .active {
     background-color: #416080;
-    color: #fff;
+    color: #04d104 !important;
+  }
+  .activeMenu {
+    background-color: #416080;
+    color: #fff !important;
   }
 </style>
