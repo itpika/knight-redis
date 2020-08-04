@@ -148,7 +148,7 @@ export default {
             id: h.id,
             label: h.label,
             time: Date.now(),
-            icon: 'el-icon-s-platform',
+            icon: 'el-icon-coin',
             isActive: false,
             close: true,
             router: '/hostView'
@@ -168,7 +168,7 @@ export default {
     align-items: center;
     justify-content: flex-start;
     height: 40px;
-    background-color: rgb(208, 218, 226);
+    background-color: #d0dae2;
   }
   > .body {
     padding: 40px 0;
@@ -201,19 +201,19 @@ export default {
           width: 40px;
           line-height: 40px;
           font-size: 18px;
-          background-color: rgb(208, 218, 226);
+          background-color: #d0dae2;
         }
         .lineRightOper {
           cursor: pointer;
         }
         .connect:hover {
-          color: rgb(4, 209, 4);
+          color: #04d104;
         }
         .edit:hover {
           color: #409EFF;
         }
         .delete:hover {
-          color: rgb(250, 76, 76);
+          color: #fa4c4c;
         }
       }
       .lineRightOper:hover {

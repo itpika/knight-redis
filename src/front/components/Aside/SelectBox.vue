@@ -42,15 +42,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .selectBox:hover {
-    background-color: #416080;
-    cursor: pointer;
-    color: #fff;
-    .left > div {
-      border-color: #fff;
-    }
-  }
   .selectBox {
+    &:hover {
+      background-color: #416080;
+      cursor: pointer;
+      color: #fff;
+      .left > div {
+        border-color: #fff;
+      }
+    }
     font-size: 14px;
     height: 40px;
     padding: 0 10px;
@@ -59,7 +59,7 @@ export default {
     justify-content: space-between;
     .left {
       .iconActive {
-        border: solid 1px #04d104 !important;
+        border: solid 1px #02f32b !important;
       }
       .iconActiveMenu {
         border: solid 1px #fff !important;
@@ -101,7 +101,7 @@ export default {
   }
   .active {
     background-color: #416080;
-    color: #04d104 !important;
+    color: #02f32b !important;
   }
   .activeMenu {
     background-color: #416080;
