@@ -25,7 +25,7 @@ export default {
         time: data.time,
         conf: data.conf
       }
-      const flg = Math.floor(Math.random() * 10)
+      const flg = Math.floor(Math.random() * 20)
       for (let index = 0; index < flg; index++) {
         host.dbData.push(Math.floor(Math.random() * 100))
       }

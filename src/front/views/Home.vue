@@ -1,7 +1,7 @@
 <template>
   <div class="home">
   <el-container>
-    <el-header><Header/></el-header>
+    <el-header height="10%"><Header/></el-header>
     <el-container>
       <el-aside width="240px" class="fontColor"><Aside></Aside></el-aside>
       <el-main :class="mainClass"><Main></Main></el-main>
@@ -31,7 +31,7 @@ export default {
 <style scoped lang="less">
   .home {
     height: 100%;
-    .el-container {
+    > .el-container {
       height: 100%;
     }
   }
@@ -40,7 +40,6 @@ export default {
     border-bottom: solid 1px #334460;
     color: #c9ced4;
     text-align: center;
-    line-height: 60px;
   }
   .el-aside {
     background-color: #1c3046;

@@ -96,14 +96,15 @@ export default {
 .hostView {
   padding: 20px;
   height: 100%;
+  box-sizing: border-box;
   background-color: #416080;
   .header {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    height: 40px;
-    margin-bottom: 20px;
-    // border-bottom: solid 1px red;
+    height: 10%;
+    padding-bottom: 20px;
+    box-sizing: border-box;
     .terminalBtn {
       /deep/ .el-button--info {
         border: 0;
@@ -117,7 +118,7 @@ export default {
     }
   }
   .body {
-    height: 100%;
+    height: 90%;
     box-sizing: border-box;
     .dbBox {
       padding: 10px;
