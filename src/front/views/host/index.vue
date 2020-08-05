@@ -142,20 +142,31 @@ export default {
     },
     // 连接host,打开一个页面
     connectionHost(id) {
+      const host = {
+        time: Date.now() + '',
+        icon: 'el-icon-coin',
+        isActive: false,
+        close: true,
+        router: 'hostView'
+      }
+      const conf = {}
       for (const h of this.hosts) {
         if (h.id === id) {
-          this.$store.commit('host/connectionHost', {
-            id: h.id,
-            label: h.label,
-            time: Date.now(),
-            icon: 'el-icon-coin',
-            isActive: false,
-            close: true,
-            router: '/hostView'
-          })
+          host.id = h.id
+          host.label = h.label
+          // 配置信息获取
+          conf.address = h.address
+          conf.port = h.port
+          conf.passwd = h.passwd
+          // 初始化左侧host栏目显示状态
+          this.$store.commit('host/connectionHost', host)
           break
         }
       }
+      // 初始化右侧hostView页状态数据
+      this.$store.commit('hostView/initHost', { time: host.time, conf })
+      // 跳转到hostView详情页
+      this.$router.push('/hostView')
     }
   }
 }

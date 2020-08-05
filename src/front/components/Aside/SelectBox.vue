@@ -8,7 +8,7 @@
       </div>
       {{box.label}}
     </div>
-    <div v-if="box.close" class="closeIcon" @click="closeHost(box.time)">
+    <div v-if="box.close" class="closeIcon" @click.stop="closeHost(box.time)">
       <i class="el-icon-close"/>
     </div>
   </div>
@@ -30,12 +30,21 @@ export default {
       if (this.$props.box.type !== 'menu') {
         // 不是菜单项目才设置 isActive 属性
         this.$props.box.isActive = !this.$props.box.isActive
+        // 加载当前host页的数据
+        this.$store.commit('hostView/restoreCurrentHost', this.box.time)
       }
+      // 更新激活项的显示状态
       this.$emit('active', this.$props.box.time)
-      this.$router.push(this.box.router)
+      // 跳转到当前host的详情页
+      this.$router.push({ name: this.box.router })
     },
     closeHost(time) {
+      // 删除左侧host栏目项
       this.$store.commit('host/closeHost', time)
+      // 删除右侧host栏目项数据
+      this.$store.commit('hostView/closeHost', time)
+      // 选出删除后呈现的下一host, 返回给父组件解决
+      this.$emit('removeHost')
     }
   }
 }

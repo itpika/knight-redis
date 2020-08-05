@@ -1,8 +1,7 @@
 <template>
   <div class="hostView">
     <div class="header">
-      <el-button type="primary" size="mini">主要按钮</el-button>
-      <el-button type="success" size="mini">成功按钮</el-button>
+      <div class="terminalBtn"><el-button type="info" size="small" round>Terminal</el-button></div>
     </div>
     <div class="body">
       <div class="dbBox">
@@ -33,11 +32,9 @@
         <!-- 数据展示body -->
         <div class="dbBoxBody bgkColor">
           <ul>
-            <li v-for="(k, i) of keys" :key="i">
+            <li v-for="(k, i) of dbData" :key="i">
               <span>{{ k }}</span>
-              <div>
-                <i class="el-icon-close"></i>
-              </div>
+              <i class="el-icon-close"></i>
             </li>
           </ul>
         </div>
@@ -47,13 +44,24 @@
 </template>
 
 <script>
-// import Header from '@/front/components/Header.vue'
-
+// import { mapState } from 'vuex'
 export default {
   name: 'hostView',
+  computed: {
+    selectDB: {
+      get () {
+        return this.$store.state.hostView.current.selectDB
+      },
+      set (val) {
+        this.$store.commit('hostView/setSelectDB', val)
+      }
+    },
+    dbData() {
+      return this.$store.state.hostView.current.dbData
+    }
+  },
   data () {
     return {
-      selectDB: '',
       dbs: [
         { value: 0, label: 'DB0' },
         { value: 1, label: 'DB1' },
@@ -71,8 +79,7 @@ export default {
         { value: 13, label: 'DB13' },
         { value: 14, label: 'DB14' },
         { value: 15, label: 'DB15' }
-      ],
-      keys: ['pika', '1000', 20002, 20003, 'name', '1000', 20002, 20003, '1000', 20002, 20003, '1000', 20002, 20003, '1000', 20002, 20003, '1000', 20002, 20003, '1000', 20002, 20003, '1000', 20002, 20003]
+      ]
     }
   },
   components: {
@@ -96,6 +103,18 @@ export default {
     justify-content: flex-start;
     height: 40px;
     margin-bottom: 20px;
+    // border-bottom: solid 1px red;
+    .terminalBtn {
+      /deep/ .el-button--info {
+        border: 0;
+        background-color: #1c3046;
+        transition: all 300ms;
+        &:hover {
+          color: #02f32b;
+          background-color: #26405c;
+        }
+      }
+    }
   }
   .body {
     height: 100%;
@@ -118,7 +137,6 @@ export default {
           margin-left: 10px;
           padding: 0 10px;
           width: 50%;
-          // color: #a9a9a9;
           color: #fff;
           box-sizing: border-box;
           display: flex;
@@ -168,6 +186,7 @@ export default {
         border-radius: 5px;
         box-sizing: border-box;
         overflow: scroll;
+        overflow-x: visible;
         > ul {
           box-sizing: border-box;
           height: 100%;
@@ -184,23 +203,20 @@ export default {
             box-sizing: border-box;
             font-size: 16px;
             border-radius: 5px;
-            // margin-bottom: 2px;
             height: 25px;
-            > div {
-              height: 18px;
-              line-height: 18px;
-              width: 18px;
-              border-radius: 50%;
-              font-size: 10px;
+            > i {
               &:hover {
-                background-color: #416080;
-                color: #02f32b;
+                color: #f30202;
               }
+              visibility: hidden;
             }
             &:hover {
               background-color: #1c3046;
               transition: all 500ms;
               cursor: pointer;
+              > i {
+                visibility: visible;
+              }
             }
           }
         }
