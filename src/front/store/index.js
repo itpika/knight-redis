@@ -19,3 +19,10 @@ export default new Vuex.Store({
     hostView
   }
 })
+
+/**
+ * host主机连接成功与否通知
+ */
+window.ipcRenderer.on('conection-notify', (event, data) => {
+  hostView.state.loaderState = (data === 'fail')
+})

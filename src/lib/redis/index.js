@@ -12,7 +12,7 @@ const redisOptions = {
   },
   // 尝试重连机制
   retryStrategy: function (times) {
-    console.log(times)
+    // console.log(times)
     const delay = Math.min(times * 50, 2000)
     return delay
   }
@@ -32,6 +32,7 @@ module.exports = {
     }
     pool[conf.time] = cli
     console.info('%s:%s@%s', conf.address, conf.port, conf.passwd)
+    return 1
   },
   disconnect: function(time) {
     if (!pool[time]) {

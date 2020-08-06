@@ -5,6 +5,7 @@
 </template>
 <script>
 import Home from '@/front/views/Home.vue'
+
 export default {
   components: {
     Home

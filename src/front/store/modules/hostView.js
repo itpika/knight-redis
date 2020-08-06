@@ -1,4 +1,4 @@
-import channel from '../../lib/channel.js'
+import send from '../../lib/channel/send.js'
 
 export default {
   namespaced: true,
@@ -8,7 +8,8 @@ export default {
       time: '',
       dbData: []
     },
-    all: []
+    all: [],
+    loaderState: false
   },
   mutations: {
     // 找出当前host的数据
@@ -33,8 +34,9 @@ export default {
       }
       state.current = host
       state.all.push(host)
+      state.loaderState = true
       // 通知主进程建立连接
-      // channel.initConnect(Object.assign({ time: data.time }, data.conf))
+      send.initConnect(Object.assign({ time: data.time }, data.conf))
     },
     closeHost(state, time) {
       const arr = []
@@ -45,7 +47,7 @@ export default {
       }
       state.all = arr
       // 通知主进程关闭连接
-      channel.closeConnect(time)
+      send.closeConnect(time)
     },
     setSelectDB(state, db) {
       state.current.selectDB = db

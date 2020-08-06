@@ -1,9 +1,9 @@
 <template>
   <div class="hostView bgkColor">
-    <div class="header">
+    <div :class="['header', {'hiddenClass': !loaderState}]">
       <div class="terminalBtn"><el-button type="info" size="small" round>Terminal</el-button></div>
     </div>
-    <div class="body">
+    <div :class="['body', {'hiddenClass': !loaderState}]">
       <div class="dbBox">
         <!-- 头部操作栏 -->
         <div class="dbBoxHeader">
@@ -41,12 +41,11 @@
       </div>
     </div>
     <!-- <div class="loader_1"></div> -->
-    <div class="loader_1">Loading...</div>
+    <div :class="['loader_1', {'hiddenClass': loaderState}]"></div>
   </div>
 </template>
 
 <script>
-// import { mapState } from 'vuex'
 export default {
   name: 'hostView',
   computed: {
@@ -60,6 +59,9 @@ export default {
     },
     dbData() {
       return this.$store.state.hostView.current.dbData
+    },
+    loaderState() {
+      return !this.$store.state.hostView.loaderState
     }
   },
   data () {
@@ -99,7 +101,13 @@ export default {
   padding: 20px;
   height: 100%;
   box-sizing: border-box;
+  position: relative;
   .loader_1 {
+    font-size: 8px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
   }
   .header {
     display: flex;
