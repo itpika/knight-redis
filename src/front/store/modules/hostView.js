@@ -34,7 +34,7 @@ export default {
       state.current = host
       state.all.push(host)
       // 通知主进程建立连接
-      channel.initConnect(Object.assign({ time: data.time }, data.conf))
+      // channel.initConnect(Object.assign({ time: data.time }, data.conf))
     },
     closeHost(state, time) {
       const arr = []

@@ -15,6 +15,7 @@ export default {
 <style lang="less">
 @import 'style/common.less';
 @import 'style/index.less';
+@import 'style/animation.less';
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

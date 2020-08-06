@@ -7,15 +7,17 @@ const redis = require('../redis/index.js')
 // })
 
 // 渲染进程通知新建连接(同步)
-ipcMain.on('initConnect', (event, conf) => {
+ipcMain.on('initConnect', async (event, conf) => {
   /**
-   * arg
-   * {
-      time: '1596697213288', address: '127.0.0.1', port: 8080, passwd: '123'
-    }
+   * conf
+   * {time: '1596697213288', address: '127.0.0.1', port: 8080, passwd: '123'}
   */
-  redis.connection(conf)
-  event.returnValue = 'pong'
+  if (await redis.connection(conf) === 0) {
+    // 连接失败
+    event.returnValue = 'ok'
+  } else {
+    event.returnValue = 'fail'
+  }
 })
 // 渲染进程通知关闭连接(异步)
 ipcMain.on('closeConnect', (event, time) => {

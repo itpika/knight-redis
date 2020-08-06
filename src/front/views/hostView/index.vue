@@ -1,5 +1,5 @@
 <template>
-  <div class="hostView">
+  <div class="hostView bgkColor">
     <div class="header">
       <div class="terminalBtn"><el-button type="info" size="small" round>Terminal</el-button></div>
     </div>
@@ -17,7 +17,7 @@
               </el-option>
             </el-select>
           </div>
-          <div class="opertionsBox">
+          <div class="opertionsBox bgkColor">
             <el-tooltip class="item" effect="light" content="NEW KEY" placement="top">
               <i class="el-icon-plus add"></i>
             </el-tooltip>
@@ -40,6 +40,8 @@
         </div>
       </div>
     </div>
+    <!-- <div class="loader_1"></div> -->
+    <div class="loader_1">Loading...</div>
   </div>
 </template>
 
@@ -97,7 +99,8 @@ export default {
   padding: 20px;
   height: 100%;
   box-sizing: border-box;
-  background-color: #416080;
+  .loader_1 {
+  }
   .header {
     display: flex;
     align-items: center;
@@ -143,7 +146,6 @@ export default {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          background-color: #416080;
           border-radius: 5px;
           .add {
             transition: all 500ms;
