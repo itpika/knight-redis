@@ -6,7 +6,7 @@ const Redis = require('ioredis')
 const redisOptions = {
   // redis遇到错误尝试重连，默认只在 READONLY 状态进行重连
   reconnectOnError: function(err) {
-    console.log(err)
+    console.error(err)
     // var targetError = 'READONLY'
     return true
   },
@@ -16,7 +16,22 @@ const redisOptions = {
     return delay
   }
 }
+const pool = {}
 
-module.exports = async function connection(conf) {
-  return new Redis(conf, redisOptions)
+module.exports = {
+  connection: function(conf) {
+    if (pool[conf.time]) {
+      return
+    }
+    const cli = new Redis({ host: conf.address, port: conf.port, password: conf.passwd }, redisOptions)
+    pool[conf.time] = cli
+    console.info('%s:%s@%s', conf.address, conf.port, conf.passwd)
+  },
+  disconnect: function(time) {
+    if (!pool[time]) {
+      return
+    }
+    pool[time].disconnect()
+    delete pool[time]
+  }
 }

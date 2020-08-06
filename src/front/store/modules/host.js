@@ -4,10 +4,10 @@ export default {
     hostState: false, // host菜单栏的显示状态
     hosts: [{
       id: '1',
-      label: '外网',
-      address: '127.0.0.1',
-      port: 8080,
-      passwd: '123'
+      label: '内网',
+      address: '10.10.1.43',
+      port: 6380,
+      passwd: '123456'
     }],
     openHost: [] // 打开的host连接
   },

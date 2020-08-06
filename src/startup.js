@@ -1,12 +1,17 @@
-const { app, BrowserWindow,ipcMain } = require('electron')
+const { app, BrowserWindow } = require('electron')
+require('./lib/channel/event.js')
 
-function createWindow () {   
+function createWindow () {
+  const path = require('path')
   // 创建浏览器窗口
   let win = new BrowserWindow({
     width: 1400,
     height: 800,
+    minWidth: 700,
+    minHeight: 400,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      preload: path.join(__dirname, './render.js')
     }
   })
 

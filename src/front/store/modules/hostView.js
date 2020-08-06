@@ -1,3 +1,5 @@
+import channel from '../../lib/channel.js'
+
 export default {
   namespaced: true,
   state: {
@@ -31,6 +33,8 @@ export default {
       }
       state.current = host
       state.all.push(host)
+      // 通知主进程建立连接
+      channel.initConnect(Object.assign({ time: data.time }, data.conf))
     },
     closeHost(state, time) {
       const arr = []
@@ -40,6 +44,8 @@ export default {
         }
       }
       state.all = arr
+      // 通知主进程关闭连接
+      channel.closeConnect(time)
     },
     setSelectDB(state, db) {
       state.current.selectDB = db
