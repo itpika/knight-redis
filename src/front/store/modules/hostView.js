@@ -6,10 +6,10 @@ export default {
     current: {
       selectDB: '',
       time: '',
-      dbData: []
+      dbData: [],
+      connectState: 0 // 当前host是否连接成功 (0:连接中，1：连接成功，-1:连接失败)
     },
-    all: [],
-    loaderState: false
+    all: []
   },
   mutations: {
     // 找出当前host的数据
@@ -26,7 +26,8 @@ export default {
         selectDB: '',
         dbData: [],
         time: data.time,
-        conf: data.conf
+        conf: data.conf,
+        connectState: 0
       }
       const flg = Math.floor(Math.random() * 20)
       for (let index = 0; index < flg; index++) {
@@ -34,7 +35,6 @@ export default {
       }
       state.current = host
       state.all.push(host)
-      state.loaderState = true
       // 通知主进程建立连接
       send.initConnect(Object.assign({ time: data.time }, data.conf))
     },

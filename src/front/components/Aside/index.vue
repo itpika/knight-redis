@@ -53,7 +53,7 @@ export default {
     },
     // host项被关闭了，选出激活显示的下一个host
     removeHost() {
-      if (this.hosts.length === 0) {
+      if (this.hosts.length === 0) { // 没有打开的host项了
         this.$router.push({ name: 'host' })
         // 清理数据
         this.$store.commit('hostView/clearCurrent')

@@ -6,8 +6,10 @@ const Redis = require('ioredis')
 const redisOptions = {
   // redis遇到错误尝试重连，默认只在 READONLY 状态进行重连
   reconnectOnError: function(err) {
-    console.error('err:--', err)
-    // var targetError = 'READONLY'
+    console.error('err:--', err.toString())
+    if (err.message.includes('NOAUTH Authentication')) {
+      return false
+    }
     return false
   },
   // 尝试重连机制
@@ -30,6 +32,7 @@ module.exports = {
     if (await this.Ping(cli) !== 1) {
       return 0
     }
+    cli.auth()
     pool[conf.time] = cli
     console.info('%s:%s@%s', conf.address, conf.port, conf.passwd)
     return 1

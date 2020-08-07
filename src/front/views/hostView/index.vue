@@ -61,7 +61,7 @@ export default {
       return this.$store.state.hostView.current.dbData
     },
     loaderState() {
-      return !this.$store.state.hostView.loaderState
+      return this.$store.state.hostView.current.connectState === 0
     }
   },
   data () {

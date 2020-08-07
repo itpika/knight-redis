@@ -24,5 +24,16 @@ export default new Vuex.Store({
  * host主机连接成功与否通知
  */
 window.ipcRenderer.on('conection-notify', (event, data) => {
-  hostView.state.loaderState = (data === 'fail')
+  // 跟新状态机的host的连接状态
+  for (let i = 0; i < hostView.state.all.length; i++) {
+    if (hostView.state.all[i].time === data.time) {
+      if (data.result === 'ok') {
+        hostView.state.all[i].connectState = 1
+      } else {
+        hostView.state.all[i].connectState = -1
+      }
+      break
+    }
+  }
+  console.log(hostView.state.current.connectState, data)
 })

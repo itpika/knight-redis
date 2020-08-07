@@ -18,9 +18,9 @@ ipcMain.on('initConnect', async (event, conf) => {
   if (await redis.connection(conf) === 0) {
     // 连接失败
     // event.returnValue = 'fail'
-    event.reply('conection-notify', 'fail')
+    event.reply('conection-notify', { time: conf.time, result: 'fail' })
   } else {
-    event.reply('conection-notify', 'ok')
+    event.reply('conection-notify', { time: conf.time, result: 'ok' })
   }
 })
 // 渲染进程通知关闭连接(异步)
