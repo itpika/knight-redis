@@ -164,7 +164,7 @@ export default {
         }
       }
       // 初始化右侧hostView页状态数据
-      this.$store.commit('hostView/initHost', { time: host.time, conf })
+      this.$store.commit('hostView/initHost', { time: host.time, conf, label: host.label })
       // 跳转到hostView详情页
       this.$router.push('/hostView')
     }

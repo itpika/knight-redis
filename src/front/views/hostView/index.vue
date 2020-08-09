@@ -1,6 +1,6 @@
 <template>
   <div class="hostView bgkColor">
-    <div :class="['content', {'hiddenClass': !(connectState === 0)}]">
+    <div :class="['content', {'hiddenClass': !(current.connectState === 0)}]">
       <div class="header">
         <div class="terminalBtn"><el-button type="info" size="small" round>Terminal</el-button></div>
       </div>
@@ -9,7 +9,7 @@
           <!-- 头部操作栏 -->
           <div class="dbBoxHeader">
             <div class="selectBox">
-              <el-select size="mini" v-model="selectDB" placeholder="SELECT DB">
+              <el-select size="mini" v-model="current.selectDB" placeholder="SELECT DB">
                 <el-option
                   v-for="item in dbs"
                   :key="item.value"
@@ -33,7 +33,7 @@
           <!-- 数据展示body -->
           <div class="dbBoxBody bgkColor">
             <ul>
-              <li v-for="(k, i) of dbData" :key="i">
+              <li v-for="(k, i) of current.dbData" :key="i">
                 <span>{{ k }}</span>
                 <i class="el-icon-close"></i>
               </li>
@@ -42,28 +42,36 @@
         </div>
       </div>
     </div>
-    <!-- <div class="loader_1"></div> -->
-    <div :class="['loader_1', {'hiddenClass': !(connectState === -1)}]"></div>
+    <!-- 遮罩层 -->
+    <div :class="['mask', 'bgkColor', {'hiddenClass': current.connectState === 0}]">
+      <!-- loader加载圈 -->
+      <div :class="['loader_1', {'visibleClass': current.connectState === -1}]"></div>
+      <!-- 错误提示框 -->
+      <div :class="['promptBox', {'hiddenClass': (current.connectState === 0 || current.connectState === -1)}]">
+        <div class="header">
+          <p>{{current.label}}</p>
+          <i class="el-icon-close"></i>
+        </div>
+        <div class="body">{{promptBodyTest}}</div>
+        <div class="bottom">
+          <kbutton size="nomal" val="CANCEL" type="info" @click="cancelConnect"/>
+          <kbutton size="nomal" val="RECONNECT" type="success"/>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import kbutton from '@/front/components/common/k-button.vue'
 export default {
   name: 'hostView',
   computed: {
-    selectDB: {
-      get () {
-        return this.$store.state.hostView.current.selectDB
-      },
-      set (val) {
-        this.$store.commit('hostView/setSelectDB', val)
-      }
+    current() {
+      return this.$store.state.hostView.current
     },
-    dbData() {
-      return this.$store.state.hostView.current.dbData
-    },
-    connectState() {
-      return this.$store.state.hostView.current.connectState
+    promptBodyTest() {
+      return this.$store.state.hostView.promptBodyTest
     }
   },
   data () {
@@ -89,8 +97,18 @@ export default {
     }
   },
   components: {
+    kbutton
   },
   methods: {
+    // 连接失败后取消
+    cancelConnect() {
+      // 删除左侧host栏目项
+      // this.$store.commit('host/closeHost', time)
+      // // 删除右侧host栏目项数据
+      // this.$store.commit('hostView/closeHost', time)
+      // // 选出删除后呈现的下一host, 返回给父组件解决
+      // this.$emit('removeHost')
+    }
   },
   // 改变中间内容块的背景颜色
   beforeCreate: function() {
@@ -104,13 +122,6 @@ export default {
   height: 100%;
   box-sizing: border-box;
   position: relative;
-  .loader_1 {
-    font-size: 8px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-  }
   .content {
     .header {
       display: flex;
@@ -234,6 +245,65 @@ export default {
               }
             }
           }
+        }
+      }
+    }
+  }
+  .mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .loader_1 {
+      visibility: hidden;
+      font-size: 8px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+    .promptBox {
+      width: 45%;
+      height: 35%;
+      border-radius: 5px;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      > div {
+        padding: 0 5%;
+      }
+      .header {
+        height: 34%;
+        color: #fff;
+        font-size: 17px;
+        background-color: #ff6262;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+        i {
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+      .body {
+        height: 33%;
+        display: flex;
+        align-items: center;
+      }
+      .bottom {
+        height: 33%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        > :last-child {
+          margin-left: 10px;
         }
       }
     }

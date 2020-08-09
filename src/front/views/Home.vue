@@ -3,7 +3,7 @@
   <el-container>
     <el-header height="10%"><Header/></el-header>
     <el-container>
-      <el-aside width="240px" class="fontColor"><Aside></Aside></el-aside>
+      <el-aside width="260px" class="fontColor"><Aside></Aside></el-aside>
       <el-main :class="mainClass"><Main></Main></el-main>
     </el-container>
   </el-container>

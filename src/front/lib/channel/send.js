@@ -14,9 +14,13 @@
 export default {
   // 初始化连接
   initConnect(conf) {
-    window.ipcRenderer.send('initConnect', conf)
+    if (window.ipcRenderer) {
+      window.ipcRenderer.send('initConnect', conf)
+    }
   },
   closeConnect(time) {
-    window.ipcRenderer.send('closeConnect', time)
+    if (window.ipcRenderer) {
+      window.ipcRenderer.send('closeConnect', time)
+    }
   }
 }

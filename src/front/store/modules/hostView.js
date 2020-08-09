@@ -6,10 +6,12 @@ export default {
     current: {
       selectDB: '',
       time: '',
+      label: '',
       dbData: [],
       connectState: -1 // 当前host是否连接成功 (-1:连接中，0:成功，1：需要密码，2:密码错误，4:连接失败)
     },
-    all: []
+    all: [],
+    promptBodyTest: ''
   },
   mutations: {
     // 找出当前host的数据
@@ -27,6 +29,7 @@ export default {
         dbData: [],
         time: data.time,
         conf: data.conf,
+        label: data.label,
         connectState: -1
       }
       const flg = Math.floor(Math.random() * 20)
