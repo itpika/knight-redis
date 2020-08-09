@@ -103,10 +103,10 @@ export default {
     // 连接失败后取消
     cancelConnect() {
       // 删除左侧host栏目项
-      // this.$store.commit('host/closeHost', time)
-      // // 删除右侧host栏目项数据
-      // this.$store.commit('hostView/closeHost', time)
-      // // 选出删除后呈现的下一host, 返回给父组件解决
+      this.$store.commit('host/closeHost', this.current.time)
+      // 删除右侧host栏目项数据
+      this.$store.commit('hostView/closeHost', this.current.time)
+      // 选出删除后呈现的下一host, 返回给父组件解决
       // this.$emit('removeHost')
     }
   },
