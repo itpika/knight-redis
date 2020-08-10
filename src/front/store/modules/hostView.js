@@ -30,17 +30,21 @@ export default {
         time: data.time,
         conf: data.conf,
         label: data.label,
-        connectState: -1
+        connectState: Math.floor(Math.random() * 10) % 2
       }
       const flg = Math.floor(Math.random() * 20)
       for (let index = 0; index < flg; index++) {
         host.dbData.push(Math.floor(Math.random() * 100))
       }
-      // state.current = host
       state.all.push(host)
       state.current = state.all[state.all.length - 1]
       // 通知主进程建立连接
       send.initConnect(Object.assign({ time: data.time }, data.conf))
+    },
+    // 重连
+    reconnect(state) {
+      // 通知主进程建立连接
+      send.initConnect(Object.assign({ time: state.current.time }, state.current.conf))
     },
     closeHost(state, time) {
       const arr = []
@@ -49,15 +53,13 @@ export default {
           arr.push(state.all[i])
         }
       }
+      if (arr.length === 0) state.current = null
       state.all = arr
       // 通知主进程关闭连接
       send.closeConnect(time)
     },
     setSelectDB(state, db) {
       state.current.selectDB = db
-    },
-    clearCurrent(state) {
-      state.current = null
     }
   },
   actions: {

@@ -55,8 +55,6 @@ export default {
     removeHost() {
       if (this.hosts.length === 0) { // 没有打开的host项了
         this.$router.push({ name: 'host' })
-        // 清理数据
-        this.$store.commit('hostView/clearCurrent')
         // 所有的host关闭了，设置host菜单栏为选中
         this.selectActiveMenu()
       } else {

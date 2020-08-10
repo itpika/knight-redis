@@ -54,8 +54,8 @@
         </div>
         <div class="body">{{promptBodyTest}}</div>
         <div class="bottom">
-          <kbutton size="nomal" val="CANCEL" type="info" @click="cancelConnect"/>
-          <kbutton size="nomal" val="RECONNECT" type="success"/>
+          <kbutton size="nomal" val="CANCEL" type="info" @click.native="cancelConnect"/>
+          <kbutton size="nomal" val="RECONNECT" type="success" @click.native="reconnect"/>
         </div>
       </div>
     </div>
@@ -72,6 +72,9 @@ export default {
     },
     promptBodyTest() {
       return this.$store.state.hostView.promptBodyTest
+    },
+    hosts() {
+      return this.$store.state.host.openHost
     }
   },
   data () {
@@ -102,12 +105,27 @@ export default {
   methods: {
     // 连接失败后取消
     cancelConnect() {
+      console.log('11')
       // 删除左侧host栏目项
       this.$store.commit('host/closeHost', this.current.time)
       // 删除右侧host栏目项数据
       this.$store.commit('hostView/closeHost', this.current.time)
-      // 选出删除后呈现的下一host, 返回给父组件解决
-      // this.$emit('removeHost')
+      // host项被关闭了，选出激活显示的下一个host
+      if (this.hosts.length === 0) { // 没有打开的host项了
+        // 所有的host关闭了，设置host菜单栏为选中
+        this.selectActiveMenu()
+        // 跳转到host路由
+        this.$router.push({ name: 'host' })
+      } else {
+        // 设置左侧host的激活项
+        this.hosts[this.hosts.length - 1].isActive = true
+        // 设置左侧host激活项的右侧页面数据
+        this.$store.commit('hostView/restoreCurrentHost', this.hosts[this.hosts.length - 1].time)
+      }
+    },
+    // 重连
+    reconnect() {
+      this.$store.commit('hostView/reconnect')
     }
   },
   // 改变中间内容块的背景颜色
