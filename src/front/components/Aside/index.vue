@@ -56,17 +56,13 @@ export default {
       if (this.hosts.length === 0) { // 没有打开的host项了
         this.$router.push({ name: 'host' })
         // 所有的host关闭了，设置host菜单栏为选中
-        this.selectActiveMenu()
+        this.$store.commit('host/setHostState', true)
       } else {
         // 设置左侧host的激活项
         this.hosts[this.hosts.length - 1].isActive = true
         // 设置左侧host激活项的右侧页面数据
         this.$store.commit('hostView/restoreCurrentHost', this.hosts[this.hosts.length - 1].time)
       }
-    },
-    // 设置host菜单栏为选中
-    selectActiveMenu() {
-      this.$store.commit('host/setHostState', true)
     }
   }
 }

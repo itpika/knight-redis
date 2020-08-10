@@ -113,7 +113,8 @@ export default {
       // host项被关闭了，选出激活显示的下一个host
       if (this.hosts.length === 0) { // 没有打开的host项了
         // 所有的host关闭了，设置host菜单栏为选中
-        this.selectActiveMenu()
+        // 所有的host关闭了，设置host菜单栏为选中
+        this.$store.commit('host/setHostState', true)
         // 跳转到host路由
         this.$router.push({ name: 'host' })
       } else {
@@ -141,6 +142,8 @@ export default {
   box-sizing: border-box;
   position: relative;
   .content {
+    box-sizing: border-box;
+    height: 100%;
     .header {
       display: flex;
       align-items: center;
@@ -166,7 +169,7 @@ export default {
       .dbBox {
         padding: 10px;
         width: 25%;
-        height: 80%;
+        height: 90%;
         border-radius: 6px;
         background-color: #1c3046;
         display: flex;
