@@ -1,14 +1,14 @@
 <template>
   <!-- 对话框 -->
   <div :class="['dialog', {hiddenClass: !show}]">
-    <div class="header">
+    <div :class="['header', type]">
       <p>{{label}}</p>
       <i class="el-icon-close"></i>
     </div>
     <div class="body">{{text}}</div>
     <div class="bottom">
-      <kbutton size="nomal" :val="leftOpertion" type="success" @click.native.stop="leftClick"/>
-      <kbutton size="nomal" :val="rightOpertion" type="info" @click.native.stop="rightClick"/>
+      <kbutton size="nomal" :val="leftOpertion" :type="leftType" @click.native.stop="leftClick"/>
+      <kbutton size="nomal" :val="rightOpertion" :type="rightType" @click.native.stop="rightClick"/>
     </div>
   </div>
 </template>
@@ -21,7 +21,30 @@ export default {
     text: String, // 对话框内容
     leftOpertion: String, // 左边按钮内容
     rightOpertion: String, // 右边按钮内容
-    show: Boolean // 是否显示
+    leftType: { // 左边按钮类型
+      type: String,
+      default: function () {
+        return 'info'
+      }
+    },
+    rightType: { // 右边按钮类型
+      type: String,
+      default: function () {
+        return 'success'
+      }
+    },
+    show: {
+      type: Boolean,
+      default: function () {
+        return true
+      }
+    }, // 是否显示
+    type: { // 弹窗类型，info，warning
+      type: String,
+      default: function () {
+        return 'info'
+      }
+    }
   },
   components: {
     kbutton
@@ -54,7 +77,6 @@ export default {
     height: 34%;
     color: #fff;
     font-size: 17px;
-    background-color: #ff6262;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -79,5 +101,11 @@ export default {
       margin-left: 10px;
     }
   }
+}
+.warning {
+  background-color: #ff6262;
+}
+.info {
+  background-color: #03c974;
 }
 </style>

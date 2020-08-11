@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import app from './modules/app'
 import host from './modules/host'
 import hostView from './modules/hostView'
-import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT } from '../../lib/redis/singal'
+import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT, FAIL } from '../../lib/redis/singal'
 
 Vue.use(Vuex)
 
@@ -30,22 +30,25 @@ if (window.ipcRenderer) {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
         hostView.state.all[i].connectState = data.code
+        switch (data.code) {
+          case NO_AUTH:
+            hostView.state.all[i].dialogState.promptTest = 'Require Password'
+            break
+          case PASSWD_ERROR:
+            hostView.state.all[i].dialogState.promptTest = 'Password authentication failed'
+            break
+          case CONNECT_TIMEOUT:
+            hostView.state.all[i].dialogState.promptTest = 'Connection timeout'
+            break
+          case FAIL:
+            hostView.state.all[i].dialogState.promptTest = 'Connection fail'
+            break
+          default:
+            break
+        }
         break
       }
     }
-    switch (data.code) {
-      case NO_AUTH:
-        hostView.state.promptTest = 'Require Password'
-        break
-      case PASSWD_ERROR:
-        hostView.state.promptTest = 'Password authentication failed'
-        break
-      case CONNECT_TIMEOUT:
-        hostView.state.promptTest = 'Connection timeout'
-        break
-      default:
-        break
-    }
-    console.log(hostView.state.current.connectState, data)
+    console.log(hostView.state.current, data)
   })
 }

@@ -33,9 +33,9 @@
           <!-- 数据展示body -->
           <div class="dbBoxBody bgkColor">
             <ul>
-              <li v-for="(k, i) of current.dbData" :key="i">
-                <span>{{ k }}</span>
-                <i class="el-icon-close"></i>
+              <li v-for="(v, i) of current.dbData" :key="i">
+                <span>{{ v.key }}</span>
+                <i class="el-icon-close" @click.stop="removeKey(v.key)"></i>
               </li>
             </ul>
           </div>
@@ -47,35 +47,27 @@
       <!-- loader加载圈 -->
       <div :class="['loader_1', {'visibleClass': current.connectState === -1}]"></div>
       <!-- 错误提示框 -->
-      <kdialog :show="current.connectState !== 0 && current.connectState !== -1" :label="current.label" :text="promptTest"
+      <kdialog :show="current.connectState !== 0 && current.connectState !== -1" :label="current.label"
+        :text="current.dialogState.promptTest" type="warning"
         rightOpertion="RECONNECT" leftOpertion="CANCEL"
         @leftCallback="cancelConnect" @rightCallback="reconnect"></kdialog>
-      <!-- <div :class="['promptBox', {'hiddenClass': (current.connectState === 0 || current.connectState === -1)}]">
-        <div class="header">
-          <p>{{current.label}}</p>
-          <i class="el-icon-close"></i>
-        </div>
-        <div class="body">{{promptTest}}</div>
-        <div class="bottom">
-          <kbutton size="nomal" val="CANCEL" type="info" @click.native="cancelConnect"/>
-          <kbutton size="nomal" val="RECONNECT" type="success" @click.native="reconnect"/>
-        </div>
-      </div> -->
+    </div>
+    <div :class="['lucency-mask', {visibleClass: current.dialogState.lucencyMaskShow}]">
+      <!-- 信息提示框 -->
+      <kdialog :text="current.dialogState.infoShowTest" :label="current.dialogState.infoShowTitle"
+        rightOpertion="OK" leftOpertion="CANCEL" rightType="warning"
+        @leftCallback="closeInfoDialog" @rightCallback="reconnect"></kdialog>
     </div>
   </div>
 </template>
 
 <script>
-// import kbutton from '@/front/components/common/k-button.vue'
 import kdialog from '@/front/components/common/k-dialog.vue'
 export default {
   name: 'hostView',
   computed: {
     current() {
       return this.$store.state.hostView.current
-    },
-    promptTest() {
-      return this.$store.state.hostView.promptTest
     },
     hosts() {
       return this.$store.state.host.openHost
@@ -84,27 +76,18 @@ export default {
   data () {
     return {
       dbs: [
-        { value: 0, label: 'DB0' },
-        { value: 1, label: 'DB1' },
-        { value: 2, label: 'DB2' },
-        { value: 3, label: 'DB3' },
-        { value: 4, label: 'DB4' },
-        { value: 5, label: 'DB5' },
-        { value: 6, label: 'DB6' },
-        { value: 7, label: 'DB7' },
-        { value: 8, label: 'DB8' },
-        { value: 9, label: 'DB9' },
-        { value: 10, label: 'DB10' },
-        { value: 11, label: 'DB11' },
-        { value: 12, label: 'DB12' },
-        { value: 13, label: 'DB13' },
-        { value: 14, label: 'DB14' },
-        { value: 15, label: 'DB15' }
+        { value: 0, label: 'DB0' }, { value: 1, label: 'DB1' },
+        { value: 2, label: 'DB2' }, { value: 3, label: 'DB3' },
+        { value: 4, label: 'DB4' }, { value: 5, label: 'DB5' },
+        { value: 6, label: 'DB6' }, { value: 7, label: 'DB7' },
+        { value: 8, label: 'DB8' }, { value: 9, label: 'DB9' },
+        { value: 10, label: 'DB10' }, { value: 11, label: 'DB11' },
+        { value: 12, label: 'DB12' }, { value: 13, label: 'DB13' },
+        { value: 14, label: 'DB14' }, { value: 15, label: 'DB15' }
       ]
     }
   },
   components: {
-    // kbutton,
     kdialog
   },
   methods: {
@@ -116,7 +99,6 @@ export default {
       this.$store.commit('hostView/closeHost', this.current.time)
       // host项被关闭了，选出激活显示的下一个host
       if (this.hosts.length === 0) { // 没有打开的host项了
-        // 所有的host关闭了，设置host菜单栏为选中
         // 所有的host关闭了，设置host菜单栏为选中
         this.$store.commit('host/setHostState', true)
         // 跳转到host路由
@@ -131,12 +113,20 @@ export default {
     // 重连
     reconnect() {
       this.$store.commit('hostView/reconnect')
+    },
+    removeKey: function (val) { // 删除key
+      this.current.dialogState.infoShowTitle = 'Delete key' // 设置info提示框标题
+      this.current.dialogState.infoShowTest = `Are you sure you want to delete this key ${val}?` // 设置info提示框内容
+      this.current.dialogState.lucencyMaskShow = true // 弹出透明遮罩层
+    },
+    closeInfoDialog: function () { // 删除key
+      this.current.dialogState.lucencyMaskShow = false // 弹出透明遮罩层
     }
-  },
-  // 改变中间内容块的背景颜色
-  beforeCreate: function() {
-    this.$store.commit('app/setMainClass', 'menu_bgd_color')
   }
+  // 改变中间内容块的背景颜色
+  // beforeCreate: function() {
+  //   this.$store.commit('app/setMainClass', 'menu_bgd_color')
+  // }
 }
 </script>
 <style scoped lang="less">
@@ -291,46 +281,19 @@ export default {
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
     }
-    .promptBox {
-      width: 45%;
-      height: 35%;
-      border-radius: 5px;
-      background-color: #fff;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      > div {
-        padding: 0 5%;
-      }
-      .header {
-        height: 34%;
-        color: #fff;
-        font-size: 17px;
-        background-color: #ff6262;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-sizing: border-box;
-        i {
-          &:hover {
-            cursor: pointer;
-          }
-        }
-      }
-      .body {
-        height: 33%;
-        display: flex;
-        align-items: center;
-      }
-      .bottom {
-        height: 33%;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        > :last-child {
-          margin-left: 10px;
-        }
-      }
+  }
+  .lucency-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    > div {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
     }
   }
 }

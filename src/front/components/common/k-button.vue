@@ -7,7 +7,12 @@
 export default {
   props: {
     val: String,
-    size: String,
+    size: {
+      type: String,
+      default: function () {
+        return 'nomal'
+      }
+    },
     type: String
   }
 }
@@ -27,6 +32,10 @@ export default {
   min-width: 80px;
   height: 40px;
 }
+.mini {
+  min-width: 50px;
+  height: 45px;
+}
 .info {
   background-color: #909399;
   &:hover {
@@ -37,6 +46,12 @@ export default {
   background-color: #03c974;
   &:hover {
     background-color: #03d77b;
+  }
+}
+.warning {
+  background-color: #ff6262;
+  &:hover {
+    background-color: #ff6262;
   }
 }
 </style>
