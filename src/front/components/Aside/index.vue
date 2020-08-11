@@ -40,7 +40,7 @@ export default {
   methods: {
     active (time) {
       if (time === 0) {
-        this.selectActiveMenu()
+        this.$store.commit('host/setHostState', true)
       }
       for (let i = 0; i < this.hosts.length; i++) {
         if (this.hosts[i].time === time) {

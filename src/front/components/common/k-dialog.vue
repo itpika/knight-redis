@@ -7,10 +7,10 @@
     </div>
     <div class="body">{{text}}</div>
     <div class="bottom">
-      <kbutton size="nomal" :val="leftOpertion" type="success" @click.stop="leftClick"/>
-      <kbutton size="nomal" :val="rightOpertion" type="info" @click.stop="rightClick"/>
+      <kbutton size="nomal" :val="leftOpertion" type="success" @click.native.stop="leftClick"/>
+      <kbutton size="nomal" :val="rightOpertion" type="info" @click.native.stop="rightClick"/>
     </div>
-  </div>  
+  </div>
 </template>
 
 <script>
@@ -21,19 +21,17 @@ export default {
     text: String, // 对话框内容
     leftOpertion: String, // 左边按钮内容
     rightOpertion: String, // 右边按钮内容
-    show: Boolean, // 是否显示
-    leftCallback: String, // 左边按钮的回头
-    rightCallback: String // 是否显示
+    show: Boolean // 是否显示
   },
   components: {
     kbutton
   },
   methods: {
     leftClick () {
-      this.$emit(this.leftCallback)
+      this.$emit('leftCallback')
     },
     rightClick () {
-      this.$emit(this.rightCallback)
+      this.$emit('rightCallback')
     }
   }
 }

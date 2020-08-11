@@ -47,31 +47,35 @@
       <!-- loader加载圈 -->
       <div :class="['loader_1', {'visibleClass': current.connectState === -1}]"></div>
       <!-- 错误提示框 -->
-      <div :class="['promptBox', {'hiddenClass': (current.connectState === 0 || current.connectState === -1)}]">
+      <kdialog :show="current.connectState !== 0 && current.connectState !== -1" :label="current.label" :text="promptTest"
+        rightOpertion="RECONNECT" leftOpertion="CANCEL"
+        @leftCallback="cancelConnect" @rightCallback="reconnect"></kdialog>
+      <!-- <div :class="['promptBox', {'hiddenClass': (current.connectState === 0 || current.connectState === -1)}]">
         <div class="header">
           <p>{{current.label}}</p>
           <i class="el-icon-close"></i>
         </div>
-        <div class="body">{{promptBodyTest}}</div>
+        <div class="body">{{promptTest}}</div>
         <div class="bottom">
           <kbutton size="nomal" val="CANCEL" type="info" @click.native="cancelConnect"/>
           <kbutton size="nomal" val="RECONNECT" type="success" @click.native="reconnect"/>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
-import kbutton from '@/front/components/common/k-button.vue'
+// import kbutton from '@/front/components/common/k-button.vue'
+import kdialog from '@/front/components/common/k-dialog.vue'
 export default {
   name: 'hostView',
   computed: {
     current() {
       return this.$store.state.hostView.current
     },
-    promptBodyTest() {
-      return this.$store.state.hostView.promptBodyTest
+    promptTest() {
+      return this.$store.state.hostView.promptTest
     },
     hosts() {
       return this.$store.state.host.openHost
@@ -100,12 +104,12 @@ export default {
     }
   },
   components: {
-    kbutton
+    // kbutton,
+    kdialog
   },
   methods: {
     // 连接失败后取消
     cancelConnect() {
-      console.log('11')
       // 删除左侧host栏目项
       this.$store.commit('host/closeHost', this.current.time)
       // 删除右侧host栏目项数据

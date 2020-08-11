@@ -46,7 +46,7 @@ async function connect (conf) {
       if (err.message.includes('NOAUTH Authentication')) {
         // 需要密码
         resolve({ code: singal.NO_AUTH })
-      } else if (err.message.includes('invalid username-password')) {
+      } else if (err.message.includes('invalid username-password') || err.message.includes('invalid password')) {
         // 密码错误
         resolve({ code: singal.PASSWD_ERROR })
       } else {

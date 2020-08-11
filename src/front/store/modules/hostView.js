@@ -11,7 +11,7 @@ export default {
       connectState: -1 // 当前host是否连接成功 (-1:连接中，0:成功，1：需要密码，2:密码错误，4:连接失败)
     },
     all: [],
-    promptBodyTest: ''
+    promptTest: ''
   },
   mutations: {
     // 找出当前host的数据

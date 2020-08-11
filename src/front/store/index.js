@@ -35,13 +35,13 @@ if (window.ipcRenderer) {
     }
     switch (data.code) {
       case NO_AUTH:
-        hostView.state.promptBodyTest = 'Require Password'
+        hostView.state.promptTest = 'Require Password'
         break
       case PASSWD_ERROR:
-        hostView.state.promptBodyTest = 'Password authentication failed'
+        hostView.state.promptTest = 'Password authentication failed'
         break
       case CONNECT_TIMEOUT:
-        hostView.state.promptBodyTest = 'Connection timeout'
+        hostView.state.promptTest = 'Connection timeout'
         break
       default:
         break
