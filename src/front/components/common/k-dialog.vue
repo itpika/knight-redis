@@ -75,6 +75,7 @@ export default {
   }
   .header {
     height: 34%;
+    width: 100%;
     color: #fff;
     font-size: 17px;
     display: flex;
@@ -107,5 +108,8 @@ export default {
 }
 .info {
   background-color: #03c974;
+}
+.public {
+  background-color: #1c3046;
 }
 </style>

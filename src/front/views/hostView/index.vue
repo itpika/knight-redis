@@ -162,7 +162,7 @@ export default {
       box-sizing: border-box;
       .dbBox {
         padding: 10px;
-        width: 25%;
+        width: 28%;
         height: 90%;
         border-radius: 6px;
         background-color: #1c3046;
@@ -220,7 +220,6 @@ export default {
           }
         }
         .dbBoxBody {
-          // height: 100%;
           flex: 1;
           margin-top: 10px;
           border-radius: 5px;
