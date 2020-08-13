@@ -1,15 +1,19 @@
 <template>
-  <div class="hostView bgkColor">
+  <div id="hostView" v-loading.lock="current.connectState === -1" element-loading-background="#416080" class="hostView bgkColor">
     <div :class="['content', {'hiddenClass': !(current.connectState === 0)}]">
       <div class="header">
         <div class="terminalBtn"><el-button type="info" size="small" round>Terminal</el-button></div>
       </div>
       <div class="body">
-        <div class="dbBox">
+        <div v-loading.lock="current.dbLoading"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.6)" class="dbBox">
           <!-- 头部操作栏 -->
           <div class="dbBoxHeader">
             <div class="selectBox">
-              <el-select size="mini" v-model="current.selectDB" placeholder="SELECT DB">
+              <el-select
+              size="mini" @change="selectDBChange"
+              v-model="current.selectDB" placeholder="SELECT DB">
                 <el-option
                   v-for="item in dbs"
                   :key="item.value"
@@ -44,8 +48,6 @@
     </div>
     <!-- 遮罩层 -->
     <div :class="['mask', 'bgkColor', {'hiddenClass': current.connectState === 0}]">
-      <!-- loader加载圈 -->
-      <div :class="['loader_1', {'visibleClass': current.connectState === -1}]"></div>
       <!-- 错误提示框 -->
       <kdialog :show="current.connectState !== 0 && current.connectState !== -1" :label="current.label"
         :text="current.dialogState.promptTest" type="warning"
@@ -121,7 +123,22 @@ export default {
     },
     closeInfoDialog: function () { // 删除key
       this.current.dialogState.lucencyMaskShow = false // 弹出透明遮罩层
+    },
+    selectDBChange: function (index) {
+      this.current.dbLoading = true
+      // TODO
+      console.log(index)
     }
+  },
+  created: function () {
+    // this.loading = this.$loading({
+    //   target: '#hostView',
+    //   lock: false,
+    //   text: 'Loading',
+    //   // fullscreen: false,
+    //   spinner: 'el-icon-loading',
+    //   background: 'rgba(0, 0, 0, 0.7)'
+    // })
   }
   // 改变中间内容块的背景颜色
   // beforeCreate: function() {
@@ -272,14 +289,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    .loader_1 {
-      visibility: hidden;
-      font-size: 8px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-    }
   }
   .lucency-mask {
     position: absolute;

@@ -8,6 +8,7 @@ export default {
       time: '',
       label: '',
       dbData: [],
+      dbLoading: false,
       connectState: -1, // 当前host是否连接成功 (-1:连接中，0:成功，1：需要密码，2:密码错误，4:连接失败)
       dialogState: {
         promptTest: '', // 错误提示框的内容文本
@@ -37,6 +38,7 @@ export default {
         label: data.label,
         connectState: Math.floor(Math.random() * 10) % 2,
         // connectState: -1,
+        dbLoading: false,
         dialogState: {
           promptTest: '', // 错误提示框的内容文本
           lucencyMaskShow: false, // 透明遮罩层是否显示
