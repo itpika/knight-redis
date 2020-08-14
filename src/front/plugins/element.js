@@ -17,12 +17,14 @@ import {
   Drawer,
   Tooltip,
   Option,
-  Loading
+  Loading,
+  Switch
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 // Vue.use(Element)
 Vue.use(Button)
+Vue.use(Switch)
 Vue.use(Loading)
 Vue.use(Option)
 Vue.use(Input)

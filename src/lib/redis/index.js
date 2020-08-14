@@ -24,6 +24,17 @@ module.exports = {
     return await pool[data.time].keys('*')
   },
   /**
+   * 删除key
+   */
+  removeKey: async function (data) {
+    await pool[data.time].select(data.index)
+    await pool[data.time].del(data.key)
+    if (data.liveUpdate) {
+      return await pool[data.time].keys('*')
+    }
+    return null
+  },
+  /**
    * 断开连接
    */
   disconnect: function(time) {

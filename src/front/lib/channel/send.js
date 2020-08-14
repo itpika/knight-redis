@@ -27,5 +27,10 @@ export default {
     if (window.ipcRenderer) {
       window.ipcRenderer.send('getAllKey', data)
     }
+  },
+  removeKey(data) {
+    if (window.ipcRenderer) {
+      window.ipcRenderer.send('removeKey', data)
+    }
   }
 }

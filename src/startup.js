@@ -1,6 +1,5 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
 require('./lib/channel/event.js')
-
 function createWindow () {
   const path = require('path')
   // 创建浏览器窗口
@@ -15,6 +14,8 @@ function createWindow () {
     }
   })
 
+  
+  win.removeMenu()
   // 加载index.html文件
   win.loadFile('dist/index.html')
   //当所有窗口都被关闭后退出
@@ -25,13 +26,14 @@ function createWindow () {
       app.quit()
     }
   })
+
   app.on('activate', () => {
     // 在macOS上，当单击dock图标并且没有其他窗口打开时，
     // 通常在应用程序中重新创建一个窗口。
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow()
     }
-  });
+  })
   
 }
 

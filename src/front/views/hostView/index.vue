@@ -27,10 +27,19 @@
                 <i class="el-icon-plus add"></i>
               </el-tooltip>
               <el-tooltip class="item" effect="light" content="REFRESH" placement="top">
-                <i class="el-icon-refresh refresh"></i>
+                <i class="el-icon-refresh refresh" @click.stop="refreshDB"></i>
               </el-tooltip>
               <el-tooltip class="item" effect="light" content="CLEAR ALL" placement="top">
                 <i class="el-icon-delete delete"></i>
+              </el-tooltip>
+              <el-tooltip :content="(current.realTime === '0' ? 'Enable':'Disable')+' Live Update'" placement="top">
+                <el-switch
+                  v-model="current.realTime"
+                  active-color="#13ce66"
+                  inactive-color="#1c3046"
+                  active-value="1"
+                  inactive-value="0">
+                </el-switch>
               </el-tooltip>
             </div>
           </div>
@@ -42,7 +51,7 @@
                   <i class="el-icon-key brightBlueColor"></i>
                   <span>{{ v }}</span>
                 </div>
-                <i class="el-icon-close" @click.stop="removeKey(v)"></i>
+                <i class="el-icon-close" @click.stop="clientRemoveKey(v)"></i>
               </li>
             </ul>
           </div>
@@ -57,11 +66,12 @@
         rightOpertion="RECONNECT" leftOpertion="CANCEL"
         @leftCallback="cancelConnect" @rightCallback="reconnect"></kdialog>
     </div>
+    <!-- 透明遮罩层 -->
     <div :class="['lucency-mask', {visibleClass: current.dialogState.lucencyMaskShow}]">
       <!-- 信息提示框 -->
       <kdialog :text="current.dialogState.infoShowTest" :label="current.dialogState.infoShowTitle"
         rightOpertion="OK" leftOpertion="CANCEL" rightType="warning"
-        @leftCallback="closeInfoDialog" @rightCallback="reconnect"></kdialog>
+        @leftCallback="closeInfoDialog" @rightCallback="removeKey()"></kdialog>
     </div>
   </div>
 </template>
@@ -119,13 +129,32 @@ export default {
     reconnect() {
       this.$store.commit('hostView/reconnect')
     },
-    removeKey: function (val) { // 删除key
+    clientRemoveKey: function (val) { // 点击删除key
       this.current.dialogState.infoShowTitle = 'Delete key' // 设置info提示框标题
       this.current.dialogState.infoShowTest = `Are you sure you want to delete this key ${val}?` // 设置info提示框内容
       this.current.dialogState.lucencyMaskShow = true // 弹出透明遮罩层
+      this.toDeleteKey = val
+    },
+    refreshDB: function () {
+      if (this.current.selectDB === null) return 0
+      this.current.dbLoading = true
+      this.$store.commit('redis/getAllKey', { index: this.current.selectDB, time: this.current.time })
+    },
+    removeKey: function () { // 删除key
+      this.$store.commit('redis/removeKey', {
+        time: this.current.time,
+        index: this.current.selectDB,
+        key: this.toDeleteKey,
+        liveUpdate: this.current.realTime === '1'
+      })
+      this.current.dbData = this.current.dbData.filter(v => {
+        return this.toDeleteKey !== v
+      })
+      if (this.current.realTime === '1') this.current.dbLoading = true
+      this.current.dialogState.lucencyMaskShow = false // 关闭透明遮罩层
     },
     closeInfoDialog: function () { // 删除key
-      this.current.dialogState.lucencyMaskShow = false // 弹出透明遮罩层
+      this.current.dialogState.lucencyMaskShow = false // 关闭透明遮罩层
     },
     // 获取当前选择db的所有key
     selectDBChange: function (index) {
@@ -211,7 +240,7 @@ export default {
               &:hover {
                 cursor: pointer;
                 color: #00fff3;
-                transform: rotate(180deg);
+                transform: rotate(90deg);
               }
             }
             .delete {

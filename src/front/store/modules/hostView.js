@@ -4,11 +4,12 @@ export default {
   namespaced: true,
   state: {
     current: {
-      selectDB: '',
-      time: '',
-      label: '',
-      dbData: [],
-      dbLoading: false,
+      selectDB: '', // 当前选择的库
+      time: '', // host的打开时间，用作唯一id
+      label: '', // 当前host的标题
+      dbData: [], // keys数据
+      realTime: '0', // keys数据是否实时热更新
+      dbLoading: false, // 放keys数据集合的div是否显示加载中特效
       connectState: -1, // 当前host是否连接成功 (-1:连接中，0:成功，1：需要密码，2:密码错误，4:连接失败)
       dialogState: {
         promptTest: '', // 错误提示框的内容文本
@@ -31,7 +32,7 @@ export default {
     // 打开host连接，初始化host状态数据
     initHost(state, data) {
       const host = {
-        selectDB: '',
+        selectDB: null,
         dbData: [],
         time: data.time,
         conf: data.conf,
@@ -46,7 +47,6 @@ export default {
           infoShowTest: '' // 信息提示框文本
         }
       }
-      // const flg = Math.floor(Math.random() * 20)
       for (let index = 0; index < 40; index++) {
         host.dbData.push(Math.floor(Math.random() * 100))
       }

@@ -28,3 +28,10 @@ ipcMain.on('getAllKey', async (event, data) => {
   const keys = await redis.getAllKey(data)
   event.reply('getAllKey', { time: data.time, keys })
 })
+// 删除key
+ipcMain.on('removeKey', async (event, data) => {
+  const keys = await redis.removeKey(data)
+  if (keys !== null) {
+    event.reply('getAllKey', { time: data.time, keys })
+  }
+})
