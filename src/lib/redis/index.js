@@ -4,6 +4,9 @@ const singal = require('./singal.js')
 
 const pool = {}
 module.exports = {
+  /**
+   * 建立一个连接
+   */
   connection: async function(conf) {
     // conf.port = 6381
     const ret = await connect(conf)
@@ -13,6 +16,16 @@ module.exports = {
     }
     return ret.code
   },
+  /**
+   * 获取所有key
+   */
+  getAllKey: async function (data) {
+    await pool[data.time].select(data.index)
+    return await pool[data.time].keys('*')
+  },
+  /**
+   * 断开连接
+   */
   disconnect: function(time) {
     if (!pool[time]) {
       return

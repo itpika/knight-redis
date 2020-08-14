@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import app from './modules/app'
-import host from './modules/host'
-import hostView from './modules/hostView'
+import app from './modules/app.js'
+import host from './modules/host.js'
+import hostView from './modules/hostView.js'
+import redis from './modules/redis.js'
 import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT, FAIL } from '../../lib/redis/singal'
 
 Vue.use(Vuex)
@@ -17,7 +18,8 @@ export default new Vuex.Store({
   modules: {
     app,
     host,
-    hostView
+    hostView,
+    redis
   }
 })
 
@@ -50,5 +52,17 @@ if (window.ipcRenderer) {
       }
     }
     console.log(hostView.state.current, data)
+  })
+  /**
+   * 获取所有key
+   */
+  window.ipcRenderer.on('getAllKey', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        console.log('data.keys', data.keys)
+        hostView.state.all[i].dbLoading = false
+        hostView.state.all[i].dbData = data.keys
+      }
+    }
   })
 }

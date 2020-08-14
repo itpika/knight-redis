@@ -1,12 +1,10 @@
 <template>
   <div class="home">
-  <el-container>
-    <el-header height="10%"><Header/></el-header>
-    <el-container>
-      <el-aside width="260px" class="fontColor"><Aside></Aside></el-aside>
-      <el-main :class="mainClass"><Main></Main></el-main>
-    </el-container>
-  </el-container>
+      <el-header height="10%"><Header/></el-header>
+      <el-container>
+        <el-aside width="260px" class="fontColor"><Aside></Aside></el-aside>
+        <el-main :class="mainClass"><Main></Main></el-main>
+      </el-container>
   </div>
 </template>
 
@@ -32,7 +30,7 @@ export default {
   .home {
     height: 100%;
     > .el-container {
-      height: 100%;
+      height: 90%;
     }
   }
   .el-header, .el-footer {

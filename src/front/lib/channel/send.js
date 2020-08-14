@@ -22,5 +22,10 @@ export default {
     if (window.ipcRenderer) {
       window.ipcRenderer.send('closeConnect', time)
     }
+  },
+  getAllKey(data) {
+    if (window.ipcRenderer) {
+      window.ipcRenderer.send('getAllKey', data)
+    }
   }
 }

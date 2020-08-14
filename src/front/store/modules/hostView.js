@@ -46,12 +46,9 @@ export default {
           infoShowTest: '' // 信息提示框文本
         }
       }
-      const flg = Math.floor(Math.random() * 20)
-      for (let index = 0; index < flg; index++) {
-        host.dbData.push({
-          type: 'string',
-          key: Math.floor(Math.random() * 100)
-        })
+      // const flg = Math.floor(Math.random() * 20)
+      for (let index = 0; index < 40; index++) {
+        host.dbData.push(Math.floor(Math.random() * 100))
       }
       state.all.push(host)
       state.current = state.all[state.all.length - 1]

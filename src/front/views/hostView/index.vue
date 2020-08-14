@@ -38,8 +38,11 @@
           <div class="dbBoxBody bgkColor">
             <ul>
               <li v-for="(v, i) of current.dbData" :key="i">
-                <span>{{ v.key }}</span>
-                <i class="el-icon-close" @click.stop="removeKey(v.key)"></i>
+                <div class="left">
+                  <i class="el-icon-key brightBlueColor"></i>
+                  <span>{{ v }}</span>
+                </div>
+                <i class="el-icon-close" @click.stop="removeKey(v)"></i>
               </li>
             </ul>
           </div>
@@ -124,21 +127,14 @@ export default {
     closeInfoDialog: function () { // 删除key
       this.current.dialogState.lucencyMaskShow = false // 弹出透明遮罩层
     },
+    // 获取当前选择db的所有key
     selectDBChange: function (index) {
       this.current.dbLoading = true
-      // TODO
-      console.log(index)
+      this.current.dbData = []
+      this.$store.commit('redis/getAllKey', { index, time: this.current.time })
     }
   },
   created: function () {
-    // this.loading = this.$loading({
-    //   target: '#hostView',
-    //   lock: false,
-    //   text: 'Loading',
-    //   // fullscreen: false,
-    //   spinner: 'el-icon-loading',
-    //   background: 'rgba(0, 0, 0, 0.7)'
-    // })
   }
   // 改变中间内容块的背景颜色
   // beforeCreate: function() {
@@ -179,8 +175,8 @@ export default {
       box-sizing: border-box;
       .dbBox {
         padding: 10px;
-        width: 28%;
-        height: 90%;
+        width: 35%;
+        height: 100%;
         border-radius: 6px;
         background-color: #1c3046;
         display: flex;
@@ -188,15 +184,16 @@ export default {
         box-sizing: border-box;
         .dbBoxHeader {
           height: 28px;
+          // height: 5%;
           width: 100%;
           display: flex;
           justify-content: space-between;
           .opertionsBox {
             margin-left: 10px;
             padding: 0 10px;
-            width: 50%;
             color: #fff;
             box-sizing: border-box;
+            flex: 1;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -227,6 +224,8 @@ export default {
             }
           }
           .selectBox {
+            display: flex;
+            height: 100%;
             width: 50%;
             /deep/ .el-input__inner {
               border: none;
@@ -239,11 +238,12 @@ export default {
         .dbBoxBody {
           flex: 1;
           margin-top: 10px;
+          height: 100%;
           border-radius: 5px;
           box-sizing: border-box;
-          overflow: scroll;
-          overflow-x: visible;
+          overflow: hidden;
           > ul {
+            overflow-y: scroll;
             box-sizing: border-box;
             height: 100%;
             padding: 10px 10px;
@@ -255,14 +255,23 @@ export default {
               justify-content: space-between;
               align-items: center;
               color: #fff;
-              padding: 0 10px;
+              padding: 0 6px 0 4px;
               box-sizing: border-box;
               font-size: 16px;
               border-radius: 5px;
               height: 25px;
+              .left {
+                display: flex;
+                flex: 0.9;
+                i {
+                  font-size: 18px;
+                  margin-right: 2px;
+                }
+                overflow: hidden;
+              }
               > i {
                 &:hover {
-                  color: #f30202;
+                  color: #ff0505;
                 }
                 visibility: hidden;
               }

@@ -23,3 +23,8 @@ ipcMain.on('initConnect', async (event, conf) => {
 ipcMain.on('closeConnect', (event, time) => {
   redis.disconnect(time)
 })
+// 获取所有key
+ipcMain.on('getAllKey', async (event, data) => {
+  const keys = await redis.getAllKey(data)
+  event.reply('getAllKey', { time: data.time, keys })
+})
