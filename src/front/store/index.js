@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import app from './modules/app.js'
 import host from './modules/host.js'
 import hostView from './modules/hostView.js'
+import newKey from './modules/newKey.js'
 import redis from './modules/redis.js'
 import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT, FAIL } from '../../lib/redis/singal'
 
@@ -19,7 +20,8 @@ export default new Vuex.Store({
     app,
     host,
     hostView,
-    redis
+    redis,
+    newKey
   }
 })
 
@@ -62,6 +64,18 @@ if (window.ipcRenderer) {
         console.log('data.keys', data.keys)
         hostView.state.all[i].dbLoading = false
         hostView.state.all[i].dbData = data.keys
+      }
+    }
+  })
+  /**
+   * 设置key成功
+   */
+  window.ipcRenderer.on('setKeyOK', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        hostView.state.all[i].dbLoading = false
+        hostView.state.all[i].dbData = data.keys
+        newKey.state.ok = true
       }
     }
   })

@@ -37,8 +37,8 @@ export default {
         time: data.time,
         conf: data.conf,
         label: data.label,
-        connectState: Math.floor(Math.random() * 10) % 2,
-        // connectState: -1,
+        // connectState: Math.floor(Math.random() * 10) % 2,
+        connectState: -1,
         dbLoading: false,
         dialogState: {
           promptTest: '', // 错误提示框的内容文本

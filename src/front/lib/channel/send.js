@@ -32,5 +32,10 @@ export default {
     if (window.ipcRenderer) {
       window.ipcRenderer.send('removeKey', data)
     }
+  },
+  setKey(data) {
+    if (window.ipcRenderer) {
+      window.ipcRenderer.send('setKey', data)
+    }
   }
 }

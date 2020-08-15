@@ -35,6 +35,24 @@ module.exports = {
     return null
   },
   /**
+   * 保存key
+   */
+  setKey: async function (data) {
+    await pool[data.time].select(data.index)
+    switch (data.type) {
+      case require('./singal.js').STRING.value: // string
+        if (data.expireModel) {
+          return await pool[data.time].set(data.key, data.value, data.expireModel, data.expireTime)
+        } else {
+          return await pool[data.time].set(data.key, data.value)
+        }
+        break
+      default:
+        break
+    }
+    return null
+  },
+  /**
    * 断开连接
    */
   disconnect: function(time) {

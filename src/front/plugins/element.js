@@ -18,7 +18,8 @@ import {
   Tooltip,
   Option,
   Loading,
-  Switch
+  Switch,
+  Message
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -41,3 +42,4 @@ Vue.use(Header)
 Vue.use(Aside)
 Vue.use(Main)
 Vue.use(Footer)
+Vue.prototype.$message = Message

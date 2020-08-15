@@ -24,7 +24,7 @@
             </div>
             <div class="opertionsBox bgkColor">
               <el-tooltip class="item" effect="light" content="NEW KEY" placement="top">
-                <i class="el-icon-plus add"></i>
+                <i class="el-icon-plus add" @click.stop="addKey"></i>
               </el-tooltip>
               <el-tooltip class="item" effect="light" content="REFRESH" placement="top">
                 <i class="el-icon-refresh refresh" @click.stop="refreshDB"></i>
@@ -73,11 +73,13 @@
         rightOpertion="OK" leftOpertion="CANCEL" rightType="warning"
         @leftCallback="closeInfoDialog" @rightCallback="removeKey()"></kdialog>
     </div>
+    <NewKey :drawer="drawer"/>
   </div>
 </template>
 
 <script>
 import kdialog from '@/front/components/common/k-dialog.vue'
+import NewKey from '@/front/components/host/newKey.vue'
 export default {
   name: 'hostView',
   computed: {
@@ -86,6 +88,17 @@ export default {
     },
     hosts() {
       return this.$store.state.host.openHost
+    },
+    saveKeyOK() {
+      return this.$store.state.newKey.ok
+    },
+    drawer: {
+      get () {
+        return this.$store.state.newKey.drawer
+      },
+      set (value) {
+        this.$store.state.newKey.drawer = value
+      }
     }
   },
   data () {
@@ -103,9 +116,20 @@ export default {
     }
   },
   components: {
-    kdialog
+    kdialog,
+    NewKey
   },
   methods: {
+    addKey() {
+      if (this.current.selectDB === null) {
+        this.$message({
+          showClose: true,
+          message: 'Please select the db first'
+        })
+        return
+      }
+      this.drawer = true
+    },
     // 连接失败后取消
     cancelConnect() {
       // 删除左侧host栏目项
@@ -161,6 +185,18 @@ export default {
       this.current.dbLoading = true
       this.current.dbData = []
       this.$store.commit('redis/getAllKey', { index, time: this.current.time })
+    }
+  },
+  watch: {
+    saveKeyOK: function(val, old) {
+      if (val) {
+        this.$message({
+          showClose: true,
+          message: 'SAVE SUCCESS',
+          type: 'success'
+        })
+        this.$store.commit('newKey/setOk', false)
+      }
     }
   },
   created: function () {

@@ -47,16 +47,16 @@
       <div class="addHostBody">
         <el-form ref="host" label-position="left" label-width="80px" :model="host" :rules="rules">
           <el-form-item label="Lable" prop="label">
-            <el-input v-model="host.label" clearable></el-input>
+            <el-input v-model="host.label" clearable placeholder="label"></el-input>
           </el-form-item>
           <el-form-item label="Address" prop="address" clearable>
-            <el-input v-model="host.address" clearable></el-input>
+            <el-input v-model="host.address" clearable placeholder="host address"></el-input>
           </el-form-item>
           <el-form-item label="Port" prop="port">
-            <el-input v-model.number="host.port" clearable></el-input>
+            <el-input v-model.number="host.port" clearable placeholder="port"></el-input>
           </el-form-item>
           <el-form-item label="Passwd" prop="passwd">
-            <el-input v-model="host.passwd" clearable></el-input>
+            <el-input v-model="host.passwd" clearable placeholder="password"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -237,7 +237,7 @@ export default {
     }
   }
   .addHostHead {
-    height: 60px;
+    height: 10%;
     border-bottom: solid 1px #334460;
     background-color: #1c3046;
     color: #fff;

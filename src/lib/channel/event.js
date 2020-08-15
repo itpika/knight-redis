@@ -35,3 +35,11 @@ ipcMain.on('removeKey', async (event, data) => {
     event.reply('getAllKey', { time: data.time, keys })
   }
 })
+// 保存key
+ipcMain.on('setKey', async (event, data) => {
+  const ret = await redis.setKey(data)
+  if (ret === 'OK') {
+    const keys = await redis.getAllKey(data)
+    event.reply('setKeyOK', { time: data.time, keys })
+  }
+})
