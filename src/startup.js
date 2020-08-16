@@ -1,4 +1,6 @@
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, shell } = require('electron')
+
+// shell.openExternal('https://github.com')
 require('./lib/channel/event.js')
 function createWindow () {
   const path = require('path')
@@ -34,6 +36,8 @@ function createWindow () {
       createWindow()
     }
   })
+  // shell.openPath('/var/code')
+  shell.beep()
   
 }
 

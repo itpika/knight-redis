@@ -16,6 +16,9 @@ export default {
         lucencyMaskShow: false, // 透明遮罩层是否显示
         infoShowTitle: '', // 信息提示框标题
         infoShowTest: '' // 信息提示框文本
+      },
+      shellState: { // shell命令窗口状态
+        open: false // 是否打开
       }
     },
     all: []
@@ -38,13 +41,17 @@ export default {
         conf: data.conf,
         label: data.label,
         // connectState: Math.floor(Math.random() * 10) % 2,
-        connectState: -1,
+        // connectState: -1,
+        connectState: 0,
         dbLoading: false,
         dialogState: {
           promptTest: '', // 错误提示框的内容文本
           lucencyMaskShow: false, // 透明遮罩层是否显示
           infoShowTitle: '', // 信息提示框标题
           infoShowTest: '' // 信息提示框文本
+        },
+        shellState: {
+          open: false
         }
       }
       for (let index = 0; index < 40; index++) {

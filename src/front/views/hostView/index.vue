@@ -2,7 +2,7 @@
   <div id="hostView" v-loading.lock="current.connectState === -1" element-loading-background="#416080" class="hostView bgkColor">
     <div :class="['content', {'hiddenClass': !(current.connectState === 0)}]">
       <div class="header">
-        <div class="terminalBtn"><el-button type="info" size="small" round>Terminal</el-button></div>
+        <div class="terminalBtn"><el-button type="info" size="small" round @click.stop="current.shellState.open = true">Terminal</el-button></div>
       </div>
       <div class="body">
         <div v-loading.lock="current.dbLoading"
@@ -74,12 +74,14 @@
         @leftCallback="closeInfoDialog" @rightCallback="removeKey()"></kdialog>
     </div>
     <NewKey :drawer="drawer"/>
+    <Terminal/>
   </div>
 </template>
 
 <script>
 import kdialog from '@/front/components/common/k-dialog.vue'
 import NewKey from '@/front/components/host/newKey.vue'
+import Terminal from '@/front/components/host/terminal.vue'
 export default {
   name: 'hostView',
   computed: {
@@ -103,6 +105,7 @@ export default {
   },
   data () {
     return {
+      terminal: false,
       dbs: [
         { value: 0, label: 'DB0' }, { value: 1, label: 'DB1' },
         { value: 2, label: 'DB2' }, { value: 3, label: 'DB3' },
@@ -117,17 +120,21 @@ export default {
   },
   components: {
     kdialog,
-    NewKey
+    NewKey,
+    Terminal
   },
   methods: {
+    openTerminal() {
+      this.terminal = true
+    },
     addKey() {
-      if (this.current.selectDB === null) {
-        this.$message({
-          showClose: true,
-          message: 'Please select the db first'
-        })
-        return
-      }
+      // if (this.current.selectDB === null) {
+      //   this.$message({
+      //     showClose: true,
+      //     message: 'Please select the db first'
+      //   })
+      //   return
+      // }
       this.drawer = true
     },
     // 连接失败后取消
