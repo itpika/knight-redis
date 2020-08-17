@@ -55,11 +55,11 @@ export default {
     },
     // 获得光标
     getFocus() {
-      console.log('====')
-      const c = document.getElementById('shellBox')
-      const ctx = c.getContext('2d')
-      // ctx.font = '12'
-      ctx.fillText('Hello World', 10, 50)
+      console.log('----')
+      const ctx = document.getElementById('shellBox').getContext('2d')
+      ctx.fillStyle = '#fff'
+      ctx.font = '14px arial'
+      ctx.fillText('127.0.0.1:6379[0]:', 10, 10)
     }
   },
   mounted() {
@@ -121,7 +121,7 @@ export default {
     padding: 0 10px;
     canvas {
       color: #fff;
-      font-size: 10px;
+      font-size: 12px;
     }
   }
 </style>
