@@ -17,8 +17,8 @@
       </div>
     </div>
     <!-- 主体 -->
-    <div class="body" ref="body">
-      <canvas id="shellBox" height="100px" width="1380px"></canvas>
+    <div id="shellBody">
+      <canvas @click.stop="getFocus" id="shellBox" :width="terminalWidth+'px'" :height="terminalHeight+'px'"></canvas>
     </div>
   </el-drawer>
 </template>
@@ -29,12 +29,14 @@ export default {
     current() {
       return this.$store.state.hostView.current
     },
-    bodyHeight() {
-      return this.$refs.body.clientHeight
+    shellState() {
+      return this.$store.state.hostView.current.shellState.open
     }
   },
   data: function () {
     return {
+      terminalWidth: 0,
+      terminalHeight: 0
     }
   },
   methods: {
@@ -42,11 +44,36 @@ export default {
     },
     leftBack () {
       this.current.shellState.open = false
+    },
+    getBodyWidth() {
+      this.terminalWidth = document.getElementById('shellBody').clientWidth - 20 // #shellBody 有20的padding，要减去
+      return document.getElementById('shellBody').clientWidth
+    },
+    getBodyHeight() {
+      this.terminalHeight = document.getElementById('shellBody').clientHeight
+      return document.getElementById('shellBody').clientHeight
+    },
+    // 获得光标
+    getFocus() {
+      console.log('====')
+      const c = document.getElementById('shellBox')
+      const ctx = c.getContext('2d')
+      // ctx.font = '12'
+      ctx.fillText('Hello World', 10, 50)
     }
   },
+  mounted() {
+    window.addEventListener('resize', this.getBodyWidth)
+    window.addEventListener('resize', this.getBodyHeight)
+  },
   watch: {
-    bodyHeight: function(val, old) {
-      console.log('---', val)
+    shellState(val, old) {
+      if (val) {
+        this.$nextTick(() => {
+          this.getBodyWidth()
+          this.getBodyHeight()
+        })
+      }
     }
   }
 }
@@ -87,10 +114,14 @@ export default {
       align-items: center;
     }
   }
-  .body {
+  #shellBody {
     height: 90%;
     box-sizing: border-box;
     background-color: #000;
     padding: 0 10px;
+    canvas {
+      color: #fff;
+      font-size: 10px;
+    }
   }
 </style>

@@ -128,13 +128,13 @@ export default {
       this.terminal = true
     },
     addKey() {
-      // if (this.current.selectDB === null) {
-      //   this.$message({
-      //     showClose: true,
-      //     message: 'Please select the db first'
-      //   })
-      //   return
-      // }
+      if (this.current.selectDB === null) {
+        this.$message({
+          showClose: true,
+          message: 'Please select the db first'
+        })
+        return
+      }
       this.drawer = true
     },
     // 连接失败后取消
