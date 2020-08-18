@@ -19,7 +19,7 @@ export default {
 @import 'style/animation.less';
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Microsoft JhengHei', 'Microsoft Yahei', Helvetica, Arial, '黑体';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

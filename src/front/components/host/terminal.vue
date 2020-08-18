@@ -1,87 +1,121 @@
 <template>
   <!-- 底层命令行抽屉 -->
-  <el-drawer
-    size="30%"
-    :visible.sync="current.shellState.open"
-    direction="btt"
-    :with-header="false"
-    :before-close="handleClose"
-    >
+  <div class="terminal">
     <!-- 头部 -->
     <div class="header">
-      <div>
-        <div class="addTitle">Shell</div>
-      </div>
-      <div class="closeIcon" @click.stop="current.shellState.open = false">
-        <i class="el-icon-close"/>
-      </div>
+      <div class="addTitle">Shell</div>
+      <i @click.stop="current.shellState.open = false" class="el-icon-close"/>
     </div>
     <!-- 主体 -->
     <div id="shellBody">
-      <canvas @click.stop="getFocus" id="shellBox" :width="terminalWidth+'px'" :height="terminalHeight+'px'"></canvas>
+      <canvas  style="z-index: 0;" id="shell-text-layer"></canvas>
+      <canvas @click.stop="getFocus" style="z-index: 3;" id="shell-cursor-layer"></canvas>
     </div>
-  </el-drawer>
+  </div>
 </template>
 <script>
 export default {
   name: 'Terminal',
+  props: {
+    address: String
+  },
   computed: {
     current() {
       return this.$store.state.hostView.current
     },
-    shellState() {
-      return this.$store.state.hostView.current.shellState.open
+    perfix() {
+      // return `${this.address}[${this.current.selectDB}] > `
+      return `${this.address}[0]> `
     }
   },
   data: function () {
     return {
-      terminalWidth: 0,
-      terminalHeight: 0
+      terminalWidth: 0, // 画布宽度
+      terminalHeight: 0, // 画布高度
+      fontSize: 14, // 字体大小
+      lineInterval: 4, // 行间隔
+      imgData: '', // 行间隔
+      textLocation: 0
     }
   },
   methods: {
-    handleClose (done) {
-    },
     leftBack () {
       this.current.shellState.open = false
     },
     getBodyWidth() {
-      this.terminalWidth = document.getElementById('shellBody').clientWidth - 20 // #shellBody 有20的padding，要减去
-      return document.getElementById('shellBody').clientWidth
+      const obj = document.getElementById('shellBody')
+      if (!obj) return 0
+      this.terminalWidth = obj.clientWidth - 20 // #shellBody 有20的padding，要减去
+      return obj.clientWidth
     },
     getBodyHeight() {
-      this.terminalHeight = document.getElementById('shellBody').clientHeight
-      return document.getElementById('shellBody').clientHeight
+      const obj = document.getElementById('shellBody')
+      if (!obj) return 0
+      this.terminalHeight = obj.clientHeight
+      return obj.clientHeight
     },
     // 获得光标
     getFocus() {
-      console.log('====')
-      const c = document.getElementById('shellBox')
-      const ctx = c.getContext('2d')
-      // ctx.font = '12'
-      ctx.fillText('Hello World', 10, 50)
+    },
+    writePrifix() {
+      const text = document.getElementById('shell-text-layer').getContext('2d')
+      text.fillStyle = '#00cc74'
+      text.font = this.fontSize + 'px Microsoft JhengHei'
+      text.fillText(this.perfix, 0, this.fontSize + this.lineInterval)
     }
   },
   mounted() {
     window.addEventListener('resize', this.getBodyWidth)
     window.addEventListener('resize', this.getBodyHeight)
+    this.$nextTick(() => {
+      this.getBodyWidth()
+      this.getBodyHeight()
+      this.$nextTick(() => {
+        this.writePrifix()
+      })
+    })
   },
   watch: {
-    shellState(val, old) {
-      if (val) {
-        this.$nextTick(() => {
-          this.getBodyWidth()
-          this.getBodyHeight()
-        })
-      }
+    // 监听父容器的宽高，动态设置canvas画布宽高
+    terminalHeight(val, old) {
+      const text = document.getElementById('shell-text-layer')
+      const textCtx = text.getContext('2d')
+      const cursor = document.getElementById('shell-cursor-layer')
+      // 保存图像
+      let imgData
+      if (old !== 0) imgData = textCtx.getImageData(0, 0, this.terminalWidth, old)
+      // 设置画布的宽高
+      text.height = val
+      cursor.height = val
+      // 复原图像
+      if (old !== 0) textCtx.putImageData(imgData, 0, 0)
+    },
+    // 监听父容器的宽高，动态设置canvas画布宽高
+    terminalWidth(val, old) {
+      const text = document.getElementById('shell-text-layer')
+      const textCtx = text.getContext('2d')
+      const cursor = document.getElementById('shell-cursor-layer')
+      // 保存图像
+      let imgData
+      if (old !== 0) imgData = textCtx.getImageData(0, 0, this.terminalWidth, old)
+      // 设置画布的宽高
+      text.width = val
+      cursor.width = val
+      // 复原图像
+      if (old !== 0) textCtx.putImageData(imgData, 0, 0)
     }
   }
 }
 </script>
 <style lang="less" scoped>
+.terminal {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 30%;
+  width: 100%;
   .header {
-    height: 10%;
-    border-bottom: solid 1px #334460;
+    height: 15%;
     background-color: #1c3046;
     color: #fff;
     display: flex;
@@ -89,39 +123,36 @@ export default {
     align-items: center;
     padding: 0 10px;
     font-size: 12px;
-    > div:first-child {
-      width: 90%;
+    .addTitle {
       display: flex;
       justify-content: flex-start;
-      > .addTitle {
-        line-height: 25px;
-      }
-    }
-    .closeIcon:hover {
-      background-color: #334460;
-      cursor: pointer;
-    }
-    .closeIcon {
-      height: 20px;
-      width: 20px;
-      border-radius: 6px;
-      > i {
-        font-size: 14px;
-        height: 14px;
-      }
-      display: flex;
-      justify-content: center;
       align-items: center;
+      width: 90%;
+      font-size: 12px;
+    }
+    > i {
+      &:hover {
+        color: #fff;
+        cursor: pointer;
+      }
+      color: #bebebe;
+      font-size: 14px;
+      height: 14px;
     }
   }
   #shellBody {
-    height: 90%;
+    height: 85%;
     box-sizing: border-box;
     background-color: #000;
-    padding: 0 10px;
+    position: relative;
     canvas {
-      color: #fff;
-      font-size: 10px;
+      position: absolute;
+      box-sizing: border-box;
+      top: 0;
+      left: 0;
+      padding: 0 10px;
+      font-size: 12px;
     }
   }
+}
 </style>

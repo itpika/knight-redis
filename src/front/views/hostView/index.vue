@@ -74,7 +74,9 @@
         @leftCallback="closeInfoDialog" @rightCallback="removeKey()"></kdialog>
     </div>
     <NewKey :drawer="drawer"/>
-    <Terminal/>
+    <transition name="terminal" mode="out-in">
+      <Terminal v-if="current.shellState.open" :address="`${current.conf.address}:${current.conf.port}`"/>
+    </transition>
   </div>
 </template>
 
@@ -128,13 +130,13 @@ export default {
       this.terminal = true
     },
     addKey() {
-      if (this.current.selectDB === null) {
-        this.$message({
-          showClose: true,
-          message: 'Please select the db first'
-        })
-        return
-      }
+      // if (this.current.selectDB === null) {
+      //   this.$message({
+      //     showClose: true,
+      //     message: 'Please select the db first'
+      //   })
+      //   return
+      // }
       this.drawer = true
     },
     // 连接失败后取消
@@ -189,7 +191,7 @@ export default {
     },
     // 获取当前选择db的所有key
     selectDBChange: function (index) {
-      this.current.dbLoading = true
+      // this.current.dbLoading = true
       this.current.dbData = []
       this.$store.commit('redis/getAllKey', { index, time: this.current.time })
     }
@@ -236,7 +238,7 @@ export default {
           background-color: #1c3046;
           transition: all 300ms;
           &:hover {
-            color: #02f32b;
+            color: #00de7e;
             background-color: #26405c;
           }
         }
@@ -256,7 +258,6 @@ export default {
         box-sizing: border-box;
         .dbBoxHeader {
           height: 28px;
-          // height: 5%;
           width: 100%;
           display: flex;
           justify-content: space-between;
@@ -274,7 +275,7 @@ export default {
               transition: all 500ms;
               &:hover {
                 cursor: pointer;
-                color: #02f32b;
+                color: #00de7e;
                 transform: rotate(90deg);
               }
             }
@@ -303,7 +304,7 @@ export default {
               border: none;
               background-color: #416080;
               outline: none;
-              color: #02f32b;
+              color: #00de7e;
             }
           }
         }
@@ -338,6 +339,7 @@ export default {
                 i {
                   font-size: 18px;
                   margin-right: 2px;
+                  color: #00de7e;
                 }
                 overflow: hidden;
               }
@@ -384,6 +386,12 @@ export default {
       left: 50%;
       transform: translateX(-50%) translateY(-50%);
     }
+  }
+  .terminal-enter-active, .terminal-leave-active {
+    transition: all .5s ease;
+  }
+  .terminal-enter, .terminal-leave-to {
+    transform: translateY(100%);
   }
 }
 </style>

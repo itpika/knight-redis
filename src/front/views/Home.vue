@@ -2,7 +2,7 @@
   <div class="home">
       <el-header height="10%"><Header/></el-header>
       <el-container>
-        <el-aside width="260px" class="fontColor"><Aside></Aside></el-aside>
+        <el-aside width="18%" class="fontColor"><Aside></Aside></el-aside>
         <el-main :class="mainClass"><Main></Main></el-main>
       </el-container>
   </div>
@@ -31,6 +31,9 @@ export default {
     height: 100%;
     > .el-container {
       height: 90%;
+      > ::-webkit-scrollbar { // 主body隐藏滚动条
+        display: none; /* Chrome Safari */
+      }
     }
   }
   .el-header, .el-footer {

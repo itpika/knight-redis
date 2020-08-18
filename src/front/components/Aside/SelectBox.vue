@@ -68,7 +68,7 @@ export default {
     justify-content: space-between;
     .left {
       .iconActive {
-        border: solid 1px #02f32b !important;
+        border: solid 1px #00de7e !important;
       }
       .iconActiveMenu {
         border: solid 1px #fff !important;
@@ -110,7 +110,7 @@ export default {
   }
   .active {
     background-color: #416080;
-    color: #02f32b !important;
+    color: #00de7e !important;
   }
   .activeMenu {
     background-color: #416080;

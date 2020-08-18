@@ -40,7 +40,7 @@
           <div class="addTitle">addHost</div>
         </div>
         <div>
-          <el-button @click="submitForm" type="success" size="mini" round>SAVE</el-button>
+          <el-button @click="submitForm" type="primary" size="mini" round>SAVE</el-button>
         </div>
       </div>
       <!-- 右侧抽屉主体 -->
