@@ -146,15 +146,11 @@ export default {
     background-color: #000;
     position: relative;
     canvas {
-<<<<<<< HEAD
       position: absolute;
       box-sizing: border-box;
       top: 0;
       left: 0;
       padding: 0 10px;
-=======
-      color: #fff;
->>>>>>> 33ae4e042c11c948ee4f2779a0e09e295b630c28
       font-size: 12px;
     }
   }
