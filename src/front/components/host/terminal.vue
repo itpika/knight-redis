@@ -110,12 +110,6 @@ export default {
       if (!this.listenKeyboard) return
       console.log(e.key, e.keyCode)
       if (this.showKeyCode.includes(e.keyCode)) { // 键盘可显示字符
-        // 计算宽度，在光标的位置写入新数据
-        // if (this.cursorSite === this.currentData.length) {
-        //   this.$data.textCtx.fillText(this.currentData, this.$data.textCtx.measureText(this.currentData).width, this.lineNum * (this.lineInterval + this.fontSize))
-        //   this.writeCursor(this.$data.cursorCtx.measureText(this.currentData).width, this.currentData.length - 1)
-        //   return
-        // }
         // 删除后面的字符（删除一个矩形来完成）特别是在中间插入字符
         const x = this.$data.cursorCtx.measureText(this.currentData.substring(0, this.cursorSite)).width // 左边的宽度
         this.$data.textCtx.clearRect(x,
@@ -124,8 +118,8 @@ export default {
         // 重绘制后面的数据
         const data = e.key + this.currentData.substring(this.cursorSite)
         this.$data.textCtx.fillText(data, x, this.lineNum * (this.lineInterval + this.fontSize))
-        // 绘制光标
         this.currentData = this.currentData.substring(0, this.cursorSite) + data
+        // 绘制光标
         this.writeCursor(x + this.$data.cursorCtx.measureText(e.key).width, this.cursorSite + 1)
       } else if (this.operateKeyCode.includes(e.keyCode)) { // 操作字符
         switch (e.keyCode) {
