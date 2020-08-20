@@ -76,38 +76,44 @@ export default {
     // 绘制行头
     writePrifix(lineNum) {
       const text = document.getElementById('shell-text-layer').getContext('2d')
-      // console.log(lineNum * (this.fontSize + this.lineInterval))
-      // 绘制前缀头
-      text.fillText(this.perfix, 0, lineNum * (this.fontSize + this.lineInterval))
       this.currentData = this.perfix
+      this.lineNum = lineNum // 记录行号
       // 记录内容宽度(只记录最大值)
       if (this.contentWidth < this.$data.textCtx.measureText(this.currentData).width) this.contentWidth = this.$data.textCtx.measureText(this.currentData).width
-      this.lineNum = lineNum // 记录行号
-      // 记录内容高度
+      // 记录最新内容高度
       this.contentHeight = lineNum * (this.fontSize + this.lineInterval) + this.fontSize
+      // 绘制前缀头
+      if (this.contentHeight - this.fontSize > this.terminalHeight) { // 内容超过盒子大小，显示最下面的一行
+        // 保存旧内容
+        this.$data.textCtx.clearRect(0, 0, this.terminalWidth, this.terminalHeight) // 清空画布
+        // 重绘制画布数据(旧的内容往上移动)
+        this.$data.textCtx.putImageData(this.allText, 0, this.terminalHeight - this.contentHeight + this.fontSize)
+        // 绘制新的一行
+        text.fillText(this.perfix, 0, 2 * this.terminalHeight - this.contentHeight + this.fontSize)
+      } else { // 还没超过默认的盒子高度
+        text.fillText(this.perfix, 0, lineNum * (this.fontSize + this.lineInterval))
+      }
       // 绘制光标
       this.writeCursor(this.$data.cursorCtx.measureText(this.currentData).width, this.currentData.length)
-      
-      // TODO
-      if (this.contentHeight > this.terminalHeight) { // 内容超过盒子大小，显示最下面的一行
-        this.$data.textCtx.clearRect(0, 0, this.contentWidth, this.contentHeight) // 清空画布
-        // 重绘制画布数据
-        console.log(this.terminalHeight - this.contentHeight)
-        // this.$data.textCtx.translate(0, this.terminalHeight - this.contentHeight)
-        this.$data.textCtx.putImageData(this.allText, 0, this.terminalHeight - this.contentHeight)
-      }
     },
     // 绘制光标
     writeCursor(width, index) {
       // 清除旧光标
       this.$data.cursorCtx.clearRect(0, 0, this.terminalWidth, this.terminalHeight)
       // 绘制新光标，计算前面文本的宽度后再绘制,宽：8，高：字体宽度再加 5
-      this.$data.cursorCtx.fillRect(width, (this.lineNum - 1) * this.fontSize + this.lineInterval * this.lineNum, 8, this.fontSize + 5)
+      if (this.contentHeight - this.fontSize > this.terminalHeight) {
+        this.$data.cursorCtx.fillRect(width,
+          2 * this.terminalHeight - this.contentHeight, 8, this.fontSize + 5)
+      } else {
+        this.$data.cursorCtx.fillRect(width,
+          (this.lineNum - 1) * this.fontSize + this.lineInterval * this.lineNum, 8, this.fontSize + 5)
+      }
       this.cursorSite = index // 记录光标的索引位置
       // console.log(index)
       // 记录光标内容
       this.$data.allCursor = this.$data.cursorCtx.getImageData(0, 0, this.terminalWidth, this.contentHeight)
       // 记录画布内容
+      // edit
       this.allText = this.$data.textCtx.getImageData(0, 0, this.contentWidth, this.contentHeight)
     }
   },
