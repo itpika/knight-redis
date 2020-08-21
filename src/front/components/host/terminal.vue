@@ -36,9 +36,10 @@ export default {
       fontSize: 14, // 字体大小
       lineInterval: 4, // 行间隔
       currentData: '', // 当前行文本的内容
-      lineNum: 0,
-      cursorSite: 0,
+      lineNum: 0, // 行号
+      cursorSite: 0, // 光标在当前行的索引位置
       listenKeyboard: 0, // 是否监听键盘按下
+      textY: 0, // 内容在y轴的起始坐标，刚开始为0，内容超出盒子高度开始为负数
       allText: null, // 所有的画布文本内容
       allCursor: null, // 所有的画布光标内容
       showKeyCode: [ // 键盘可显示字符
@@ -81,15 +82,20 @@ export default {
       // 记录内容宽度(只记录最大值)
       if (this.contentWidth < this.$data.textCtx.measureText(this.currentData).width) this.contentWidth = this.$data.textCtx.measureText(this.currentData).width
       // 记录最新内容高度
-      this.contentHeight = lineNum * (this.fontSize + this.lineInterval) + this.fontSize
+      this.contentHeight = (lineNum + 1) * (this.fontSize + this.lineInterval)
       // 绘制前缀头
       if (this.contentHeight - this.fontSize > this.terminalHeight) { // 内容超过盒子大小，显示最下面的一行
         // 保存旧内容
         this.$data.textCtx.clearRect(0, 0, this.terminalWidth, this.terminalHeight) // 清空画布
         // 重绘制画布数据(旧的内容往上移动)
-        this.$data.textCtx.putImageData(this.allText, 0, this.terminalHeight - this.contentHeight + this.fontSize)
+        // 原公式
+        // this.$data.textCtx.putImageData(this.allText, 0, 0 - (this.fontSize + this.lineInterval - (this.terminalHeight - (this.fontSize + this.lineInterval) * (lineNum - 1) - this.lineInterval)))
+        // 化简
+        this.textY = this.terminalHeight - (this.fontSize + this.lineInterval) * (lineNum) - this.lineInterval
+        console.log(this.textY)
+        this.$data.textCtx.putImageData(this.allText, 0, this.textY)
         // 绘制新的一行
-        text.fillText(this.perfix, 0, 2 * this.terminalHeight - this.contentHeight + this.fontSize)
+        text.fillText(this.perfix, 0, this.terminalHeight - this.lineInterval)
       } else { // 还没超过默认的盒子高度
         text.fillText(this.perfix, 0, lineNum * (this.fontSize + this.lineInterval))
       }
@@ -103,7 +109,7 @@ export default {
       // 绘制新光标，计算前面文本的宽度后再绘制,宽：8，高：字体宽度再加 5
       if (this.contentHeight - this.fontSize > this.terminalHeight) {
         this.$data.cursorCtx.fillRect(width,
-          2 * this.terminalHeight - this.contentHeight, 8, this.fontSize + 5)
+          this.terminalHeight - this.fontSize - this.lineInterval, 8, this.fontSize + 5)
       } else {
         this.$data.cursorCtx.fillRect(width,
           (this.lineNum - 1) * this.fontSize + this.lineInterval * this.lineNum, 8, this.fontSize + 5)
@@ -114,7 +120,7 @@ export default {
       this.$data.allCursor = this.$data.cursorCtx.getImageData(0, 0, this.terminalWidth, this.contentHeight)
       // 记录画布内容
       // edit
-      this.allText = this.$data.textCtx.getImageData(0, 0, this.contentWidth, this.contentHeight)
+      this.allText = this.$data.textCtx.getImageData(0, this.textY, this.contentWidth, this.contentHeight)
     }
   },
   mounted() {
@@ -149,7 +155,11 @@ export default {
           this.$data.cursorCtx.measureText(this.currentData.substring(this.cursorSite)).width, this.fontSize + this.lineInterval)
         // 重绘制后面的数据
         const data = e.key + this.currentData.substring(this.cursorSite)
-        this.$data.textCtx.fillText(data, x, this.lineNum * (this.lineInterval + this.fontSize))
+        if (this.contentHeight - this.fontSize > this.terminalHeight) { // 命令行画布超出盒子高度，就在最后一行写数据
+          this.$data.textCtx.fillText(data, x, this.terminalHeight - this.lineInterval)
+        } else { // 没有超出就当前行写数据
+          this.$data.textCtx.fillText(data, x, this.lineNum * (this.lineInterval + this.fontSize))
+        }
         this.currentData = this.currentData.substring(0, this.cursorSite) + data
         // 记录内容宽度(只记录最大值)
         if (this.contentWidth < this.$data.textCtx.measureText(this.currentData).width) this.contentWidth = this.$data.textCtx.measureText(this.currentData).width
@@ -214,7 +224,7 @@ export default {
       this.$data.cursorCtx.fillStyle = '#fff' // 字体颜色
       // 复原图像
       if (old !== 0) {
-        if (this.allText) this.$data.textCtx.putImageData(this.allText, 0, 0)
+        if (this.allText) this.$data.textCtx.putImageData(this.allText, 0, this.textY)
         if (this.allCursor) this.$data.cursorCtx.putImageData(this.allCursor, 0, 0)
       }
     },
@@ -234,7 +244,7 @@ export default {
       this.$data.cursorCtx.fillStyle = '#fff' // 字体颜色
       // 复原图像
       if (old !== 0) {
-        if (this.allText) this.$data.textCtx.putImageData(this.allText, 0, 0)
+        if (this.allText) this.$data.textCtx.putImageData(this.allText, 0, this.textY)
         if (this.allCursor) this.$data.cursorCtx.putImageData(this.allCursor, 0, 0)
       }
     }
