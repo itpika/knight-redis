@@ -8,12 +8,11 @@
     </div>
     <!-- 主体 -->
     <div id="shellBody">
-      <canvas  style="z-index: 0;overflow-y:scroll;" id="shell-text-layer"></canvas>
-      <canvas @click.stop="listenKeyboard = 1" @mouseout="listenKeyboard = 0" @mousewheel="mousewheel" style="z-index: 3;" id="shell-cursor-layer"></canvas>
     </div>
   </div>
 </template>
 <script>
+import { Terminal } from 'xterm'
 export default {
   name: 'Terminal',
   props: {
@@ -39,7 +38,6 @@ export default {
       lineNum: 0, // 行号
       cursorSite: 0, // 光标在当前行的索引位置
       listenKeyboard: 0, // 是否监听键盘按下
-      textY: 0, // 内容在y轴的起始坐标，刚开始为0，内容超出盒子高度开始为负数
       allText: null, // 所有的画布文本内容
       allCursor: null, // 所有的画布光标内容
       showKeyCode: [ // 键盘可显示字符
@@ -58,200 +56,60 @@ export default {
     leftBack () {
       this.current.shellState.open = false
     },
-    getBodyWidth() {
-      const obj = document.getElementById('shellBody')
-      if (!obj) return 0
-      this.terminalWidth = obj.clientWidth - 20 // #shellBody 有20的padding，要减去
-      return obj.clientWidth
-    },
-    getBodyHeight() {
-      const obj = document.getElementById('shellBody')
-      if (!obj) return 0
-      this.terminalHeight = obj.clientHeight
-      return obj.clientHeight
-    },
     mousewheel(e) { // 鼠标滚轮滚动
-      if (this.contentHeight - this.fontSize <= this.terminalHeight) return
-      console.log(e.wheelDeltaY)
-    },
-    // 绘制行头
-    writePrifix(lineNum) {
-      const text = document.getElementById('shell-text-layer').getContext('2d')
-      this.currentData = this.perfix
-      this.lineNum = lineNum // 记录行号
-      // 记录内容宽度(只记录最大值)
-      if (this.contentWidth < this.$data.textCtx.measureText(this.currentData).width) this.contentWidth = this.$data.textCtx.measureText(this.currentData).width
-      // 记录最新内容高度
-      this.contentHeight = (lineNum + 1) * (this.fontSize + this.lineInterval)
-      // 绘制前缀头
-      if (this.contentHeight - this.fontSize > this.terminalHeight) { // 内容超过盒子大小，显示最下面的一行
-        // 保存旧内容
-        this.$data.textCtx.clearRect(0, 0, this.terminalWidth, this.terminalHeight) // 清空画布
-        // 重绘制画布数据(旧的内容往上移动)
-        // 原公式
-        // this.$data.textCtx.putImageData(this.allText, 0, 0 - (this.fontSize + this.lineInterval - (this.terminalHeight - (this.fontSize + this.lineInterval) * (lineNum - 1) - this.lineInterval)))
-        // 化简
-        this.textY = this.terminalHeight - (this.fontSize + this.lineInterval) * (lineNum) - this.lineInterval
-        console.log(this.textY)
-        this.$data.textCtx.putImageData(this.allText, 0, this.textY)
-        // 绘制新的一行
-        text.fillText(this.perfix, 0, this.terminalHeight - this.lineInterval)
-      } else { // 还没超过默认的盒子高度
-        text.fillText(this.perfix, 0, lineNum * (this.fontSize + this.lineInterval))
-      }
-      // 绘制光标
-      this.writeCursor(this.$data.cursorCtx.measureText(this.currentData).width, this.currentData.length)
-    },
-    // 绘制光标
-    writeCursor(width, index) {
-      // 清除旧光标
-      this.$data.cursorCtx.clearRect(0, 0, this.terminalWidth, this.terminalHeight)
-      // 绘制新光标，计算前面文本的宽度后再绘制,宽：8，高：字体宽度再加 5
-      if (this.contentHeight - this.fontSize > this.terminalHeight) {
-        this.$data.cursorCtx.fillRect(width,
-          this.terminalHeight - this.fontSize - this.lineInterval, 8, this.fontSize + 5)
-      } else {
-        this.$data.cursorCtx.fillRect(width,
-          (this.lineNum - 1) * this.fontSize + this.lineInterval * this.lineNum, 8, this.fontSize + 5)
-      }
-      this.cursorSite = index // 记录光标的索引位置
-      // console.log(index)
-      // 记录光标内容
-      this.$data.allCursor = this.$data.cursorCtx.getImageData(0, 0, this.terminalWidth, this.contentHeight)
-      // 记录画布内容
-      // edit
-      this.allText = this.$data.textCtx.getImageData(0, this.textY, this.contentWidth, this.contentHeight)
     }
   },
   mounted() {
-    // 监听宽高变化，同步canvas画布
-    window.addEventListener('resize', this.getBodyWidth)
-    window.addEventListener('resize', this.getBodyHeight)
-    this.$nextTick(() => {
-      this.getBodyWidth() // 初始化画布宽
-      this.getBodyHeight() // 初始化画布高
-      this.$nextTick(() => {
-        this.$data.listenKeyboard = 1
-        this.$data.textCtx = document.getElementById('shell-text-layer').getContext('2d')
-        this.$data.textCtx.fillStyle = '#00cc74'
-        this.$data.textCtx.font = this.fontSize + 'px Monaco' // Menlo, Monaco
-        this.$data.cursorCtx = document.getElementById('shell-cursor-layer').getContext('2d')
-        this.$data.cursorCtx.font = this.fontSize + 'px Monaco' // Menlo, Monaco 设置字体样式
-        this.$data.cursorCtx.fillStyle = '#fff' // 字体颜色
-        this.writePrifix(1) // 绘制前缀头
-      })
+    const term = new Terminal({
+      cols: 10,
+      rows: 10,
+      fontFamily: 'courier',
+      theme: {
+        foreground: '#00cc74',
+        background: '#000',
+        cursor: '#fff',
+        cursorAccent: '#000'
+      },
+      bellStyle: 'both'
     })
+    term.open(document.getElementById('shellBody'))
+    // term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ')
+    // term.textarea.hidden = true
+    // term.setOption
+    // term.focus()
+    term.write('Hello from')
+    term.clear()
+    // term.onKey((a1, a2) => {
+    //   console.log(a1, a2)
+    // })
   },
   created() {
     // 监听键盘事件
-    document.onkeydown = (e) => {
-      if (!this.listenKeyboard) return
-      // console.log(e.key, e.keyCode)
-      if (this.showKeyCode.includes(e.keyCode)) { // 键盘可显示字符
-        const x = this.$data.cursorCtx.measureText(this.currentData.substring(0, this.cursorSite)).width // 左边的宽度
-        // 删除后面的字符（删除一个矩形来完成）特别是在中间插入字符
-        this.$data.textCtx.clearRect(x,
-          (this.lineNum - 1) * this.fontSize + this.lineInterval * this.lineNum,
-          this.$data.cursorCtx.measureText(this.currentData.substring(this.cursorSite)).width, this.fontSize + this.lineInterval)
-        // 重绘制后面的数据
-        const data = e.key + this.currentData.substring(this.cursorSite)
-        if (this.contentHeight - this.fontSize > this.terminalHeight) { // 命令行画布超出盒子高度，就在最后一行写数据
-          this.$data.textCtx.fillText(data, x, this.terminalHeight - this.lineInterval)
-        } else { // 没有超出就当前行写数据
-          this.$data.textCtx.fillText(data, x, this.lineNum * (this.lineInterval + this.fontSize))
-        }
-        this.currentData = this.currentData.substring(0, this.cursorSite) + data
-        // 记录内容宽度(只记录最大值)
-        if (this.contentWidth < this.$data.textCtx.measureText(this.currentData).width) this.contentWidth = this.$data.textCtx.measureText(this.currentData).width
-        // 绘制光标
-        this.writeCursor(x + this.$data.cursorCtx.measureText(e.key).width, this.cursorSite + 1)
-      } else if (this.operateKeyCode.includes(e.keyCode)) { // 操作字符
-        switch (e.keyCode) {
-          case 37: // 左移
-            if (this.cursorSite === this.perfix.length) return // 左边的光标边界限制
-            this.writeCursor(this.$data.textCtx.measureText(this.currentData.substring(0, this.cursorSite - 1)).width, this.cursorSite - 1)
-            this.$data.beforeC = this.$data.cursorCtx
-            break
-          case 39: // 右移
-            this.writeCursor(this.$data.cursorCtx.measureText(this.currentData.substring(0,
-              (this.cursorSite + 1) < this.currentData.length ? (this.cursorSite + 1) : this.currentData.length)).width,
-            this.cursorSite < this.currentData.length ? this.cursorSite + 1 : this.cursorSite)
-            break
-          case 8: // 回退
-            {
-              if (this.cursorSite === this.perfix.length) return // 左边的光标边界限制
-              const x = this.$data.cursorCtx.measureText(this.currentData.substring(0, this.cursorSite - 1)).width // 左边的宽度
-              // 删除字符（删除一个矩形来完成）
-              this.$data.textCtx.clearRect(x, (this.lineNum - 1) * this.fontSize + this.lineInterval * this.lineNum,
-                this.$data.cursorCtx.measureText(this.currentData.substring(this.cursorSite - 1)).width,
-                this.fontSize + this.lineInterval)
-              // 重绘制后面的数据
-              const data = this.currentData.substring(this.cursorSite)
-              this.$data.textCtx.fillText(data, x, this.lineNum * (this.lineInterval + this.fontSize))
-              this.currentData = this.currentData.substring(0, this.cursorSite - 1) + data
-              // 记录内容宽度(只记录最大值)
-              if (this.contentWidth < this.$data.textCtx.measureText(this.currentData).width) this.contentWidth = this.$data.textCtx.measureText(this.currentData).width
-              // 绘制光标
-              this.writeCursor(x, this.cursorSite - 1)
-            }
-            break
-          case 13: // 回车换行
-            this.writePrifix(++this.lineNum)
-            // if (this.lineNum === 3) this.$data.textCtx.translate(20, 20)
-            // if (this.currentData === this.perfix) { // 空行换行,新启一行
-            // }
-            break
-          default:
-            break
-        }
-      }
-    }
-  },
-  watch: {
-    // 监听父容器的宽高，动态设置canvas画布宽高
-    terminalHeight(val, old) {
-      const text = document.getElementById('shell-text-layer')
-      const cursor = document.getElementById('shell-cursor-layer')
-      // 设置画布的宽高
-      text.height = val
-      cursor.height = val
-      // 高度变化，更新dom对象
-      this.$data.textCtx = text.getContext('2d')
-      this.$data.cursorCtx = cursor.getContext('2d')
-      this.$data.textCtx.fillStyle = '#00cc74'
-      this.$data.textCtx.font = this.fontSize + 'px Monaco' // Menlo, Monaco
-      this.$data.cursorCtx.font = this.fontSize + 'px Monaco' // Menlo, Monaco 设置字体样式
-      this.$data.cursorCtx.fillStyle = '#fff' // 字体颜色
-      // 复原图像
-      if (old !== 0) {
-        if (this.allText) this.$data.textCtx.putImageData(this.allText, 0, this.textY)
-        if (this.allCursor) this.$data.cursorCtx.putImageData(this.allCursor, 0, 0)
-      }
-    },
-    // 监听父容器的宽高，动态设置canvas画布宽高
-    terminalWidth(val, old) {
-      const text = document.getElementById('shell-text-layer')
-      const cursor = document.getElementById('shell-cursor-layer')
-      // 设置画布的宽高
-      text.width = val
-      cursor.width = val
-      // 高度变化，更新dom对象
-      this.$data.textCtx = text.getContext('2d')
-      this.$data.cursorCtx = cursor.getContext('2d')
-      this.$data.textCtx.fillStyle = '#00cc74'
-      this.$data.textCtx.font = this.fontSize + 'px Monaco' // Menlo, Monaco
-      this.$data.cursorCtx.font = this.fontSize + 'px Monaco' // Menlo, Monaco 设置字体样式
-      this.$data.cursorCtx.fillStyle = '#fff' // 字体颜色
-      // 复原图像
-      if (old !== 0) {
-        if (this.allText) this.$data.textCtx.putImageData(this.allText, 0, this.textY)
-        if (this.allCursor) this.$data.cursorCtx.putImageData(this.allCursor, 0, 0)
-      }
-    }
+    // document.onkeydown = (e) => {
+    //   if (!this.listenKeyboard) return
+    //   // console.log(e.key, e.keyCode)
+    //   if (this.showKeyCode.includes(e.keyCode)) { // 键盘可显示字符
+    //   } else if (this.operateKeyCode.includes(e.keyCode)) { // 操作字符
+    //     switch (e.keyCode) {
+    //       case 37: // 左移
+    //         break
+    //       case 39: // 右移
+    //         break
+    //       case 8: // 回退
+    //         break
+    //       case 13: // 回车换行
+    //         break
+    //       default:
+    //         break
+    //     }
+    //   }
+    // }
   }
 }
 </script>
 <style lang="less" scoped>
+@import '~xterm/css/xterm.css';
+
 .terminal {
   position: absolute;
   bottom: 0;
