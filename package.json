@@ -14,8 +14,9 @@
     "default-passive-events": "^2.0.0",
     "element-ui": "^2.13.2",
     "ioredis": "^4.17.3",
-    "vue": "^2.6.11",
-    "vue-router": "^3.2.0",
+    "term-web": "^1.1.7",
+    "vue": "^2.6.12",
+    "vue-router": "^3.4.3",
     "vuex": "^3.4.0",
     "xterm": "^4.8.1"
   },
@@ -39,6 +40,6 @@
     "node-sass": "^4.9.2",
     "sass-loader": "^9.0.2",
     "vue-cli-plugin-element": "~1.0.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.12"
   }
 }

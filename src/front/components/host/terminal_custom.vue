@@ -1,4 +1,5 @@
 <template>
+  <!-- 原始canvas版本，未完成... -->
   <!-- 底层命令行抽屉 -->
   <div class="terminal">
     <!-- 头部 -->
