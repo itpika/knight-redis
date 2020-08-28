@@ -18,7 +18,9 @@
     "vue": "^2.6.12",
     "vue-router": "^3.4.3",
     "vuex": "^3.4.0",
-    "xterm": "^4.8.1"
+    "xterm": "^4.8.1",
+    "xterm-addon-fit": "^0.4.0",
+    "xterm-addon-web-links": "^0.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",
