@@ -15,6 +15,10 @@ export default {
     // 保存key
     setKey: function (state, data) {
       send.setKey(data)
+    },
+    // 发送执行命令
+    sendCommand: function (state, data) {
+      send.sendCommand(data)
     }
   },
   actions: {

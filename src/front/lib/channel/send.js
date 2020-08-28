@@ -37,5 +37,10 @@ export default {
     if (window.ipcRenderer) {
       window.ipcRenderer.send('setKey', data)
     }
+  },
+  sendCommand(data) {
+    if (window.ipcRenderer) {
+      window.ipcRenderer.send('sendCommand', data)
+    }
   }
 }

@@ -23,6 +23,9 @@ export default {
     current() {
       return this.$store.state.hostView.current
     },
+    commandExecData() {
+      return this.$store.state.hostView.current.shellState.commandExecData
+    },
     perfix() {
       return `${this.address}[${this.current.selectDB}]> `
     }
@@ -40,8 +43,6 @@ export default {
   methods: {
     leftBack () {
       this.current.shellState.open = false
-    },
-    send(data) {
     },
     getBodyHeight() {
       const obj = document.getElementById('shellBody')
@@ -79,13 +80,22 @@ export default {
       pixelRatio: window.devicePixelRatio,
       // Callback when command is not found
       // notFound: (val) => `-bash: <d color='red'>${val}</d>: command not found`,
+      notFound: (val) => { // 命令内容
+        // 发送命令到主进程进行执行
+        this.$store.commit('redis/sendCommand', { time: this.current.time, command: val.trim() })
+      },
       watermark: '' // 命令行水印图片
     })
     this.term = term
+    // this.term.output('<d color="#fff" background="red">some text</d>')
+  },
+  watch: {
+    commandExecData: function(val, old) {
+      this.term.output(val)
+      this.term.input()
+    }
   },
   created() {
-    // 处理鼠标按下默认事件，后续处理
-    // window.addEventListener('mousedown', e => e.preventDefault(), { passive: false })
   }
 }
 </script>

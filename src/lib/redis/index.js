@@ -53,6 +53,20 @@ module.exports = {
     return null
   },
   /**
+   * 执行命令
+   */
+  sendCommand: async function(data) {
+    console.log(data)
+    const commands = data.command.split(' ')
+    let ret
+    try {
+      ret = await pool[data.time].send_command(commands[0], commands.slice(1))
+    } catch (error) {
+      return {code: -1}
+    }
+    return {code: 0, data: ret}
+  },
+  /**
    * 断开连接
    */
   disconnect: function(time) {

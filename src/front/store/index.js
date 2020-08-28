@@ -79,4 +79,16 @@ if (window.ipcRenderer) {
       }
     }
   })
+  /**
+   * 命令结果返回
+   * { time: data.time, code: ret.code, data: ret.data | null })
+   */
+  window.ipcRenderer.on('commandResult', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        hostView.state.all[i].shellState.commandExecCode = data.code
+        hostView.state.all[i].shellState.commandExecData = data.data
+      }
+    }
+  })
 }
