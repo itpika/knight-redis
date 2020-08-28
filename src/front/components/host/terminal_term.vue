@@ -7,15 +7,13 @@
       <i @click.stop="current.shellState.open = false" class="el-icon-close"/>
     </div>
     <!-- 主体 -->
-    <div id="shellBody" ref="terminal">
+    <div id="shellBody" ref="shellBody">
+      <div id="terminal"></div>
     </div>
   </div>
 </template>
 <script>
-import { Terminal } from 'xterm'
-import { FitAddon } from 'xterm-addon-fit'
-import { WebLinksAddon } from 'xterm-addon-web-links'
-
+import Term from 'term-web'
 export default {
   name: 'Terminal',
   props: {
@@ -31,8 +29,6 @@ export default {
   },
   data: function () {
     return {
-      terminalWidth: 0, // 画布宽度
-      terminalHeight: 0, // 画布高度
       contentWidth: 0, // 内容宽度
       contentHeight: 0, // 内容高度
       fontSize: 14, // 字体大小
@@ -46,46 +42,50 @@ export default {
       this.current.shellState.open = false
     },
     send(data) {
-      console.log(data)
-      // if (data.domEvent.keyCode === 8) {
-      //   return
-      // }
-      this.term.write(data.key)
+    },
+    getBodyHeight() {
+      const obj = document.getElementById('shellBody')
+      if (!obj) return 0
+      this.term.height = obj.clientHeight
+      return obj.clientHeight
+    },
+    getBodyWidth() {
+      const obj = document.getElementById('shellBody')
+      if (!obj) return 0
+      this.term.width = obj.clientWidth
+      return obj.clientWidth
     }
   },
+  beforeMount() {
+  },
   mounted() {
-    const term = new Terminal({
-      rows: 10,
-      fontFamily: 'courier',
-      rendererType: 'canvas',
-      convertEol: true,
-      scrollback: 1000,
-      disableStdin: false,
-      cursorStyle: 'block', // 光标样式
-      cursorBlink: true, // 是否闪烁
-      theme: {
-        foreground: '#00cc74',
-        background: '#000',
-        cursor: '#fff',
-        cursorAccent: '#000'
-      },
-      bellStyle: 'both'
+    window.addEventListener('resize', this.getBodyHeight)
+    window.addEventListener('resize', this.getBodyWidth)
+    const term = new Term({
+      container: '#terminal',
+      height: document.getElementById('shellBody').clientHeight,
+      width: document.getElementById('shellBody').clientWidth,
+      recorder: false, // 开启右上角记录按钮
+      fontFamily: 'Menlo', // Menlo,Monaco
+      fontSize: 16,
+      color: '#b0b2b6',
+      draggable: false, // 是否可拖动
+      title: '', // 首部标题
+      welcome: '', // 欢迎词
+      prefix: this.perfix,
+      background: '#2a2734',
+      loading: (val) => '<d color="yellow">Loading...</d>', // 加载提示
+      // Pixel ratio
+      pixelRatio: window.devicePixelRatio,
+      // Callback when command is not found
+      // notFound: (val) => `-bash: <d color='red'>${val}</d>: command not found`,
+      watermark: '' // 命令行水印图片
     })
     this.term = term
-    const fitAddon = new FitAddon()
-    term.loadAddon(fitAddon)
-    term.loadAddon(new WebLinksAddon())
-    this.term.open(this.$refs.terminal)
-    fitAddon.fit()
-    term.prompt = () => {
-      term.write(this.perfix)
-    }
-    term.onKey(data => this.send(data))
-    term.prompt()
   },
   created() {
     // 处理鼠标按下默认事件，后续处理
-    window.addEventListener('mousedown', e => e.preventDefault(), { passive: false })
+    // window.addEventListener('mousedown', e => e.preventDefault(), { passive: false })
   }
 }
 </script>
@@ -97,6 +97,7 @@ export default {
   bottom: 0;
   left: 0;
   height: 30%;
+  min-height: 20%;
   width: 100%;
   .header {
     height: 15%;
@@ -127,8 +128,7 @@ export default {
   #shellBody {
     height: 85%;
     box-sizing: border-box;
-    background-color: #000;
-    position: relative;
+    background-color: #2a2734;
   }
 }
 </style>

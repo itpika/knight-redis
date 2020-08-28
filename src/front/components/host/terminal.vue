@@ -7,13 +7,15 @@
       <i @click.stop="current.shellState.open = false" class="el-icon-close"/>
     </div>
     <!-- 主体 -->
-    <div id="shellBody" ref="shellBody">
-      <div id="terminal"></div>
+    <div id="shellBody" ref="terminal">
     </div>
   </div>
 </template>
 <script>
-import Term from 'term-web'
+import { Terminal } from 'xterm'
+import { FitAddon } from 'xterm-addon-fit'
+import { WebLinksAddon } from 'xterm-addon-web-links'
+
 export default {
   name: 'Terminal',
   props: {
@@ -32,12 +34,12 @@ export default {
   },
   data: function () {
     return {
-      contentWidth: 0, // 内容宽度
+      terminalHeight: 0, // 画布高度
       contentHeight: 0, // 内容高度
       fontSize: 14, // 字体大小
-      currentData: '', // 当前行文本的内容
+      command: '', // 当前行文本的内容
       lineNum: 0, // 行号
-      listenKeyboard: 0 // 是否监听键盘按下
+      cursorIndex: 0 // 光标索引位置
     }
   },
   methods: {
@@ -47,55 +49,80 @@ export default {
     getBodyHeight() {
       const obj = document.getElementById('shellBody')
       if (!obj) return 0
-      this.term.height = obj.clientHeight
+      this.terminalHeight = obj.clientHeight
       return obj.clientHeight
     },
-    getBodyWidth() {
-      const obj = document.getElementById('shellBody')
-      if (!obj) return 0
-      this.term.width = obj.clientWidth
-      return obj.clientWidth
+    send(data) {
+      console.log(data)
+      // new TextEncoder().encode("\x00" + data)
+      if (data.domEvent.keyCode === 8) { // 回退
+        if (this.command.length === 0) return
+        this.term.write('\b \b')
+        this.command = this.command.slice(0, this.cursorIndex - 1) + this.command.slice(this.cursorIndex)
+        this.cursorIndex--
+        return
+      } else if (data.domEvent.keyCode === 13) { // 换行
+        this.cursorIndex = 0
+        this.command = ''
+        this.term.write('\n')
+        this.term.prompt()
+        return
+      } else if (data.domEvent.keyCode === 37) { // left move
+        if (this.cursorIndex === 0) return
+        this.cursorIndex--
+        this.term.write(data.key)
+        return
+      } else if (data.domEvent.keyCode === 38) { // top move
+        return
+      } else if (data.domEvent.keyCode === 39) { // right move
+        if (this.command.length === this.cursorIndex) return
+        this.cursorIndex++
+        this.term.write(data.key)
+        return
+      } else if (data.domEvent.keyCode === 40) { // bottom move
+        return
+      }
+      this.command += data.key
+      this.term.write(data.key)
+      this.cursorIndex++
     }
-  },
-  beforeMount() {
   },
   mounted() {
     window.addEventListener('resize', this.getBodyHeight)
-    window.addEventListener('resize', this.getBodyWidth)
-    const term = new Term({
-      container: '#terminal',
-      height: document.getElementById('shellBody').clientHeight,
-      width: document.getElementById('shellBody').clientWidth,
-      recorder: false, // 开启右上角记录按钮
-      fontFamily: 'Menlo', // Menlo,Monaco
-      fontSize: 16,
-      color: '#b0b2b6',
-      draggable: false, // 是否可拖动
-      title: '', // 首部标题
-      welcome: '', // 欢迎词
-      prefix: this.perfix,
-      background: '#2a2734',
-      loading: (val) => '<d color="yellow">Loading...</d>', // 加载提示
-      // Pixel ratio
-      pixelRatio: window.devicePixelRatio,
-      // Callback when command is not found
-      // notFound: (val) => `-bash: <d color='red'>${val}</d>: command not found`,
-      notFound: (val) => { // 命令内容
-        // 发送命令到主进程进行执行
-        this.$store.commit('redis/sendCommand', { time: this.current.time, command: val.trim() })
+    const term = new Terminal({
+      rows: 10,
+      fontFamily: 'courier', // Menlo courier
+      rendererType: 'canvas',
+      convertEol: true,
+      scrollback: 1000,
+      disableStdin: false,
+      cursorStyle: 'block', // 光标样式
+      cursorBlink: true, // 是否闪烁
+      tabStopWidth: 4, // 制表宽度
+      theme: {
+        foreground: '#00cc74',
+        background: '#2a2734',
+        cursor: '#fff',
+        cursorAccent: '#000'
       },
-      watermark: '' // 命令行水印图片
+      bellStyle: 'both'
     })
     this.term = term
-    // this.term.output('<d color="#fff" background="red">some text</d>')
-  },
-  watch: {
-    commandExecData: function(val, old) {
-      this.term.output(val)
-      this.term.input()
+    const fitAddon = new FitAddon()
+    term.loadAddon(fitAddon)
+    term.loadAddon(new WebLinksAddon())
+    term.open(this.$refs.terminal)
+    fitAddon.fit()
+    term.prompt = () => {
+      term.write(this.perfix)
     }
+    term.onKey(data => this.send(data))
+    term.prompt()
   },
   created() {
+    // 处理鼠标按下默认事件，后续处理
+    window.addEventListener('mousedown', e => e.preventDefault(), { passive: false })
+    // window.addEventListener('onmousedown', e => e.preventDefault(), { passive: false })
   }
 }
 </script>
@@ -107,7 +134,6 @@ export default {
   bottom: 0;
   left: 0;
   height: 30%;
-  min-height: 20%;
   width: 100%;
   .header {
     height: 15%;
@@ -138,7 +164,8 @@ export default {
   #shellBody {
     height: 85%;
     box-sizing: border-box;
-    background-color: #2a2734;
+    background-color: #000;
+    position: relative;
   }
 }
 </style>
