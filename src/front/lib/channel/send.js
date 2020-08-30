@@ -42,5 +42,15 @@ export default {
     if (window.ipcRenderer) {
       window.ipcRenderer.send('sendCommand', data)
     }
+  },
+  getClipboard(data) {
+    if (window.ipcRenderer) {
+      window.ipcRenderer.send('getClipboard', data)
+    }
+  },
+  setClipboard(data) {
+    if (window.ipcRenderer) {
+      window.ipcRenderer.send('setClipboard', data)
+    }
   }
 }

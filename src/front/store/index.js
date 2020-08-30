@@ -91,4 +91,15 @@ if (window.ipcRenderer) {
       }
     }
   })
+  /**
+   * 获取剪切板的内容
+   */
+  window.ipcRenderer.on('getClipboard', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        hostView.state.all[i].shellState.clipboardText = data.text
+        hostView.state.all[i].shellState.paste = 1
+      }
+    }
+  })
 }

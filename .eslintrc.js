@@ -16,6 +16,9 @@ module.exports = {
     'space-before-function-paren': 'off',
     'no-unused-vars': 'warn',
     'no-trailing-spaces': 'off',
+    'one-var': 'off',
+    'semi': 'warn',
+    'no-case-declarations': 'off',
     'no-unreachable': 'warn'
   }
 }

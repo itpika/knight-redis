@@ -19,6 +19,14 @@ export default {
     // 发送执行命令
     sendCommand: function (state, data) {
       send.sendCommand(data)
+    },
+    // 获取剪切板内容
+    getClipboard: function (state, data) {
+      send.getClipboard(data)
+    },
+    // 设置剪切板内容
+    setClipboard: function (state, data) {
+      send.setClipboard(data)
     }
   },
   actions: {

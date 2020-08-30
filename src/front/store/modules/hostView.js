@@ -20,10 +20,12 @@ export default {
       shellState: { // shell命令窗口状态
         open: false, // 是否打开
         commandExecCode: 0,
-        commandExecData: ''
+        commandExecData: '',
+        clipboardText: '', // 剪切板内容
+        paste: 0 // 获取剪切板内容(ctrl+v触发)
       }
     },
-    all: []
+    all: [] // 所有打开的host的连接
   },
   mutations: {
     // 找出当前host的数据
@@ -53,9 +55,11 @@ export default {
           infoShowTest: '' // 信息提示框文本
         },
         shellState: {
-          open: false,
+          open: false, // shell窗口是否打开
           commandExecCode: 0,
-          commandExecData: ''
+          commandExecData: '',
+          clipboardText: '', // 剪切板内容
+          paste: 0 // 获取剪切板内容(ctrl+v触发)
         }
       }
       for (let index = 0; index < 40; index++) {

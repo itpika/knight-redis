@@ -1,4 +1,4 @@
-const { ipcMain } = require('electron')
+const { ipcMain, clipboard } = require('electron')
 const redis = require('../redis/index.js')
 const singal = require('../redis/singal.js')
 // 异步
@@ -9,6 +9,20 @@ const singal = require('../redis/singal.js')
 // 同步
 // event.returnValue = 'fail'
 
+/**
+ * 获取系统剪切板内容
+ */
+ipcMain.on('getClipboard', async (event, data) => {
+  const text = clipboard.readText()
+  event.reply('getClipboard', { time: data.time, text })
+})
+/**
+ * 设置系统剪切板内容
+ */
+ipcMain.on('setClipboard', async (event, data) => {
+  const text = data.text.trim()
+  if (text !== '') clipboard.writeText(data.text)
+})
 
 // 渲染进程通知新建连接(同步)
 ipcMain.on('initConnect', async (event, conf) => {
