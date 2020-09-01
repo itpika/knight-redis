@@ -60,6 +60,6 @@ ipcMain.on('setKey', async (event, data) => {
 // 执行命令
 ipcMain.on('sendCommand', async (event, data) => {
   const ret = await redis.sendCommand(data)
-  event.reply('commandResult', { time: data.time, code: ret.code,
-    data: ret.code === 0 ? ret.data : 'unknown command' + data.command })
+  event.reply('commandResult', { time: data.time,
+    text: ret.code === 0 ? ret.data : 'unknown command: ' + data.command })
 })

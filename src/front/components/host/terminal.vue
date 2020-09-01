@@ -25,8 +25,8 @@ export default {
     current() {
       return this.$store.state.hostView.current
     },
-    commandExecData() {
-      return this.$store.state.hostView.current.shellState.commandExecData
+    commandExecCode() {
+      return this.$store.state.hostView.current.shellState.commandExecCode
     },
     prefix() {
       return `${this.address}[${this.current.selectDB}]> `
@@ -59,6 +59,12 @@ export default {
         this.input += this.copy
       }
       this.$store.state.hostView.current.shellState.paste = 0
+    },
+    commandExecCode: function(val) {
+      if (!val) return
+      this.term.write(this.current.shellState.commandExecData + '\n')
+      this.term.prompt()
+      this.$store.state.hostView.current.shellState.commandExecCode = 0
     }
   },
   methods: {
@@ -74,15 +80,17 @@ export default {
     // 在这里处理自定义输入...
     handleInput() {
       // 判断空值
-      this.term.write('\r\n')
-      if (this.input.trim()) {
+      this.term.write('\n')
+      this.input = this.input.trim()
+      if (this.input) {
+        // 发送到后端
+        this.$store.commit('redis/sendCommand', { time: this.current.time, command: this.input })
         // 记录历史命令
         if (this.histCommandList[this.histCommandList.length - 1] !== this.input) {
           this.histCommandList.push(this.input)
           this.histIndex = this.histCommandList.length
         }
       }
-      this.term.prompt()
     }
   },
   mounted() {
@@ -293,7 +301,9 @@ export default {
   }
   #shellBody {
     height: 85%;
-    background-color: #000;
+    box-sizing: border-box;
+    padding: 5px;
+    background-color: #2a2734;
     :first-child {
       height: 100%;
     }

@@ -86,8 +86,9 @@ if (window.ipcRenderer) {
   window.ipcRenderer.on('commandResult', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
-        hostView.state.all[i].shellState.commandExecCode = data.code
-        hostView.state.all[i].shellState.commandExecData = data.data
+        hostView.state.all[i].shellState.commandExecCode = 1
+        hostView.state.all[i].shellState.commandExecData = data.text
+        console.log('data.text', data.text)
       }
     }
   })
