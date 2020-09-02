@@ -45,8 +45,8 @@ export default {
         conf: data.conf,
         label: data.label,
         // connectState: Math.floor(Math.random() * 10) % 2,
-        connectState: -1,
-        // connectState: 0,
+        // connectState: -1,
+        connectState: 0,
         dbLoading: false,
         dialogState: {
           promptTest: '', // 错误提示框的内容文本

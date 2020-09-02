@@ -2,7 +2,7 @@
   <div id="hostView" v-loading.lock="current.connectState === -1" element-loading-background="#416080" class="hostView bgkColor">
     <div :class="['content', {'hiddenClass': !(current.connectState === 0)}]">
       <div class="header">
-        <div class="terminalBtn"><el-button type="info" size="small" round @click.stop="current.shellState.open = true">Terminal</el-button></div>
+        <div class="terminalBtn"><el-button type="info" size="small" round @click.stop="current.shellState.open = !current.shellState.open">Terminal</el-button></div>
       </div>
       <div class="body">
         <div v-loading.lock="current.dbLoading"

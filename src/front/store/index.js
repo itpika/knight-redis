@@ -61,7 +61,6 @@ if (window.ipcRenderer) {
   window.ipcRenderer.on('getAllKey', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
-        console.log('data.keys', data.keys)
         hostView.state.all[i].dbLoading = false
         hostView.state.all[i].dbData = data.keys
       }
@@ -88,7 +87,6 @@ if (window.ipcRenderer) {
       if (hostView.state.all[i].time === data.time) {
         hostView.state.all[i].shellState.commandExecCode = 1
         hostView.state.all[i].shellState.commandExecData = data.text
-        console.log('data.text', data.text)
       }
     }
   })

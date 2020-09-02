@@ -59,22 +59,33 @@ module.exports = {
     const commands = data.command.split(' ')
     let ret
     try {
+      await pool[data.time].select(data.index)
       ret = await pool[data.time].send_command(commands[0], commands.slice(1))
       console.log(ret)
-      if (!(ret instanceof String) && typeof ret === 'object' && ret !== null) {
+      // string，boolean， number类型之间返回
+      if (['string', 'number', 'boolean'].includes(typeof ret)) return {code: 0, data: ret}
+      // nul和undefined直接返回
+      if (ret === null || ret === undefined) return {code: 0, data: 'null'}
+      let s = ''
+      if (ret instanceof Array) { // list
+        for (let i = 0; i < ret.length; i++) {
+          s += `${i+1})  ${ret[i]}\n`
+        }
+      } else { // object
         const keys = Reflect.ownKeys(ret)
         if (keys.length === 0) {
-          ret = '{}'
+          s = '{}'
         } else {
-          let s = '{\n'
+          s = '{\n'
           for (k of keys) {
             s += `  ${k}: ${ret[k]},\n`
           }
           s += '}'
-          ret = s
         }
       }
+      ret = s.trim()
     } catch (error) {
+      console.log(error)
       return {code: -1}
     }
     return {code: 0, data: ret}

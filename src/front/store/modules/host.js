@@ -5,12 +5,12 @@ export default {
     hosts: [{
       id: '1',
       label: '内网',
-      // address: '10.10.1.43',
-      // port: 6380,
-      // passwd: '123456'
-      address: '127.0.0.1',
-      port: 6379,
-      passwd: '111111'
+      address: '10.10.1.43',
+      port: 6380,
+      passwd: '123456'
+      // address: '127.0.0.1',
+      // port: 6379,
+      // passwd: '111111'
     }],
     openHost: [] // 打开的host连接
   },

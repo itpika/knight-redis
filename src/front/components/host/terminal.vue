@@ -29,7 +29,7 @@ export default {
       return this.$store.state.hostView.current.shellState.commandExecCode
     },
     prefix() {
-      return `${this.address}[${this.current.selectDB}]> `
+      return `${this.address}[${this.selectDB}]> `
     },
     paste() {
       return this.$store.state.hostView.current.shellState.paste
@@ -40,12 +40,12 @@ export default {
   },
   data: function () {
     return {
+      selectDB: 0,
       terminalHeight: 0, // 画布高度
       contentHeight: 0, // 内容高度
       fontSize: 14, // 字体大小
       input: '', // 当前输入的内容
-      // 历史指令
-      histIndex: 0,
+      histIndex: 0, // 历史指令索引
       histCommandList: [], // 历史指令集合
       currentOffset: 0 // 当前行的光标总偏移长度
     }
@@ -84,14 +84,27 @@ export default {
       this.input = this.input.trim()
       if (this.input) {
         // 发送到后端
-        this.$store.commit('redis/sendCommand', { time: this.current.time, command: this.input })
+        this.$store.commit('redis/sendCommand', { time: this.current.time, command: this.input, index: this.selectDB })
         // 记录历史命令
         if (this.histCommandList[this.histCommandList.length - 1] !== this.input) {
           this.histCommandList.push(this.input)
-          this.histIndex = this.histCommandList.length
+          this.histIndex = this.histCommandList.length - 1
         }
+        // 判断特殊命令 select
+        if (/^select [0-9][0-5]?$/gi.test(this.input)) {
+          const splis = this.input.split(' ')
+          const index = parseInt(splis[1])
+          if (splis.length === 2 && splis[0].toLowerCase() === 'select' && index < 16 && index >= 0) {
+            this.selectDB = index
+          }
+        }
+        return
       }
+      this.term.prompt()
     }
+  },
+  beforeMount() {
+    this.selectDB = this.current.selectDB || 0
   },
   mounted() {
     window.addEventListener('resize', this.getBodyHeight)
@@ -147,6 +160,8 @@ export default {
       this.currentOffset = fixation
       // 禁用Home、PgUp、PgDn、Ins、Del键
       if ([36, 33, 34, 45, 46].indexOf(key.domEvent.keyCode) !== -1) return
+      // ctrl
+      if ([17, 18].includes(key.domEvent.keyCode)) return
 
       switch (key.domEvent.keyCode) {
         // 回车键
@@ -172,7 +187,7 @@ export default {
           break
         // 方向盘上键
         case 38:
-          if (this.histCommandList[this.histIndex - 1]) {
+          if (this.histCommandList[this.histIndex]) {
             // 将光标重置到末端
             term._core.buffer.x = fixation
             let b1 = '', b2 = '', b3 = ''
@@ -183,14 +198,14 @@ export default {
               b3 = b3 + '\b'
             }
             term.write(b1 + b2 + b3)
-            this.input = this.histCommandList[this.histIndex - 1]
-            term.write(this.histCommandList[this.histIndex - 1])
+            this.input = this.histCommandList[this.histIndex]
+            term.write(this.histCommandList[this.histIndex])
             this.histIndex--
           }
           break
         // 方向盘下键
         case 40:
-          if (this.histCommandList[this.histIndex + 1]) {
+          if (this.histCommandList[this.histIndex]) {
             // 将光标重置到末端
             term._core.buffer.x = fixation  
             let b1 = '', b2 = '', b3 = ''
@@ -200,9 +215,9 @@ export default {
               b2 = b2 + ' '
               b3 = b3 + '\b'
             }
-            this.input = this.histCommandList[this.histIndex + 1]
+            this.input = this.histCommandList[this.histIndex]
             term.write(b1 + b2 + b3)
-            term.write(this.histCommandList[this.histIndex + 1])
+            term.write(this.histCommandList[this.histIndex])
             this.histIndex++
           }
           break
@@ -219,6 +234,8 @@ export default {
           }
           break
         default:
+          // ctrl, alt 组合键不打印
+          if (key.domEvent.ctrlKey || key.domEvent.altKey) return
           // 限制输入最大长度 防止换行bug
           if (fixation >= term.cols) return
           // 不在末尾插入时 要拼接
@@ -237,14 +254,14 @@ export default {
       }
     })
     term.attachCustomKeyEventHandler(ev => {
-      // console.log(ev)
+      console.log(ev)
       // ctrl+v
-      if (ev.keyCode === 86 && (ev.ctrlKey || ev.metaKey)) {
+      if (ev.keyCode === 86 && (ev.ctrlKey || ev.metaKey) && ev.type === 'keydown') {
         // 从主进程获取系统剪切板内容
         this.$store.commit('redis/getClipboard', { time: this.current.time })
       }
       // ctrl+c
-      if (ev.keyCode === 67 && (ev.ctrlKey || ev.metaKey)) {
+      if (ev.keyCode === 67 && (ev.ctrlKey || ev.metaKey) && ev.type === 'keydown') {
         if (term.hasSelection()) {
           // 设置系统剪切板内容
           this.$store.commit('redis/setClipboard', { text: term.getSelection() })

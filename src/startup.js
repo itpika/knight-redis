@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require('electron')
+const { app, BrowserWindow, shell,  } = require('electron')
 
 // shell.openExternal('https://github.com')
 require('./lib/channel/event.js')
@@ -15,7 +15,6 @@ function createWindow () {
       preload: path.join(__dirname, './render.js')
     }
   })
-
   
   win.removeMenu()
   // 加载index.html文件
@@ -38,7 +37,7 @@ function createWindow () {
   })
   // shell.openPath('/var/code')
   shell.beep()
-  
+  win.webContents.openDevTools()
 }
 
 app.whenReady().then(createWindow)
