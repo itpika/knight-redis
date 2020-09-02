@@ -46,7 +46,7 @@
           <!-- 数据展示body -->
           <div class="dbBoxBody bgkColor">
             <ul>
-              <li v-for="(v, i) of current.dbData" :key="i">
+              <li v-for="(v, i) of current.dbData" :key="i" @click.stop="keyDetail(v)">
                 <div class="left">
                   <i class="el-icon-key brightBlueColor"></i>
                   <span>{{ v }}</span>
@@ -55,6 +55,9 @@
               </li>
             </ul>
           </div>
+        </div>
+        <div class="key-detail-box">
+          <KeyDetail/>
         </div>
       </div>
     </div>
@@ -83,6 +86,7 @@
 <script>
 import kdialog from '@/front/components/common/k-dialog.vue'
 import NewKey from '@/front/components/host/newKey.vue'
+import KeyDetail from '@/front/components/host/keyDetail.vue'
 import Terminal from '@/front/components/host/terminal.vue'
 export default {
   name: 'hostView',
@@ -123,9 +127,13 @@ export default {
   components: {
     kdialog,
     NewKey,
-    Terminal
+    Terminal,
+    KeyDetail
   },
   methods: {
+    keyDetail(k) { // 点击查看key详情
+      console.log(k)
+    },
     openTerminal() {
       this.terminal = true
     },
@@ -247,6 +255,8 @@ export default {
     .body {
       height: 90%;
       box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
       .dbBox {
         padding: 10px;
         width: 35%;
@@ -276,7 +286,6 @@ export default {
               &:hover {
                 cursor: pointer;
                 color: #00de7e;
-                transform: rotate(90deg);
               }
             }
             .refresh {
@@ -284,7 +293,6 @@ export default {
               &:hover {
                 cursor: pointer;
                 color: #00fff3;
-                transform: rotate(90deg);
               }
             }
             .delete {
@@ -292,7 +300,6 @@ export default {
               &:hover {
                 color: #fa4c4c;
                 cursor: pointer;
-                transform: rotate(45deg);
               }
             }
           }
@@ -360,6 +367,14 @@ export default {
             }
           }
         }
+      }
+      .key-detail-box {
+        padding: 10px;
+        width: 63%;
+        border-radius: 6px;
+        display: flex;
+        background-color: #1c3046;
+        box-sizing: border-box;
       }
     }
   }
