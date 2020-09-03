@@ -3,18 +3,48 @@
   "version": "0.1.0",
   "private": true,
   "main": "src/startup.js",
+  "author": "itpika",
+  "description": "This is a Redis desktop chemical tool",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist-win": "electron-builder -w",
+    "dist-linux": "electron-builder -l",
+    "dist-mac": "electron-builder -m"
+  },
+  "build": {
+    "appId": "com.electron.knight",
+    "productName": "knightRedis",
+    "copyright": "Copyright © 2020 itpika",
+    "directories": {
+      "buildResources": "dist",
+      "output": "app"
+    },
+    "files": [
+      "dist/**/*",
+      "src/lib/**",
+      "src/*.js"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "dist/image/icon2.png"
+    }
   },
   "dependencies": {
     "core-js": "^3.6.5",
     "default-passive-events": "^2.0.0",
     "element-ui": "^2.13.2",
     "ioredis": "^4.17.3",
-    "term-web": "^1.1.7",
     "vue": "^2.6.12",
     "vue-router": "^3.4.3",
     "vuex": "^3.4.0",
@@ -31,6 +61,8 @@
     "@vue/eslint-config-standard": "^5.1.2",
     "babel-eslint": "^10.1.0",
     "electron": "^9.1.2",
+    "electron-builder": "^22.8.0",
+    "electron-packager": "^15.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
