@@ -17,7 +17,7 @@
   },
   "build": {
     "appId": "com.electron.knight",
-    "productName": "knightRedis",
+    "productName": "KnightRedis",
     "copyright": "Copyright © 2020 itpika",
     "directories": {
       "buildResources": "dist",
@@ -37,6 +37,11 @@
           ]
         }
       ],
+      "icon": "dist/image/icon2.png"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.developer-tools",
       "icon": "dist/image/icon2.png"
     }
   },
