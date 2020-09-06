@@ -43,6 +43,11 @@ export default {
       window.ipcRenderer.send('sendCommand', data)
     }
   },
+  keyDetail(data) {
+    if (window.ipcRenderer) {
+      window.ipcRenderer.send('keyDetail', data)
+    }
+  },
   getClipboard(data) {
     if (window.ipcRenderer) {
       window.ipcRenderer.send('getClipboard', data)

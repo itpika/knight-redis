@@ -63,3 +63,8 @@ ipcMain.on('sendCommand', async (event, data) => {
   event.reply('commandResult', { time: data.time,
     text: ret.code === 0 ? ret.data : 'unknown command: ' + data.command })
 })
+// 获取key详情
+ipcMain.on('keyDetail', async (event, data) => {
+  const ret = await redis.keyDetail(data)
+  event.reply('keyDetail', { time: data.time, data: ret })
+})

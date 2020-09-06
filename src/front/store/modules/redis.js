@@ -20,6 +20,10 @@ export default {
     sendCommand: function (state, data) {
       send.sendCommand(data)
     },
+    // 获取key详情
+    keyDetail: function (state, data) {
+      send.keyDetail(data)
+    },
     // 获取剪切板内容
     getClipboard: function (state, data) {
       send.getClipboard(data)

@@ -79,6 +79,18 @@ if (window.ipcRenderer) {
     }
   })
   /**
+   * 接收key详情数据
+   */
+  window.ipcRenderer.on('keyDetail', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        hostView.state.all[i].keyDetail.type = data.data.type
+        hostView.state.all[i].keyDetail.ttl = data.data.ttl
+        hostView.state.all[i].keyDetail.value = data.data.value
+      }
+    }
+  })
+  /**
    * 命令结果返回
    * { time: data.time, code: ret.code, data: ret.data | null })
    */

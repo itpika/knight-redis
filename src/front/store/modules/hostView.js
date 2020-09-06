@@ -23,6 +23,11 @@ export default {
         commandExecData: '',
         clipboardText: '', // 剪切板内容
         paste: 0 // 获取剪切板内容(ctrl+v触发)
+      },
+      keyDetail: {
+        type: '-', // key类型
+        ttl: -1, // 有效期
+        value: '' // 值
       }
     },
     all: [] // 所有打开的host的连接
@@ -45,8 +50,8 @@ export default {
         conf: data.conf,
         label: data.label,
         // connectState: Math.floor(Math.random() * 10) % 2,
-        connectState: -1,
-        // connectState: 0,
+        // connectState: -1,
+        connectState: 0,
         dbLoading: false,
         dialogState: {
           promptTest: '', // 错误提示框的内容文本
@@ -60,10 +65,15 @@ export default {
           commandExecData: '',
           clipboardText: '', // 剪切板内容
           paste: 0 // 获取剪切板内容(ctrl+v触发)
+        },
+        keyDetail: {
+          type: '-',
+          ttl: -1,
+          value: ''
         }
       }
       for (let index = 0; index < 40; index++) {
-        host.dbData.push(Math.floor(Math.random() * 100))
+        host.dbData.push(Math.floor(Math.random() * 100) + '')
       }
       state.all.push(host)
       state.current = state.all[state.all.length - 1]

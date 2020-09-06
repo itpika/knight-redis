@@ -56,8 +56,8 @@
             </ul>
           </div>
         </div>
-        <div class="key-detail-box">
-          <KeyDetail/>
+        <div :class="['key-detail-box', keyDetailBoxShow]">
+          <KeyDetail :keyName="keyDetailName" />
         </div>
       </div>
     </div>
@@ -112,6 +112,8 @@ export default {
   data () {
     return {
       terminal: false,
+      keyDetailName: '',
+      keyDetailBoxShow: 'hiddenClass',
       dbs: [
         { value: 0, label: 'DB0' }, { value: 1, label: 'DB1' },
         { value: 2, label: 'DB2' }, { value: 3, label: 'DB3' },
@@ -132,7 +134,9 @@ export default {
   },
   methods: {
     keyDetail(k) { // 点击查看key详情
-      console.log(k)
+      this.$data.keyDetailName = k
+      this.$data.keyDetailBoxShow = ''
+      this.$store.commit('redis/keyDetail', { time: this.current.time, key: k })
     },
     openTerminal() {
       this.terminal = true

@@ -91,6 +91,28 @@ module.exports = {
     return {code: 0, data: ret}
   },
   /**
+   * 获取key详情
+   */
+  keyDetail: async function(data) {
+    const keyType = await pool[data.time].type(data.key)
+    const ret = {
+      name: data.key,
+      type: keyType.toUpperCase()
+    }
+    switch (keyType) {
+      case 'string':
+        const val = await pool[data.time].get(data.key)
+        ret.value = val
+        break;
+    
+      default:
+        break;
+    }
+    const ttl = await pool[data.time].ttl(data.key)
+    ret.ttl = ttl
+    return ret
+  },
+  /**
    * 断开连接
    */
   disconnect: function(time) {
