@@ -3,9 +3,9 @@
     <div class="header">
       <div class="left bkg-radio-kgt">
         <div class="key-type greenColor">
-          <!-- <span>{{this.current.keyDetail.type}}:</span> -->
+          <span>{{this.current.keyDetail.type}}:</span>
           <!-- <span>HASH:</span> -->
-          <span>STRING:</span>
+          <!-- <span>STRING:</span> -->
         </div>
         <span class="key-name">
           <el-tooltip :content="keyName" effect="dark" offset="0" placement="top-start">
