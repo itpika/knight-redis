@@ -3,12 +3,12 @@
 <template>
   <div :class="[selectBox, {active: box.isActive, activeMenu: box.activeMenu} ]" @click="click" :id="box.id">
     <div class="left">
-      <div :class="{iconActive: box.isActive, iconActiveMenu: box.activeMenu}">
+      <div :class="['radio-kgt', {iconActive: box.isActive}, {iconActiveMenu: box.activeMenu}]">
         <i :class="box.icon"/>
       </div>
       {{box.label}}
     </div>
-    <div v-if="box.close" class="closeIcon" @click.stop="closeHost(box.time)">
+    <div v-if="box.close" class="closeIcon radio-kgt" @click.stop="closeHost(box.time)">
       <i class="el-icon-close"/>
     </div>
   </div>
@@ -80,7 +80,6 @@ export default {
       div {
         height: 25px;
         width: 25px;
-        border-radius: 6px;
         border: solid 1px #a9a9a9;
         margin: 0 10px 0 0;
         display: flex;
@@ -98,7 +97,6 @@ export default {
     .closeIcon {
       height: 25px;
       width: 25px;
-      border-radius: 6px;
       > i {
         font-size: 14px;
         height: 14px;

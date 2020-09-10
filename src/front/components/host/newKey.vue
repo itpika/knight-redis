@@ -8,9 +8,9 @@
     :with-header="false"
     :before-close="handleClose">
     <!-- 右侧抽屉头部 -->
-    <div class="header">
+    <div class="header bgdColor">
       <div>
-        <div class="closeLeft fontColor">
+        <div class="closeLeft fontColor radio-kgt">
           <i class="el-icon-back" @click="leftBack"></i>
         </div>
         <div class="addTitle">NEW KEY</div>
@@ -20,7 +20,7 @@
       </div>
     </div>
     <!-- 右侧抽屉主体 -->
-    <div class="body">
+    <div class="body radio-kgt">
       <el-form ref="key" label-position="left" label-width="80px" :model="key" :rules="rules">
         <el-form-item label="NAME" prop="name">
           <el-input v-model="key.name" clearable placeholder="key name"></el-input>
@@ -129,7 +129,6 @@ export default {
 .header {
   height: 10%;
   border-bottom: solid 1px #334460;
-  background-color: #1c3046;
   color: #fff;
   display: flex;
   justify-content: space-between;
@@ -148,7 +147,6 @@ export default {
       margin-right: 10px;
       height: 25px;
       width: 25px;
-      border-radius: 6px;
       > i {
         font-size: 14px;
         height: 14px;
@@ -168,7 +166,6 @@ export default {
 .body {
   margin: 15px;
   background-color: #fff;
-  border-radius: 6px;
   padding: 15px;
 }
 </style>

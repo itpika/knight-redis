@@ -7,7 +7,7 @@
       <div class="body">
         <div v-loading.lock="current.dbLoading"
         element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(0, 0, 0, 0.6)" class="dbBox">
+        element-loading-background="rgba(0, 0, 0, 0.6)" class="dbBox bgdColor-radio-kgt">
           <!-- 头部操作栏 -->
           <div class="dbBoxHeader">
             <div class="selectBox">
@@ -44,7 +44,7 @@
             </div>
           </div>
           <!-- 数据展示body -->
-          <div class="dbBoxBody bgkColor">
+          <div class="dbBoxBody bkg-radio-kgt">
             <ul>
               <li v-for="(v, i) of current.dbData" :key="i" @click.stop="keyDetail(v)">
                 <div class="left">
@@ -56,7 +56,7 @@
             </ul>
           </div>
         </div>
-        <div :class="['key-detail-box', keyDetailBoxShow]">
+        <div :class="['key-detail-box', 'bgdColor-radio-kgt',  keyDetailBoxShow]">
           <KeyDetail :keyName="keyDetailName" />
         </div>
       </div>
@@ -72,8 +72,8 @@
     <!-- 透明遮罩层 -->
     <div :class="['lucency-mask', {visibleClass: current.dialogState.lucencyMaskShow}]">
       <!-- 信息提示框 -->
-      <kdialog :text="current.dialogState.infoShowTest" :label="current.dialogState.infoShowTitle"
-        rightOpertion="OK" leftOpertion="CANCEL" rightType="warning"
+      <kdialog :show="current.dialogState.lucencyMaskShow" :text="current.dialogState.infoShowTest" :label="current.dialogState.infoShowTitle"
+        rightOpertion="OK" leftOpertion="CANCEL" rightType="warning" type="warning"
         @leftCallback="closeInfoDialog" @rightCallback="removeKey()"></kdialog>
     </div>
     <NewKey :drawer="drawer"/>
@@ -265,8 +265,6 @@ export default {
         padding: 10px;
         width: 35%;
         height: 100%;
-        border-radius: 6px;
-        background-color: #1c3046;
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
@@ -323,7 +321,6 @@ export default {
           flex: 1;
           margin-top: 10px;
           height: 100%;
-          border-radius: 5px;
           box-sizing: border-box;
           overflow: hidden;
           > ul {
@@ -347,12 +344,16 @@ export default {
               .left {
                 display: flex;
                 flex: 0.9;
+                overflow: hidden;
+                span {
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                }
                 i {
                   font-size: 18px;
                   margin-right: 2px;
                   color: #00de7e;
                 }
-                overflow: hidden;
               }
               > i {
                 &:hover {
@@ -375,9 +376,7 @@ export default {
       .key-detail-box {
         padding: 10px;
         width: 63%;
-        border-radius: 6px;
         display: flex;
-        background-color: #1c3046;
         box-sizing: border-box;
       }
     }

@@ -1,17 +1,21 @@
 <template>
-  <div class="box">
+  <div class="box radio-kgt">
     <div class="header">
-      <div class="left">
+      <div class="left bkg-radio-kgt">
         <div class="key-type greenColor">
           <!-- <span>{{this.current.keyDetail.type}}:</span> -->
-          <!-- <span>hash:</span> -->
+          <!-- <span>HASH:</span> -->
           <span>STRING:</span>
         </div>
-        <span class="key-name">{{keyName}}</span>
+        <span class="key-name">
+          <el-tooltip :content="keyName" effect="dark" offset="0" placement="top-start">
+            <span class="key-name">{{keyName}}</span>
+          </el-tooltip>
+        </span>
       </div>
-      <div class="right">right</div>
+      <div class="right bkg-radio-kgt">right</div>
     </div>
-    <div class="body">body</div>
+    <div class="body bkg-radio-kgt">body</div>
   </div>
 </template>
 <script>
@@ -39,19 +43,12 @@ export default {
   box-sizing: border-box;
   height: 100%;
   width: 100%;
-  border-radius: 6px;
   display: flex;
   flex-flow: column;
-  > div {
-    background-color: #416080;
-    border-radius: 6px;
-  }
   .header {
     height: 10%;
-    > div {
-      background-color: #416080;
-      border-radius: 6px;
-    }
+    max-height: 40px;
+    min-height: 25px;
     display: flex;
     justify-content: space-between;
     .left {
@@ -61,17 +58,16 @@ export default {
       align-items: center;
       box-sizing: border-box;
       padding: 0 10px;
+      justify-content: flex-start;
+      margin-right: 10px;
       .key-type {
-        width: 35%;
-        display: flex;
-        justify-content: flex-start;
-        span {
-          float: left;
-          margin-right: 5px;
-        }
+        margin-right: 5px;
       }
       .key-name {
         color: #fff;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
     .right {

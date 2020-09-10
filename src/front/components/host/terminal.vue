@@ -2,7 +2,7 @@
   <!-- 底层命令行抽屉 -->
   <div class="terminal">
     <!-- 头部 -->
-    <div class="header">
+    <div class="header bgdColor">
       <div class="addTitle">Shell</div>
       <i @click.stop="current.shellState.open = false" class="el-icon-close"/>
     </div>
@@ -292,7 +292,6 @@ export default {
   width: 100%;
   .header {
     height: 15%;
-    background-color: #1c3046;
     color: #fff;
     display: flex;
     justify-content: space-between;

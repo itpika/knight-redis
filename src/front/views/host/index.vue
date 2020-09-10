@@ -32,9 +32,9 @@
       :with-header="false"
       :before-close="handleClose">
       <!-- 右侧抽屉头部 -->
-      <div class="addHostHead">
+      <div class="addHostHead bgdColor">
         <div>
-          <div class="closeLeft fontColor">
+          <div class="closeLeft radio-kgt fontColor">
             <i class="el-icon-back" @click="leftBack"></i>
           </div>
           <div class="addTitle">addHost</div>
@@ -44,7 +44,7 @@
         </div>
       </div>
       <!-- 右侧抽屉主体 -->
-      <div class="addHostBody">
+      <div class="addHostBody radio-kgt">
         <el-form ref="host" label-position="left" label-width="80px" :model="host" :rules="rules">
           <el-form-item label="Lable" prop="label">
             <el-input v-model="host.label" clearable placeholder="label"></el-input>
@@ -239,7 +239,6 @@ export default {
   .addHostHead {
     height: 10%;
     border-bottom: solid 1px #334460;
-    background-color: #1c3046;
     color: #fff;
     display: flex;
     justify-content: space-between;
@@ -258,7 +257,6 @@ export default {
         margin-right: 10px;
         height: 25px;
         width: 25px;
-        border-radius: 6px;
         > i {
           font-size: 14px;
           height: 14px;
@@ -278,7 +276,6 @@ export default {
   .addHostBody {
     margin: 15px;
     background-color: #fff;
-    border-radius: 6px;
     padding: 15px;
   }
 }

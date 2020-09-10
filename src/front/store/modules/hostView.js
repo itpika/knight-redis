@@ -1,5 +1,4 @@
 import send from '../../lib/channel/send.js'
-
 export default {
   namespaced: true,
   state: {
@@ -49,9 +48,8 @@ export default {
         time: data.time,
         conf: data.conf,
         label: data.label,
-        // connectState: Math.floor(Math.random() * 10) % 2,
-        // connectState: -1,
-        connectState: 0,
+        connectState: process.env.NODE_ENV === 'development' ? 0 : -1,
+        // connectState: 2,
         dbLoading: false,
         dialogState: {
           promptTest: '', // 错误提示框的内容文本
@@ -72,8 +70,11 @@ export default {
           value: ''
         }
       }
-      for (let index = 0; index < 40; index++) {
-        host.dbData.push(Math.floor(Math.random() * 100) + '')
+      if (process.env.NODE_ENV === 'development') {
+        for (let index = 0; index < 40; index++) {
+          host.dbData.push(Math.floor(Math.random() * 100) + '')
+          host.dbData[3] = 'aaaaaabbbbbbbcccccccddddddd111111222222'
+        }
       }
       state.all.push(host)
       state.current = state.all[state.all.length - 1]
