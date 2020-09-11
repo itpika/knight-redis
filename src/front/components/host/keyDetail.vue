@@ -13,7 +13,12 @@
           </el-tooltip>
         </span>
       </div>
-      <div class="right bkg-radio-kgt">right</div>
+      <div class="right">
+        <div class="reload radio-kgt"><i class="el-icon-refresh-right"/><span v-html="'&nbsp;reload'"></span></div>
+        <div class="rename bkg-radio-kgt"><span v-html="'&nbsp;rename'"></span></div>
+        <div class="delete radio-kgt"><i class="el-icon-delete-solid"/><span v-html="'&nbsp;delete'"></span></div>
+        <div class="ttl bkg-radio-kgt">TTL:-1</div>
+      </div>
     </div>
     <div class="body bkg-radio-kgt">body</div>
   </div>
@@ -23,6 +28,8 @@ export default {
   name: 'keyDetail',
   props: {
     keyName: String
+  },
+  components: {
   },
   computed: {
     current() {
@@ -72,6 +79,37 @@ export default {
     }
     .right {
       flex-grow: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 0 5px;
+      color: #fff;
+      > div {
+        height: 100%;
+        box-sizing: border-box;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        flex: 1;
+        font-size: 14px;
+      }
+      .rename {
+        margin-right: 5px;
+        cursor: pointer;
+      }
+      .ttl {
+        }
+      .reload {
+        margin-right: 5px;
+        background-color: #00de7e;
+        cursor: pointer;
+      }
+      .delete {
+        margin-right: 5px;
+        background-color: #fa4c4c;
+        cursor: pointer;
+      }
     }
   }
   .body {
