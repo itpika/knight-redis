@@ -23,13 +23,13 @@
               </el-select>
             </div>
             <div class="opertionsBox bgkColor">
-              <el-tooltip class="item" effect="light" content="NEW KEY" placement="top">
+              <el-tooltip class="item" content="NEW KEY" placement="top">
                 <i class="el-icon-plus add" @click.stop="addKey"></i>
               </el-tooltip>
-              <el-tooltip class="item" effect="light" content="REFRESH" placement="top">
+              <el-tooltip class="item" content="REFRESH" placement="top">
                 <i class="el-icon-refresh refresh" @click.stop="refreshDB"></i>
               </el-tooltip>
-              <el-tooltip class="item" effect="light" content="CLEAR ALL" placement="top">
+              <el-tooltip class="item" content="CLEAR ALL" placement="top">
                 <i class="el-icon-delete delete"></i>
               </el-tooltip>
               <el-tooltip :content="(current.realTime === '0' ? 'Enable':'Disable')+' Live Update'" placement="top">
@@ -57,7 +57,7 @@
           </div>
         </div>
         <div :class="['key-detail-box', 'bgdColor-radio-kgt',  keyDetailBoxShow]">
-          <KeyDetail :keyName="keyDetailName" />
+          <KeyDetail @deleteKey="deleteKey" />
         </div>
       </div>
     </div>
@@ -112,7 +112,6 @@ export default {
   data () {
     return {
       terminal: false,
-      keyDetailName: '',
       keyDetailBoxShow: 'hiddenClass',
       dbs: [
         { value: 0, label: 'DB0' }, { value: 1, label: 'DB1' },
@@ -134,8 +133,9 @@ export default {
   },
   methods: {
     keyDetail(k) { // 点击查看key详情
-      this.$data.keyDetailName = k
       this.$data.keyDetailBoxShow = ''
+      this.current.keyDetail.keyName = k
+      console.log('a', this.current.keyDetail.keyName)
       this.$store.commit('redis/keyDetail', { time: this.current.time, key: k })
     },
     openTerminal() {
@@ -174,6 +174,11 @@ export default {
     reconnect() {
       this.$store.commit('hostView/reconnect')
     },
+    // 在key详情页面删除key
+    deleteKey(data) {
+      this.clientRemoveKey(data)
+    },
+    // 在key列表里面删除key
     clientRemoveKey: function (val) { // 点击删除key
       this.current.dialogState.infoShowTitle = 'Delete key' // 设置info提示框标题
       this.current.dialogState.infoShowTest = `Are you sure you want to delete this key ${val}?` // 设置info提示框内容
@@ -192,6 +197,15 @@ export default {
         key: this.toDeleteKey,
         liveUpdate: this.current.realTime === '1'
       })
+      // 重制key详情组件数据
+      this.$data.keyDetailBoxShow = 'hiddenClass'
+      this.current.keyDetail = {
+        keyName: '',
+        type: '-',
+        ttl: -1,
+        value: ''
+      }
+
       this.current.dbData = this.current.dbData.filter(v => {
         return this.toDeleteKey !== v
       })

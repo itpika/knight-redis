@@ -24,6 +24,7 @@ export default {
         paste: 0 // 获取剪切板内容(ctrl+v触发)
       },
       keyDetail: {
+        keyName: '', // key name
         type: '-', // key类型
         ttl: -1, // 有效期
         value: '' // 值
@@ -65,16 +66,17 @@ export default {
           paste: 0 // 获取剪切板内容(ctrl+v触发)
         },
         keyDetail: {
+          keyName: '',
           type: '-',
           ttl: -1,
           value: ''
         }
       }
       if (process.env.NODE_ENV === 'development') {
-        for (let index = 0; index < 40; index++) {
+        for (let index = 0; index < 20; index++) {
           host.dbData.push(Math.floor(Math.random() * 100) + '')
-          host.dbData[3] = 'aaaaaabbbbbbbcccccccddddddd111111222222'
         }
+        host.dbData[3] = 'aaaaaabbbbbbbcccccccddddddd111111222222'
       }
       state.all.push(host)
       state.current = state.all[state.all.length - 1]

@@ -4,8 +4,6 @@
       <div class="left bkg-radio-kgt">
         <div class="key-type greenColor">
           <span>{{this.current.keyDetail.type}}:</span>
-          <!-- <span>HASH:</span> -->
-          <!-- <span>STRING:</span> -->
         </div>
         <span class="key-name">
           <el-tooltip :content="keyName" effect="dark" offset="0" placement="top-start">
@@ -14,10 +12,10 @@
         </span>
       </div>
       <div class="right">
-        <div class="reload radio-kgt"><i class="el-icon-refresh-right"/><span v-html="'&nbsp;reload'"></span></div>
+        <div class="reload radio-kgt" @click.stop="reload"><i class="el-icon-refresh-right"/><span v-html="'&nbsp;reload'"></span></div>
         <div class="rename bkg-radio-kgt"><span v-html="'&nbsp;rename'"></span></div>
-        <div class="delete radio-kgt"><i class="el-icon-delete-solid"/><span v-html="'&nbsp;delete'"></span></div>
-        <div class="ttl bkg-radio-kgt">TTL:-1</div>
+        <div class="delete radio-kgt" @click.stop="deleteKey"><i class="el-icon-delete-solid"/><span v-html="'&nbsp;delete'"></span></div>
+        <div class="ttl bkg-radio-kgt">TTL:<span v-html="'&nbsp;'+this.current.keyDetail.ttl"></span></div>
       </div>
     </div>
     <div class="body bkg-radio-kgt">body</div>
@@ -26,14 +24,14 @@
 <script>
 export default {
   name: 'keyDetail',
-  props: {
-    keyName: String
-  },
   components: {
   },
   computed: {
     current() {
       return this.$store.state.hostView.current
+    },
+    keyName() {
+      return this.$store.state.hostView.current.keyDetail.keyName
     }
   },
   data: function () {
@@ -42,6 +40,14 @@ export default {
     }
   },
   methods: {
+    // 重加载key详情
+    reload() {
+      this.$store.commit('redis/keyDetail', { time: this.current.time, key: this.current.keyDetail.keyName })
+    },
+    // 删除key
+    deleteKey() {
+      this.$emit('deleteKey', this.current.keyDetail.keyName)
+    }
   }
 }
 </script>
@@ -92,11 +98,15 @@ export default {
         display: flex;
         justify-content: center;
         flex: 1;
-        font-size: 14px;
+        font-size: 12px;
+        transition: background-color 0.3s;
       }
       .rename {
         margin-right: 5px;
         cursor: pointer;
+        &:hover {
+          background-color: #52789f;
+        }
       }
       .ttl {
         }
@@ -104,11 +114,17 @@ export default {
         margin-right: 5px;
         background-color: #00de7e;
         cursor: pointer;
+        &:hover {
+          background-color: #01c671;
+        }
       }
       .delete {
         margin-right: 5px;
         background-color: #fa4c4c;
         cursor: pointer;
+        &:hover {
+          background-color: #d54a4a;
+        }
       }
     }
   }
