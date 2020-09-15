@@ -21,11 +21,11 @@
     </div>
     <!-- 右侧抽屉主体 -->
     <div class="body radio-kgt">
-      <el-form ref="key" label-position="left" label-width="80px" :model="key" :rules="rules">
-        <el-form-item label="NAME" prop="name">
+      <el-form ref="key" label-position="left" label-width="80px" :model="key">
+        <el-form-item label="NAME" prop="name" :rules="{ required: true, message: 'Please enter the key name', trigger: 'blur' }">
           <el-input v-model="key.name" clearable placeholder="key name"></el-input>
         </el-form-item>
-        <el-form-item label="TYPE" prop="type">
+        <el-form-item label="TYPE" prop="type" :rules="{ required: true, message: 'Please select the key type', trigger: 'blur' }">
           <el-select v-model="key.type" placeholder="Please select type" style="width: 100%" clearable>
             <el-option v-for="(item, i) of keyType" :key="i"
             :label="item.name" :value="item.value"></el-option>
@@ -40,11 +40,25 @@
             </el-select>
           </el-input>
         </el-form-item>
-        <el-form-item label="VALUE" prop="value">
+        <el-form-item label="VALUE" prop="value" :rules="{ required: true, message: 'Please input key value', trigger: 'blur' }">
           <el-input
+            v-if="key.type === 1 || key.type === 3 || key.type === 4 || key.type === 5"
             v-model="key.value" clearable
             type="textarea" :autosize="{ minRows: 2}"
             placeholder="key value">
+          </el-input>
+          <div v-else-if="key.type === 2">
+            <el-input v-model="key.hashKey" placeholder="key" style="margin-bottom: 10px"></el-input>
+            <el-input
+            v-model="key.value" clearable
+            type="textarea" :autosize="{ minRows: 2}"
+            placeholder="value">
+          </el-input>
+          </div>
+          <el-input
+            v-model="key.value" clearable
+            type="textarea" :autosize="{ minRows: 2}"
+            placeholder="key value" v-else>
           </el-input>
         </el-form-item>
       </el-form>
@@ -52,7 +66,7 @@
   </el-drawer>
 </template>
 <script>
-import { STRING, LIST, HASH, SET } from '../../../lib/redis/singal'
+import { STRING, LIST, HASH, SET, ZSET } from '../../../lib/redis/singal'
 export default {
   name: 'NewKey',
   computed: {
@@ -70,16 +84,8 @@ export default {
   },
   data: function () {
     return {
-      keyType: [STRING, LIST, HASH, SET],
-      key: {},
-      rules: {
-        name: [
-          { required: true, message: 'Please enter the key name', trigger: 'blur' }
-        ],
-        type: [
-          { required: true, message: 'Please select the key type', trigger: 'blur' }
-        ]
-      }
+      keyType: [STRING, LIST, HASH, SET, ZSET],
+      key: {}
     }
   },
   methods: {
@@ -107,6 +113,23 @@ export default {
           switch (this.key.type) {
             case STRING.value: // string
               data.type = STRING.value
+              data.value = this.key.value
+              break
+            case LIST.value: // list
+              data.type = LIST.value
+              data.value = this.key.value
+              break
+            case SET.value: // set
+              data.type = SET.value
+              data.value = this.key.value
+              break
+            case ZSET.value: // zset
+              data.type = ZSET.value
+              data.value = this.key.value
+              break
+            case HASH.value: // hash
+              data.type = HASH.value
+              data.hashKey = this.key.hashKey
               data.value = this.key.value
               break
             default:

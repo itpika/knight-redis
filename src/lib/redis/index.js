@@ -39,6 +39,7 @@ module.exports = {
    */
   setKey: async function (data) {
     await pool[data.time].select(data.index)
+    let ret
     switch (data.type) {
       case require('./singal.js').STRING.value: // string
         if (data.expireModel) {
@@ -46,7 +47,34 @@ module.exports = {
         } else {
           return await pool[data.time].set(data.key, data.value)
         }
-        break
+      case require('./singal.js').LIST.value: // list
+        const ret = await pool[data.time].lpush(data.key, data.value)
+        if (data.expireModel) {
+          const seconds = data.expireModel === 'EX' ? data.expireTime : Math.floor(data.expireTime / 1000)
+          await pool[data.time].expire(data.key, seconds)
+        }
+        return ret
+      case require('./singal.js').HASH.value: // hash
+        ret = await pool[data.time].hset(data.key, data.hashKey, data.value)
+        if (data.expireModel) {
+          const seconds = data.expireModel === 'EX' ? data.expireTime : Math.floor(data.expireTime / 1000)
+          await pool[data.time].expire(data.key, seconds)
+        }
+        return ret
+      case require('./singal.js').SET.value: // set
+        ret = await pool[data.time].sadd(data.key, data.value)
+        if (data.expireModel) {
+          const seconds = data.expireModel === 'EX' ? data.expireTime : Math.floor(data.expireTime / 1000)
+          await pool[data.time].expire(data.key, seconds)
+        }
+        return ret
+      case require('./singal.js').ZSET.value: // zset
+        ret = await pool[data.time].zadd(data.key, data.value)
+        if (data.expireModel) {
+          const seconds = data.expireModel === 'EX' ? data.expireTime : Math.floor(data.expireTime / 1000)
+          await pool[data.time].expire(data.key, seconds)
+        }
+        return ret
       default:
         break
     }
