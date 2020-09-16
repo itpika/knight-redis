@@ -1,10 +1,16 @@
 <template>
   <div class="header">
     <div class="menu" style="-webkit-app-region: drag">
-      <div class="logo">
-        <el-image
-        :src="require('@/public/image/icon.png')"
-        fit="fill"></el-image>
+      <div class="left">
+        <div class="logo">
+          <!-- <el-image
+          :src="require('@/public/image/icon.png')"
+          fit="fill"></el-image> -->
+        </div>
+        <div class="top-menu">
+          <div>View</div>
+          <div>Help</div>
+        </div>
       </div>
       <div class="opertion">
         <div class="min" style="-webkit-app-region: no-drag;" @click.stop="minWindow">
@@ -64,10 +70,37 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgb(28, 48, 70);
-    .logo {
+    background-color: rgb(37, 53, 70);
+    .left {
       height: 100%;
-      width: 25px;
+      display: flex;
+      justify-content: flex-start;
+      .logo {
+        height: 100%;
+        width: 25px;
+      }
+      .top-menu {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        > div {
+          user-select: none;
+          height: 100%;
+          font-size: 13px;
+          width: 50px;
+          display: flex;
+          color: #cccccc;
+          justify-content: center;
+          align-items: center;
+          -webkit-app-region: no-drag;
+          &:hover {
+            background-color: rgb(56, 70, 83);
+            color: #dad9d9;
+            cursor: default;
+          }
+        }
+      }
     }
     .opertion {
       height: 100%;
@@ -81,7 +114,7 @@ export default {
       }
       .min, .max {
         &:hover {
-          background-color: rgb(87, 113, 145);
+          background-color: rgb(56, 70, 83);
         }
       }
       .min div {

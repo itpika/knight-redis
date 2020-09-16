@@ -2,7 +2,7 @@
   <div class="home">
       <el-header style="height: 30px"><Header/></el-header>
       <el-container>
-        <el-aside width="18%" class="fontColor"><Aside></Aside></el-aside>
+        <el-aside width="18%" class="fontColor bgdColor"><Aside></Aside></el-aside>
         <el-main :class="mainClass"><Main></Main></el-main>
       </el-container>
   </div>
@@ -39,17 +39,14 @@ export default {
     }
   }
   .el-header, .el-footer {
-    background-color: #1c3046;
     color: #c9ced4;
     text-align: center;
     padding: 0;
   }
   .el-aside {
-    background-color: #1c3046;
     text-align: center;
   }
   .el-main {
-    // background-color: #E9EEF3;
     color: #333;
     height: 100%;
     padding: 0;

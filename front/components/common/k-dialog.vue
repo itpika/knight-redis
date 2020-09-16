@@ -110,6 +110,6 @@ export default {
   background-color: #03c974;
 }
 .public {
-  background-color: #1c3046;
+  background-color: #152435;
 }
 </style>

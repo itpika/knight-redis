@@ -228,7 +228,7 @@ export default {
         }
       }
       .lineRightOper:hover {
-        background-color: #1c3046;
+        background-color: #152435;
       }
     }
     .line:hover {

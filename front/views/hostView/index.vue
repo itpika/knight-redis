@@ -1,5 +1,5 @@
 <template>
-  <div id="hostView" v-loading.lock="current.connectState === -1" element-loading-background="#416080" class="hostView bgkColor">
+  <div id="hostView" v-loading.lock="current.connectState === -1" element-loading-background="#4f6d8c" class="hostView bgkColor">
     <div :class="['content', {'hiddenClass': !(current.connectState === 0)}]">
       <div class="header">
         <div class="terminalBtn"><el-button type="info" size="small" round @click.stop="current.shellState.open = !current.shellState.open">Terminal</el-button></div>
@@ -36,7 +36,7 @@
                 <el-switch
                   v-model="current.realTime"
                   active-color="#13ce66"
-                  inactive-color="#1c3046"
+                  inactive-color="#152435"
                   active-value="1"
                   inactive-value="0">
                 </el-switch>
@@ -261,7 +261,7 @@ export default {
       .terminalBtn {
         /deep/ .el-button--info {
           border: 0;
-          background-color: #1c3046;
+          background-color: #152435;
           transition: all 300ms;
           &:hover {
             color: #00de7e;
@@ -325,7 +325,7 @@ export default {
             width: 50%;
             /deep/ .el-input__inner {
               border: none;
-              background-color: #416080;
+              background-color: #4f6d8c;
               outline: none;
               color: #00de7e;
             }
@@ -376,7 +376,7 @@ export default {
                 visibility: hidden;
               }
               &:hover {
-                background-color: #1c3046;
+                background-color: #152435;
                 transition: all 500ms;
                 cursor: pointer;
                 > i {

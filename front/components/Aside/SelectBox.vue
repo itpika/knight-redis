@@ -53,7 +53,7 @@ export default {
 <style lang="less" scoped>
   .selectBox {
     &:hover {
-      background-color: #416080;
+      background-color: #4f6d8c;
       cursor: pointer;
       color: #fff;
       .left > div {
@@ -107,11 +107,11 @@ export default {
     }
   }
   .active {
-    background-color: #416080;
+    background-color: #4f6d8c;
     color: #00de7e !important;
   }
   .activeMenu {
-    background-color: #416080;
+    background-color: #4f6d8c;
     color: #fff !important;
   }
 </style>
