@@ -42,13 +42,21 @@
         </el-form-item>
         <el-form-item label="VALUE" prop="value" :rules="{ required: true, message: 'Please input key value', trigger: 'blur' }">
           <el-input
-            v-if="key.type === 1 || key.type === 3 || key.type === 4 || key.type === 5"
+            v-if="key.type === 1 || key.type === 3 || key.type === 4"
             v-model="key.value" clearable
             type="textarea" :autosize="{ minRows: 2}"
             placeholder="key value">
           </el-input>
           <div v-else-if="key.type === 2">
             <el-input v-model="key.hashKey" placeholder="key" style="margin-bottom: 10px"></el-input>
+            <el-input
+            v-model="key.value" clearable
+            type="textarea" :autosize="{ minRows: 2}"
+            placeholder="value">
+          </el-input>
+          </div>
+          <div v-else-if="key.type === 5">
+            <el-input v-model="key.score" placeholder="score" style="margin-bottom: 10px"></el-input>
             <el-input
             v-model="key.value" clearable
             type="textarea" :autosize="{ minRows: 2}"
@@ -126,6 +134,7 @@ export default {
             case ZSET.value: // zset
               data.type = ZSET.value
               data.value = this.key.value
+              data.score = this.key.score
               break
             case HASH.value: // hash
               data.type = HASH.value

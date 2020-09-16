@@ -1,4 +1,7 @@
 const path = require('path')
+function resolve(dir){
+    return path.join(__dirname,dir)//path.join(__dirname)设置绝对路径
+}
 module.exports = {
 	outputDir: 'dist',
 	publicPath: './',
@@ -8,9 +11,17 @@ module.exports = {
 	pages: {
 		index: {
 			// page 的入口
-			entry: 'src/front/main.js',
+			entry: 'front/main.js',
 			// 在 dist/index.html 的输出
 			filename: 'index.html'
 		}
+	},
+	configureWebpack: {
+		resolve: {
+			alias: {
+				'@': resolve('./')
+			}
+		}
+
 	}
 }

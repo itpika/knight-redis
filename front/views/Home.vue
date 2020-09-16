@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-      <el-header height="10%"><Header/></el-header>
+      <el-header style="height: 30px"><Header/></el-header>
       <el-container>
         <el-aside width="18%" class="fontColor"><Aside></Aside></el-aside>
         <el-main :class="mainClass"><Main></Main></el-main>
@@ -29,8 +29,10 @@ export default {
 <style scoped lang="less">
   .home {
     height: 100%;
+    display: flex;
+    flex-flow: column;
     > .el-container {
-      height: 90%;
+      flex: 1;
       > ::-webkit-scrollbar { // 主body隐藏滚动条
         display: none; /* Chrome Safari */
       }
@@ -38,9 +40,9 @@ export default {
   }
   .el-header, .el-footer {
     background-color: #1c3046;
-    border-bottom: solid 1px #334460;
     color: #c9ced4;
     text-align: center;
+    padding: 0;
   }
   .el-aside {
     background-color: #1c3046;

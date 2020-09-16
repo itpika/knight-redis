@@ -19,11 +19,13 @@ import {
   Option,
   Loading,
   Switch,
-  Message
+  Message,
+  Image
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 // Vue.use(Element)
+Vue.use(Image)
 Vue.use(Button)
 Vue.use(Switch)
 Vue.use(Loading)

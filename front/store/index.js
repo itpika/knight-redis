@@ -113,4 +113,10 @@ if (window.ipcRenderer) {
       }
     }
   })
+  window.ipcRenderer.on('maximize', () => {
+    app.state.winMax = true
+  })
+  window.ipcRenderer.on('unmaximize', () => {
+    app.state.winMax = false
+  })
 }

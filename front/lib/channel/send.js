@@ -57,5 +57,8 @@ export default {
     if (window.ipcRenderer) {
       window.ipcRenderer.send('setClipboard', data)
     }
+  },
+  windowsOpertion(event) {
+    if (window.ipcRenderer) window.ipcRenderer.send(event)
   }
 }
