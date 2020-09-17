@@ -44,7 +44,7 @@
             </div>
           </div>
           <!-- 数据展示body -->
-          <div class="dbBoxBody bkg-radio-kgt">
+          <div class="dbBoxBody bkg-radio-kgt" ref="dbBoxBody">
             <ul>
               <li v-for="(v, i) of current.dbData" :key="i" @click.stop="keyDetail(v)">
                 <div class="left">
@@ -244,19 +244,21 @@ export default {
 </script>
 <style scoped lang="less">
 .hostView {
-  padding: 20px;
+  padding: 10px 20px;
   height: 100%;
   box-sizing: border-box;
   position: relative;
   .content {
     box-sizing: border-box;
     height: 100%;
+    display: flex;
+    flex-direction: column;
     .header {
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      height: 10%;
-      padding-bottom: 20px;
+      height: 55px;
+      padding-bottom: 10px;
       box-sizing: border-box;
       .terminalBtn {
         /deep/ .el-button--info {
@@ -271,7 +273,8 @@ export default {
       }
     }
     .body {
-      height: 90%;
+      // height: 90%;
+      flex: 1;
       box-sizing: border-box;
       display: flex;
       justify-content: space-between;
@@ -332,18 +335,19 @@ export default {
           }
         }
         .dbBoxBody {
-          flex: 1;
           margin-top: 10px;
-          height: 100%;
           box-sizing: border-box;
-          overflow: hidden;
+          overflow: auto;
+          flex: 1;
+          position: relative;
           > ul {
-            overflow-y: scroll;
-            box-sizing: border-box;
+            position: absolute;
             height: 100%;
+            width: 100%;
+            box-sizing: border-box;
             padding: 10px 10px;
-            margin:0;
-            list-style:none;
+            margin: 0;
+            list-style: none;
             li {
               display: flex;
               width: 100%;

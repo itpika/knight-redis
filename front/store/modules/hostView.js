@@ -67,13 +67,17 @@ export default {
         },
         keyDetail: {
           keyName: '',
-          type: '-',
+          type: 'HASH',
           ttl: -1,
-          value: ''
+          // value: '12889838jndnahxa9121'
+          value: {
+            keys: ['name', 'age'],
+            values: ['pika', '20']
+          }
         }
       }
       if (process.env.NODE_ENV === 'development') {
-        for (let index = 0; index < 20; index++) {
+        for (let index = 0; index < 50; index++) {
           host.dbData.push(Math.floor(Math.random() * 100) + '')
         }
         host.dbData[3] = 'aaaaaabbbbbbbcccccccddddddd111111222222'

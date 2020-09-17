@@ -19,6 +19,8 @@ module.exports = {
     'one-var': 'off',
     'semi': 'warn',
     'no-case-declarations': 'off',
-    'no-unreachable': 'warn'
+    'no-unreachable': 'warn',
+    'vue/no-unused-components': 'warn',
+    'object-curly-spacing': 'warn'
   }
 }
