@@ -1,18 +1,18 @@
 <template>
   <div class="header">
     <div class="menu" style="-webkit-app-region: drag">
-      <div class="left">
+      <div class="left" v-if="os != 'macOS'">
         <div class="logo">
-          <!-- <el-image
+          <el-image
           :src="require('@/public/image/icon.png')"
-          fit="fill"></el-image> -->
+          fit="fill"></el-image>
         </div>
         <div class="top-menu">
           <div>View</div>
           <div>Help</div>
         </div>
       </div>
-      <div class="opertion">
+      <div class="opertion" v-if="os != 'macOS'">
         <div class="min" style="-webkit-app-region: no-drag;" @click.stop="minWindow">
           <div></div>
         </div>
@@ -33,6 +33,7 @@ export default {
   name: 'Header',
   data() {
     return {
+      os: global.os_platform
     }
   },
   computed: {

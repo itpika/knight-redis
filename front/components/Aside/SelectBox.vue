@@ -67,6 +67,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     .left {
+      user-select: none;
       .iconActive {
         border: solid 1px #00de7e !important;
       }

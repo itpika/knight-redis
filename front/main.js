@@ -6,6 +6,9 @@ import 'default-passive-events'
 import './plugins/element.js'
 
 Vue.config.productionTip = false
+
+global.os_platform = 'macOS'
+
 new Vue({
   router,
   store,
