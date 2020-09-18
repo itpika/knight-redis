@@ -33,33 +33,30 @@
         </div>
       </div>
       <div class="detail-text radio-kgt">
-        <div v-text="current.keyDetail.value" class="string-box bgdColor-radio-kgt" v-if="this.current.keyDetail.type === string" contenteditable="true">
+        <div v-text="current.keyDetail.value" class="string-box bgdColor-radio-kgt" 
+         @paste="filterText" v-if="this.current.keyDetail.type === string" contenteditable="true">
         </div>
-        <div class="hash-box" v-else-if="this.current.keyDetail.type === hash">
-          <ul class="bgdColor-radio-kgt">
-            <li class="radio-kgt">
-              <div class="row greenColor">row</div>
-              <div class="key greenColor">key</div>
-              <div class="value greenColor">value</div>
-            </li>
-            <li class="radio-kgt select" v-for="(item, i) in this.current.keyDetail.value.keys" :key="i">
-              <div class="row">{{i+1}}</div>
-              <div class="key">{{item}}</div>
-              <div class="value">{{current.keyDetail.value.values[i]}}</div>
-            </li>
-          </ul>
-          <div class="select-key"></div>
-          <div class="select-key-value"></div>
-        </div>
+        <HashDetail v-else-if="this.current.keyDetail.type === hash"/>
+        <ListDetail v-else-if="this.current.keyDetail.type === list"/>
+        <SetDetail v-else-if="this.current.keyDetail.type === set"/>
+        <ZSetDetail v-else-if="this.current.keyDetail.type === zset"/>
       </div>
     </div>
   </div>
 </template>
 <script>
 import { STRING, LIST, HASH, SET, ZSET } from '../../../lib/redis/singal'
+import HashDetail from '@/front/components/host/keyTypeDetail/hash'
+import ListDetail from '@/front/components/host/keyTypeDetail/list'
+import SetDetail from '@/front/components/host/keyTypeDetail/set'
+import ZSetDetail from '@/front/components/host/keyTypeDetail/zset'
 export default {
   name: 'keyDetail',
   components: {
+    HashDetail,
+    ListDetail,
+    SetDetail,
+    ZSetDetail
   },
   computed: {
     current() {
@@ -80,7 +77,8 @@ export default {
       keyViewType: 1,
       string: STRING.upName,
       hash: HASH.upName,
-      set: LIST.upName,
+      list: LIST.upName,
+      set: SET.upName,
       zset: ZSET.upName
     }
   },
@@ -92,6 +90,11 @@ export default {
     // 删除key
     deleteKey() {
       this.$emit('deleteKey', this.current.keyDetail.keyName)
+    },
+    filterText(e) {
+      e.preventDefault();
+      const text = e.clipboardData.getData('Text')
+      document.execCommand('insertText', false, text)
     }
   }
 }
@@ -231,41 +234,6 @@ export default {
           /*滚动条里面轨道*/
           background: #152435;
           box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-      }
-      .hash-box {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        ul {
-          height: 30%;
-          margin: 0;
-          padding: 5px 10px;
-          list-style: none;
-          .select {
-            transition: background-color 0.3s;
-            &:hover {
-              background-color: #4f6d8c;
-              cursor: pointer;
-            }
-          }
-          
-          li {
-            font-size: 14px;
-            color: #fff;
-            display: flex;
-            justify-content: space-between;
-            height: 20px;
-            .row {
-              flex: 1;
-            }
-            .key {
-              flex: 3;
-            }
-            .value {
-              flex: 6;
-            }
-          }
         }
       }
     }

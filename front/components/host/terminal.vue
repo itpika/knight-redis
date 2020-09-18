@@ -276,8 +276,10 @@ export default {
   },
   created() {
     // 处理鼠标按下默认事件，后续处理
-    window.addEventListener('mousedown', e => e.preventDefault(), { passive: false })
+    window.addEventListener('onMouseDown', e => e.preventDefault(), { passive: false })
     // window.addEventListener('onmousedown', e => e.preventDefault(), { passive: false })
+    // window.addEventListener('onMouseUp', e => e.preventDefault(), { passive: false })
+    // window.addEventListener('onmouseup', e => e.preventDefault(), { passive: false })
   }
 }
 </script>

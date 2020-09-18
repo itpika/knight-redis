@@ -67,13 +67,14 @@ export default {
         },
         keyDetail: {
           keyName: '',
-          type: 'HASH',
+          type: 'SET',
           ttl: -1,
           // value: '12889838jndnahxa9121'
-          value: {
-            keys: ['name', 'age'],
-            values: ['pika', '20']
-          }
+          value: [1, 'http://www.mamicode.com/info-detail2983524.html111111111123121', 'pika', 'md;osajdo;fmn;jfkdfjlksdhreihdjbvliubgfugfdjhfjfudufhjkjhfksndnskasdasdasxsxq1ewq141223']
+          // value: {
+          //   keys: ['name', 'asxasxssssssssaaaaaaaaaaaaa'],
+          //   values: ['euumxkasxlasxjuiqwxlm;maxla;iwxmaxawlxksdjhfuhsaxansxkalshxuixmohdkadkak', '20']
+          // }
         }
       }
       if (process.env.NODE_ENV === 'development') {

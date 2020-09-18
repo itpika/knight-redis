@@ -7,7 +7,8 @@ import './plugins/element.js'
 
 Vue.config.productionTip = false
 
-global.os_platform = 'macOS'
+// global.os_platform = 'macOS'
+global.os_platform = 'win'
 
 new Vue({
   router,

@@ -32,6 +32,8 @@ export default {
         this.$props.box.isActive = !this.$props.box.isActive
         // 加载当前host页的数据
         this.$store.commit('hostView/restoreCurrentHost', this.box.time)
+      } else { // 点击host菜单项
+        this.$props.box.activeMenu = true
       }
       // 更新激活项的显示状态
       this.$emit('active', this.$props.box.time)
@@ -56,6 +58,7 @@ export default {
       background-color: #4f6d8c;
       cursor: pointer;
       color: #fff;
+      // color: #00de7e;
       .left > div {
         border-color: #fff;
       }
@@ -69,10 +72,9 @@ export default {
     .left {
       user-select: none;
       .iconActive {
-        border: solid 1px #00de7e !important;
+        background-color: #152435;
       }
       .iconActiveMenu {
-        border: solid 1px #fff !important;
       }
       height: 100%;
       display: flex;
@@ -81,10 +83,10 @@ export default {
       div {
         height: 25px;
         width: 25px;
-        border: solid 1px #a9a9a9;
         margin: 0 10px 0 0;
         display: flex;
         justify-content: center;
+        background-color: #33404f;
         align-items: center;
       }
       > i{
