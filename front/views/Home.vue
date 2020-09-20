@@ -41,7 +41,6 @@ export default {
   }
   .el-header {
     max-height: 30px;
-    height: 6%;
   }
   .el-header, .el-footer {
     color: #c9ced4;

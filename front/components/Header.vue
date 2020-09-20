@@ -4,7 +4,7 @@
       <div class="left" v-if="os != 'macOS'">
         <div class="logo">
           <el-image
-          :src="require('@/public/image/icon.png')"
+          :src="require('@/public/image/mac.png')"
           fit="fill"></el-image>
         </div>
         <div class="top-menu">
@@ -78,7 +78,10 @@ export default {
       justify-content: flex-start;
       .logo {
         height: 100%;
-        width: 25px;
+        width: 30px;
+        padding-left: 5px;
+        display: flex;
+        align-items: center;
       }
       .top-menu {
         height: 100%;
