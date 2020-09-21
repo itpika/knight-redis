@@ -66,9 +66,11 @@ export default {
       display: flex;
       justify-content: space-between;
       height: 20px;
+      padding: 0 5px;
       .row {
         flex: 1;
         color: rgb(202, 202, 202);
+        text-align: left;
       }
       .value {
         width: 100%;

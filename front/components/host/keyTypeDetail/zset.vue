@@ -4,12 +4,15 @@
       <li class="radio-kgt">
         <div class="row greenColor">row</div>
         <div class="value greenColor">value</div>
+        <div class="score greenColor">score</div>
       </li>
-      <li class="radio-kgt select" v-for="(item, i) in this.current.keyDetail.value" :key="i" @click.stop="keyShow(item, i)">
+      <li class="radio-kgt select" v-for="(item, i) in this.current.keyDetail.value.values" :key="i" @click.stop="keyShow(item, i)">
         <div class="row">{{i+1}}</div>
-        <div class="value" v-html="current.keyDetail.value[i]"></div>
+        <div class="value" v-html="item"></div>
+        <div class="score" v-html="current.keyDetail.value.scores[i]"></div>
       </li>
     </ul>
+    <div @paste="filterText" class="select-key-score bgdColor-radio-kgt" contenteditable="true">{{score}}</div>
     <div @paste="filterText" class="select-key bgdColor-radio-kgt" contenteditable="true">{{value}}</div>
   </div>
 </template>
@@ -33,10 +36,11 @@ export default {
   },
   methods: {
     keyShow(key, index) { // key数据展示
-      this.value = this.current.keyDetail.value[index]
+      this.value = this.current.keyDetail.value.values[index]
+      this.score = this.current.keyDetail.value.scores[index]
     },
     filterText(e) {
-      e.preventDefault();
+      e.preventDefault()
       const text = e.clipboardData.getData('Text')
       document.execCommand('insertText', false, text)
     }
@@ -66,21 +70,29 @@ export default {
       display: flex;
       justify-content: space-between;
       height: 20px;
+      padding: 0 5px;
       .row {
-        flex: 1;
+        flex: 2;
+        text-align: left;
         color: rgb(202, 202, 202);
       }
       .value {
-        width: 100%;
-        flex: 6;
+        flex: 9;
         color: #00de7e;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .score {
+        flex: 3;
+        color: #f56c6c;
         text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
       }
     }
   }
-  .select-key {
+  .select-key-score {
     font-size: 12px;
     margin-bottom: 5px;
     flex: 2;
@@ -91,6 +103,23 @@ export default {
     white-space: pre-wrap;
     overflow: auto;
     color: #f56c6c;
+    &::-webkit-scrollbar-track {
+      /*滚动条里面轨道*/
+      background: #152435;
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+  }
+  .select-key {
+    font-size: 12px;
+    color: #00de7e;
+    flex: 6;
+    margin: 0;
+    text-align: left;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0 5px;
+    white-space: pre-wrap;
+    overflow: auto;
     &::-webkit-scrollbar-track {
       /*滚动条里面轨道*/
       background: #152435;

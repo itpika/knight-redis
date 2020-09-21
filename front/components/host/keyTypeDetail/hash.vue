@@ -73,7 +73,9 @@ export default {
       height: 20px;
       .row {
         flex: 1;
+        text-align: left;
         color: rgb(202, 202, 202);
+        padding: 0 5px;
       }
       .key {
         flex: 3;

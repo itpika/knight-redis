@@ -66,8 +66,10 @@ export default {
       display: flex;
       justify-content: space-between;
       height: 20px;
+      padding: 0 5px;
       .row {
         flex: 1;
+        text-align: left;
         color: rgb(202, 202, 202);
       }
       .value {

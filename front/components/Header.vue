@@ -78,10 +78,17 @@ export default {
       justify-content: flex-start;
       .logo {
         height: 100%;
+        padding: 4px;
+        box-sizing: border-box;
         width: 30px;
-        padding-left: 5px;
         display: flex;
         align-items: center;
+        justify-content: center;
+        div {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
       }
       .top-menu {
         height: 100%;

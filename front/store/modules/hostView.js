@@ -67,14 +67,18 @@ export default {
         },
         keyDetail: {
           keyName: '',
-          type: 'SET',
+          type: 'ZSET',
           ttl: -1,
           // value: '12889838jndnahxa9121'
-          value: [1, 'http://www.mamicode.com/info-detail2983524.html111111111123121', 'pika', 'md;osajdo;fmn;jfkdfjlksdhreihdjbvliubgfugfdjhfjfudufhjkjhfksndnskasdasdasxsxq1ewq141223']
+          // value: [1, 'http://www.mamicode.com/info-detail2983524.html111111111123121', 'pika', 'md;osajdo;fmn;jfkdfjlksdhreihdjbvliubgfugfdjhfjfudufhjkjhfksndnskasdasdasxsxq1ewq141223']
           // value: {
           //   keys: ['name', 'asxasxssssssssaaaaaaaaaaaaa'],
           //   values: ['euumxkasxlasxjuiqwxlm;maxla;iwxmaxawlxksdjhfuhsaxansxkalshxuixmohdkadkak', '20']
           // }
+          value: {
+            scores: ['11', '2', '31'],
+            values: ['euumxkasxlasxjuiqwxlm;maxla;iwxmaxawlxksdjhfuhsaxansxkalshxuixmohdkadkak', '20', 'pika']
+          }
         }
       }
       if (process.env.NODE_ENV === 'development') {
