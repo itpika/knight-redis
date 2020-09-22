@@ -17,12 +17,19 @@ import { mapState } from 'vuex'
 export default {
   name: 'Home',
   computed: mapState({
-    mainClass: state => state.app.mainClass
+    mainClass: state => state.app.mainClass,
+    clickMenu: state => state.app.clickMenu
   }),
   components: {
     Header,
     Aside,
     Main
+  },
+  methods: {
+    bodyClick() {
+      console.log(111)
+      this.clickMenu = false
+    }
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <!-- 左侧项组件-->
 
 <template>
-  <div :class="[selectBox, {active: box.isActive, activeMenu: box.activeMenu} ]" @click="click" :id="box.id">
+  <div :class="[selectBox, {active: box.isActive, activeMenu: box.activeMenu} ]" @click.stop="click" :id="box.id">
     <div class="left">
       <div :class="['radio-kgt', {iconActive: box.isActive}, {iconActiveMenu: box.activeMenu}]">
         <i :class="box.icon"/>

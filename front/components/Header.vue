@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div class="menu" style="-webkit-app-region: drag">
+    <div class="menu" style="-webkit-app-region: drag" @mouseleave.stop="mouseleave" @mouseenter="mouseenter">
       <div class="left" v-if="os != 'macOS'">
         <div class="logo">
           <el-image
@@ -8,8 +8,8 @@
           fit="fill"></el-image>
         </div>
         <div class="top-menu">
-          <div>View</div>
-          <div>Help</div>
+          <HeadMenu menuName="help"/>
+          <HeadMenu menuName="view"/>
         </div>
       </div>
       <div class="opertion" v-if="os != 'macOS'">
@@ -29,6 +29,7 @@
 
 <script>
 import send from '@/front/lib/channel/send.js'
+import HeadMenu from '@/front/components/common/menu'
 export default {
   name: 'Header',
   data() {
@@ -36,9 +37,12 @@ export default {
       os: global.os_platform
     }
   },
+  components: {
+    HeadMenu
+  },
   computed: {
-    winMax() {
-      return this.$store.state.app.winMax
+    app() {
+      return this.$store.state.app
     }
   },
   methods: {
@@ -46,17 +50,27 @@ export default {
       send.windowsOpertion('minWindow')
     },
     maxWindow() {
-      if (this.winMax) {
+      if (this.app.winMax) {
         send.windowsOpertion('unmaxWindow')
       } else {
         send.windowsOpertion('maxWindow')
       }
-      this.winMax = !this.winMax
+      this.app.winMax = !this.app.winMax
+    },
+    mouseleave() { // 菜单栏失去光标
+      this.app.headMenuMouse = false
+    },
+    mouseenter() { // 菜单栏获得光标
+      this.app.headMenuMouse = true
     },
     exit() {
       send.windowsOpertion('exit')
     }
+  },
+  mounted() {
+    // TODO
   }
+
 }
 </script>
 
@@ -95,22 +109,6 @@ export default {
         width: 100%;
         display: flex;
         justify-content: flex-start;
-        > div {
-          user-select: none;
-          height: 100%;
-          font-size: 13px;
-          width: 50px;
-          display: flex;
-          color: #cccccc;
-          justify-content: center;
-          align-items: center;
-          -webkit-app-region: no-drag;
-          &:hover {
-            background-color: rgb(56, 70, 83);
-            color: #dad9d9;
-            cursor: default;
-          }
-        }
       }
     }
     .opertion {

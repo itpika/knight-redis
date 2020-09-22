@@ -31,7 +31,8 @@ export default {
   },
   data: function () {
     return {
-      value: ''
+      value: '',
+      score: ''
     }
   },
   methods: {

@@ -2,7 +2,7 @@
   <div class="host">
     <div class="header">
       <el-button type="primary" icon="el-icon-plus"
-      @click="drawer = true" size="mini" round>NEW HOST</el-button>
+      @click.stop="drawer = true" size="mini" round>NEW HOST</el-button>
       <el-button type="primary" icon="el-icon-plus" size="mini" round>NEW GROUP</el-button>
     </div>
     <div class="body">
@@ -12,13 +12,13 @@
           <span>{{item.label}}</span>
         </div>
         <div class="lineRight">
-          <div class="lineRightOper rotating90 connect" @click="connectionHost(item.id)">
+          <div class="lineRightOper rotating90 connect" @click.stop="connectionHost(item.id)">
             <i class="el-icon-sort"></i>
           </div>
-          <div class="lineRightOper edit" @click="editHost(item.id)">
+          <div class="lineRightOper edit" @click.stop="editHost(item.id)">
             <i class="el-icon-edit"></i>
           </div>
-          <div class="lineRightOper delete" @click="deleteHost(item.id)">
+          <div class="lineRightOper delete" @click.stop="deleteHost(item.id)">
             <i class="el-icon-delete"></i>
           </div>
         </div>
@@ -35,12 +35,12 @@
       <div class="addHostHead bgdColor">
         <div>
           <div class="closeLeft radio-kgt fontColor">
-            <i class="el-icon-back" @click="leftBack"></i>
+            <i class="el-icon-back" @click.stop="leftBack"></i>
           </div>
           <div class="addTitle">addHost</div>
         </div>
         <div>
-          <el-button @click="submitForm" type="primary" size="mini" round>SAVE</el-button>
+          <el-button @click.stop="submitForm" type="primary" size="mini" round>SAVE</el-button>
         </div>
       </div>
       <!-- 右侧抽屉主体 -->

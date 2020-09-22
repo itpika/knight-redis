@@ -2,11 +2,40 @@ export default {
   namespaced: true,
   state: {
     mainClass: 'main_bgd_color',
-    winMax: false
+    winMax: false,
+    menus: [], // 菜单栏
+    currentMenu: '', // 当前显示的菜单栏
+    clickMenu: false, // 是否单击了菜单栏的某一项
+    headMenuMouse: false
   },
   mutations: {
     setMainClass(state, Class) {
       state.mainClass = Class
+    },
+    addMenu(state, item) {
+      state.menus.push(item)
+    },
+    clickShowMenu(state, name) {
+      for (const item of state.menus) {
+        if (item.name === name) {
+          if (state.currentMenu === name) {
+            state.currentMenu = ''
+            state.clickMenu = false
+          } else {
+            state.currentMenu = name
+            state.clickMenu = true
+          }
+          break
+        }
+      }
+    },
+    hoverShowMenu(state, name) {
+      for (const item of state.menus) {
+        if (item.name === name) {
+          state.currentMenu = name
+          break
+        }
+      }
     }
   },
   actions: {

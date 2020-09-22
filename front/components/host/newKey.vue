@@ -11,12 +11,12 @@
     <div class="header bgdColor">
       <div>
         <div class="closeLeft fontColor radio-kgt">
-          <i class="el-icon-back" @click="leftBack"></i>
+          <i class="el-icon-back" @click.stop="leftBack"></i>
         </div>
         <div class="addTitle">NEW KEY</div>
       </div>
       <div>
-        <el-button @click="submitForm" type="success" size="mini" round>SAVE</el-button>
+        <el-button @click.stop="submitForm" type="success" size="mini" round>SAVE</el-button>
       </div>
     </div>
     <!-- 右侧抽屉主体 -->

@@ -21,6 +21,7 @@ module.exports = {
     'no-case-declarations': 'off',
     'no-unreachable': 'warn',
     'vue/no-unused-components': 'warn',
-    'object-curly-spacing': 'warn'
+    'object-curly-spacing': 'warn',
+    'indent': 'off'
   }
 }
