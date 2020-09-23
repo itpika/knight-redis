@@ -60,7 +60,7 @@ export default {
     font-size: 13px;
     width: 50px;
     display: flex;
-    color: #9b9b9b;
+    color: #a9a9a9;
     justify-content: center;
     align-items: center;
     -webkit-app-region: no-drag;
@@ -85,15 +85,19 @@ export default {
     margin: 0;
     background-color: #2e3336;
     box-shadow: 0.5px 2px 4px rgb(0, 0, 0);
+    > :first-child {
+      margin-top: 5px;
+    }
     > li {
       display: flex;
       justify-content: space-between;
-      font-size: 12px;
+      font-size: 13px;
       align-items: center;
       height: 25px;
       padding: 2px 10px;
       color: rgb(219, 218, 218);
       box-sizing: border-box;
+      margin-bottom: 5px;
       &:hover {
         background-color: #1d3a55;
         cursor: pointer;

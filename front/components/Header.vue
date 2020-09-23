@@ -4,7 +4,7 @@
       <div class="left" v-if="os != 'macOS'">
         <div class="logo">
           <el-image
-          :src="require('@/public/image/mac.png')"
+          :src="require('@/public/image/icon.png')"
           fit="fill"></el-image>
         </div>
         <div class="top-menu">

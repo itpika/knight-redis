@@ -30,6 +30,7 @@
       "startup.js"
     ],
     "win": {
+      "icon": "dist/image/icon.png",
       "target": [
         {
           "target": "nsis",
