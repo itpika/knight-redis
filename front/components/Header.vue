@@ -8,8 +8,9 @@
           fit="fill"></el-image>
         </div>
         <div class="top-menu">
-          <HeadMenu menuName="help"/>
-          <HeadMenu menuName="view"/>
+          <HeadMenu v-for="(item, i) in menus" :key="i"
+            :menu="item"
+          />
         </div>
       </div>
       <div class="opertion" v-if="os != 'macOS'">
@@ -34,7 +35,16 @@ export default {
   name: 'Header',
   data() {
     return {
-      os: global.os_platform
+      os: global.os_platform,
+      menus: [
+        { 
+          name: 'view',
+          child: [
+            { name: 'open developer tools', icon: 'tool.png', click: () => this.$store.commit('app/openDevelopTool') },
+            { name: 'github', icon: 'github.png', click: () => this.$store.commit('app/openBrowserUri', 'https://github.com/itpika/knight') }
+          ]
+        }
+      ]
     }
   },
   components: {
@@ -68,7 +78,11 @@ export default {
     }
   },
   mounted() {
-    // TODO
+    document.onmousedown = () => { // 当菜单栏打开，点击窗口其它部分，重置菜单栏
+      if (!this.app.headMenuMouse) {
+        this.$store.commit('app/resetMenu')
+      }
+    }
   }
 
 }

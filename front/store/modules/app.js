@@ -1,3 +1,4 @@
+import send from '../../lib/channel/send.js'
 export default {
   namespaced: true,
   state: {
@@ -6,7 +7,7 @@ export default {
     menus: [], // 菜单栏
     currentMenu: '', // 当前显示的菜单栏
     clickMenu: false, // 是否单击了菜单栏的某一项
-    headMenuMouse: false
+    headMenuMouse: false // 光标是否在菜单栏上
   },
   mutations: {
     setMainClass(state, Class) {
@@ -36,6 +37,16 @@ export default {
           break
         }
       }
+    },
+    resetMenu(state) {
+      state.currentMenu = ''
+      state.clickMenu = false
+    },
+    openDevelopTool() { // 打开开发者工具
+      send.openDevelopTool()
+    },
+    openBrowserUri(state, uri) { // 打开浏览器访问一个地址
+      send.openBrowserUri(uri)
     }
   },
   actions: {

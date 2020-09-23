@@ -1,6 +1,5 @@
-const { app, BrowserWindow, shell } = require('electron')
+const { app, BrowserWindow, } = require('electron')
 
-// shell.openExternal('https://github.com')
 require('./lib/channel/event.js')
 function createWindow () {
   const win = require('./lib/windows/index.js')
@@ -16,9 +15,8 @@ function createWindow () {
     }
   })
   // shell.openPath('/var/code')
-  win.webContents.openDevTools()
+  // win.webContents.openDevTools()
 }
-shell.beep()
 app.on('activate', () => {
   // 在macOS上，当单击dock图标并且没有其他窗口打开时，
   // 通常在应用程序中重新创建一个窗口。

@@ -26,10 +26,6 @@ export default {
     Main
   },
   methods: {
-    bodyClick() {
-      console.log(111)
-      this.clickMenu = false
-    }
   }
 }
 </script>

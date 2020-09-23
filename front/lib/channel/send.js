@@ -60,5 +60,11 @@ export default {
   },
   windowsOpertion(event) {
     if (window.ipcRenderer) window.ipcRenderer.send(event)
+  },
+  openDevelopTool() {
+    if (window.ipcRenderer) window.ipcRenderer.send('openDevelopTool')
+  },
+  openBrowserUri(uri) {
+    if (window.ipcRenderer) window.ipcRenderer.send('openBrowserUri', uri)
   }
 }
