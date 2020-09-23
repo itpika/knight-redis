@@ -19,6 +19,6 @@ npm run serve
 ```
 
 ### 预览
-![avatar](./public/image/overview/knight1.jpg)
+![avatar](./public/image/overview/knight1.png)
 
-![avatar](./public/image/overview/knight2.jpg)
+![avatar](./public/image/overview/knight2.png)
