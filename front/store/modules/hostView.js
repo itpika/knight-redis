@@ -10,6 +10,7 @@ export default {
       realTime: '0', // keys数据是否实时热更新
       dbLoading: false, // 放keys数据集合的div是否显示加载中特效
       connectState: -1, // 当前host是否连接成功 (-1:连接中，0:成功，1：需要密码，2:密码错误，4:连接失败)
+      deleteKeyOK: 0, // 是否成功删除key
       dialogState: {
         promptTest: '', // 错误提示框的内容文本
         lucencyMaskShow: false, // 透明遮罩层是否显示
@@ -51,6 +52,7 @@ export default {
         label: data.label,
         connectState: process.env.NODE_ENV === 'development' ? 0 : -1,
         // connectState: 2,
+        deleteKeyOK: 0,
         dbLoading: false,
         dialogState: {
           promptTest: '', // 错误提示框的内容文本

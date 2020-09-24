@@ -132,13 +132,7 @@ export default {
       }
     },
     deleteHost(id) {
-      const arr = []
-      for (let i = 0; i < this.hosts.length; i++) {
-        if (this.hosts[i].id !== id) {
-          arr.push(this.hosts[i])
-        }
-      }
-      this.hosts = arr
+      this.$store.commit('host/deleteHost', id)
     },
     // 连接host,打开一个页面
     connectionHost(id) {

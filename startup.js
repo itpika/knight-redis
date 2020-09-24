@@ -1,6 +1,7 @@
-const { app, BrowserWindow, } = require('electron')
+const { app, BrowserWindow } = require('electron')
 
 require('./lib/channel/event.js')
+require('./lib/channel/disk.js')
 function createWindow () {
   const win = require('./lib/windows/index.js')
   win.removeMenu()
@@ -23,5 +24,6 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
   }
+  BrowserWindow.re
 })
 app.whenReady().then(createWindow)

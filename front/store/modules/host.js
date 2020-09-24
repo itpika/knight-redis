@@ -1,3 +1,4 @@
+import send from '../../lib/channel/send.js'
 export default {
   namespaced: true,
   state: {
@@ -37,14 +38,26 @@ export default {
     },
     addHost (state, host) {
       state.hosts.push(host)
+      send.addHost(host) // 持久化到磁盘
     },
     editHost (state, host) {
       for (let i = 0; i < state.hosts.length; i++) {
         if (state.hosts[i].id === host.id) {
           state.hosts[i] = host
+          send.addHost(host) // 持久化到磁盘
           break
         }
       }
+    },
+    deleteHost(state, id) {
+      const arr = []
+      for (let i = 0; i < state.hosts.length; i++) {
+        if (state.hosts[i].id !== id) {
+          arr.push(state.hosts[i])
+        }
+      }
+      state.hosts = arr
+      send.delete(id) // 持久化到磁盘
     },
     closeHost (state, time) {
       const arr = []

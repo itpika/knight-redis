@@ -67,6 +67,18 @@ if (window.ipcRenderer) {
     }
   })
   /**
+   * 删除key通知
+   */
+  window.ipcRenderer.on('removeKey', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        if (data.keys) hostView.state.all[i].dbData = data.keys
+        hostView.state.all[i].dbLoading = false
+        hostView.state.all[i].deleteKeyOK = 1
+      }
+    }
+  })
+  /**
    * 设置key成功
    */
   window.ipcRenderer.on('setKeyOK', (event, data) => {
@@ -114,10 +126,19 @@ if (window.ipcRenderer) {
       }
     }
   })
+  // 窗口最大化
   window.ipcRenderer.on('maximize', () => {
     app.state.winMax = true
   })
+  // 窗口取消最大化
   window.ipcRenderer.on('unmaximize', () => {
     app.state.winMax = false
+  })
+  // 接收本地的host数据
+  window.ipcRenderer.on('localHostData', (event, data) => {
+    console.log(event, data)
+    if (data && data instanceof Array && data.length > 0) {
+      host.state.hosts = data
+    }
   })
 }

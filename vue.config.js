@@ -8,6 +8,7 @@ module.exports = {
 	devServer: {
 		port: 8000
 	},
+	productionSourceMap: false, // 去除sourceMap文件
 	pages: {
 		index: {
 			// page 的入口

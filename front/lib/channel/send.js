@@ -66,5 +66,11 @@ export default {
   },
   openBrowserUri(uri) {
     if (window.ipcRenderer) window.ipcRenderer.send('openBrowserUri', uri)
+  },
+  addHost(host) {
+    if (window.ipcRenderer) window.ipcRenderer.send('addHost', host)
+  },
+  delete(host) {
+    if (window.ipcRenderer) window.ipcRenderer.send('deleteHost', host)
   }
 }

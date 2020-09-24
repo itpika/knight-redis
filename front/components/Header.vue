@@ -3,9 +3,9 @@
     <div class="menu" style="-webkit-app-region: drag" @mouseleave.stop="mouseleave" @mouseenter="mouseenter">
       <div class="left" v-if="os != 'macOS'">
         <div class="logo">
-          <el-image
+          <!-- <el-image
           :src="require('@/public/image/icon.png')"
-          fit="fill"></el-image>
+          fit="fill"></el-image> -->
         </div>
         <div class="top-menu">
           <HeadMenu v-for="(item, i) in menus" :key="i"
@@ -106,12 +106,18 @@ export default {
       justify-content: flex-start;
       .logo {
         height: 100%;
-        padding: 4px;
+        // padding: 4px;
         box-sizing: border-box;
-        width: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 35px;
+        z-index: 3000;
+        background-image: url(../../public/image/icon.png);
+        background-repeat: no-repeat;
+        background-position: 50%;
+        background-size: 18px;
+        flex-shrink: 0;
         div {
           display: flex;
           align-items: center;

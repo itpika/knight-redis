@@ -20,7 +20,8 @@ import {
   Loading,
   Switch,
   Message,
-  Image
+  Image,
+  Notification
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -45,3 +46,4 @@ Vue.use(Aside)
 Vue.use(Main)
 Vue.use(Footer)
 Vue.prototype.$message = Message
+Vue.prototype.$notify = Notification

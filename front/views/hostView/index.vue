@@ -100,6 +100,9 @@ export default {
     saveKeyOK() {
       return this.$store.state.newKey.ok
     },
+    deleteKeyOK() {
+      return this.$store.state.hostView.current.deleteKeyOK
+    },
     drawer: {
       get () {
         return this.$store.state.newKey.drawer
@@ -143,9 +146,10 @@ export default {
     },
     addKey() {
       if (this.current.selectDB === null) {
-        this.$message({
-          showClose: true,
-          message: 'Please select the db first'
+        this.$notify.warning({
+          duration: 2000,
+          customClass: 'notifyBox',
+          message: 'Please select the db first!'
         })
         return
       }
@@ -212,7 +216,7 @@ export default {
       if (this.current.realTime === '1') this.current.dbLoading = true
       this.current.dialogState.lucencyMaskShow = false // 关闭透明遮罩层
     },
-    closeInfoDialog: function () { // 删除key
+    closeInfoDialog: function () { // 取消删除key
       this.current.dialogState.lucencyMaskShow = false // 关闭透明遮罩层
     },
     // 获取当前选择db的所有key
@@ -223,14 +227,25 @@ export default {
     }
   },
   watch: {
-    saveKeyOK: function(val, old) {
+    saveKeyOK(val, old) {
       if (val) {
-        this.$message({
-          showClose: true,
-          message: 'SAVE SUCCESS',
-          type: 'success'
+        this.$notify.success({
+          message: 'SAVE SUCCESS!',
+          customClass: 'notifyBox',
+          duration: 2000
         })
         this.$store.commit('newKey/setOk', false)
+      }
+    },
+    deleteKeyOK(val, old) { // 删除key后，弹窗提示
+      if (val === 1 && old === 0) {
+        this.$notify.error({
+          iconClass: 'el-icon-success',
+          duration: 2000,
+          customClass: 'notifyBox',
+          message: 'DELETE SUCCESS'
+        })
+        this.current.deleteKeyOK = 0
       }
     }
   },
