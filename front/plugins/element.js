@@ -21,13 +21,17 @@ import {
   Switch,
   Message,
   Image,
-  Notification
+  Notification,
+  Row,
+  Col
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 // Vue.use(Element)
 Vue.use(Image)
 Vue.use(Button)
+Vue.use(Row)
+Vue.use(Col)
 Vue.use(Switch)
 Vue.use(Loading)
 Vue.use(Option)

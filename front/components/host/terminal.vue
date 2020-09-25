@@ -15,7 +15,7 @@
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { WebLinksAddon } from 'xterm-addon-web-links'
-
+import { SearchAddon } from 'xterm-addon-search'
 export default {
   name: 'Terminal',
   props: {
@@ -117,11 +117,12 @@ export default {
       convertEol: true,
       cursorBlink: true, // 是否闪烁
       tabStopWidth: 4, // 制表宽度
+      allowTransparency: true,
       theme: {
         foreground: '#00cc74',
         background: '#2a2734',
         cursor: '#fff',
-        // lineHeight: 20
+        // lineHeight: 20,
         scrollback: 800,
         cursorAccent: '#000'
       },
@@ -130,17 +131,19 @@ export default {
     this.term = term
     const fitAddon = new FitAddon()
     term.loadAddon(fitAddon)
+    const searchAddon = new SearchAddon()
+    term.loadAddon(searchAddon)
     term.loadAddon(new WebLinksAddon())
     term.open(this.$refs.terminal)
-    fitAddon.fit()
+    fitAddon.fit() // 使终端与包含元素相匹配
     term.prompt = () => {
       term.write(this.prefix)
     }
     // term.onKey(data => this.send(data))
     term.prompt()
     term.focus()
-    window.onresize = function() {
-      fitAddon.fit()
+    window.onresize = () => { // 窗口变化时, 使终端与包含元素相匹配
+      if (this.current.shellState.open) fitAddon.fit()
     }
     
     // 选中复制
@@ -262,7 +265,9 @@ export default {
       }
       // ctrl+c
       if (ev.keyCode === 67 && (ev.ctrlKey || ev.metaKey) && ev.type === 'keydown') {
+        console.log('---')
         if (term.hasSelection()) {
+          console.log('---', term.getSelection())
           // 设置系统剪切板内容
           this.$store.commit('redis/setClipboard', { text: term.getSelection() })
         }
@@ -273,10 +278,16 @@ export default {
     // term.on('data', function(data){
     // todo something
     // })
+    // document.getElementById('shellBody')
+    // document.querySelector('#shellBody').addEventListener('mousedown', e => {
+    //   // this.term.focus()
+    //   console.log(1)
+    //   e.preventDefault()
+    // })
   },
   created() {
     // 处理鼠标按下默认事件，后续处理
-    window.addEventListener('onMouseDown', e => e.preventDefault(), { passive: false })
+    // window.addEventListener('mousedown', e => e.preventDefault(), { passive: false })
     // window.addEventListener('onmousedown', e => e.preventDefault(), { passive: false })
     // window.addEventListener('onMouseUp', e => e.preventDefault(), { passive: false })
     // window.addEventListener('onmouseup', e => e.preventDefault(), { passive: false })

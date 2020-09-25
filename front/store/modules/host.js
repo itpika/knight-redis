@@ -5,7 +5,7 @@ export default {
     hostState: false, // host菜单栏的显示状态
     hosts: [{
       id: '1',
-      label: '内网',
+      label: 'localhost',
       address: '10.10.1.43',
       port: 6380,
       passwd: '123456'

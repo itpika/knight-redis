@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import 'default-passive-events'
 import './plugins/element.js'
-
+import 'element-ui/lib/theme-chalk/display.css' // 基于断点的隐藏类样式
 Vue.config.productionTip = false
 
 // global.os_platform = 'macOS'

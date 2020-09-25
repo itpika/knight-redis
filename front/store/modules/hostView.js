@@ -28,6 +28,7 @@ export default {
         keyName: '', // key name
         type: '-', // key类型
         ttl: -1, // 有效期
+        rename: false, // 重命名key
         value: '' // 值
       }
     },
@@ -70,6 +71,7 @@ export default {
         keyDetail: {
           keyName: '',
           type: 'ZSET',
+          rename: false,
           ttl: -1,
           // value: '12889838jndnahxa9121'
           // value: [1, 'http://www.mamicode.com/info-detail2983524.html111111111123121', 'pika', 'md;osajdo;fmn;jfkdfjlksdhreihdjbvliubgfugfdjhfjfudufhjkjhfksndnskasdasdasxsxq1ewq141223']

@@ -2,21 +2,29 @@
   <div class="box radio-kgt">
     <div class="header">
       <div class="left bkg-radio-kgt">
-        <div class="key-type greenColor">
-          <span>{{this.current.keyDetail.type}}:</span>
+        <div :class="['box', { 'displayHidden': rename }]">
+          <div class="key-type greenColor">
+            <span>{{this.current.keyDetail.type}}:</span>
+          </div>
+          <span class="key-name">
+            <el-tooltip :content="keyName" effect="dark" offset="0" placement="top-start">
+              <span>{{keyName}}</span>
+            </el-tooltip>
+          </span>
         </div>
-        <span class="key-name">
-          <el-tooltip :content="keyName" effect="dark" offset="0" placement="top-start">
-            <span class="key-name">{{keyName}}</span>
-          </el-tooltip>
-        </span>
+        <div :class="['input-name', { 'displayHidden': !rename }]">
+          <el-input v-model="newKeyName" size="mini" placeholder="key name" ref="rename"></el-input>
+        </div>
       </div>
-      <div class="right">
-        <div class="reload radio-kgt" @click.stop="reload"><i class="el-icon-refresh-right"/><span v-html="'&nbsp;reload'"></span></div>
-        <div class="rename bkg-radio-kgt"><span v-html="'&nbsp;rename'"></span></div>
-        <div class="delete radio-kgt" @click.stop="deleteKey"><i class="el-icon-delete-solid"/><span v-html="'&nbsp;delete'"></span></div>
-        <div class="ttl bkg-radio-kgt">TTL:<span v-html="'&nbsp;'+this.current.keyDetail.ttl"></span></div>
-      </div>
+      <el-row :gutter="10" class="right">
+        <el-col :span="6" class="reload radio-kgt" @click.stop="reload"><i class="el-icon-refresh-right"/><span v-html="'&nbsp;reload'"></span></el-col>
+        <el-col :span="6" class="rename bkg-radio-kgt" @click.stop="renameClick">
+          <i v-if="!current.keyDetail.rename" class="el-icon-edit"/>
+          <span class="hidden-md-and-down" v-html="!current.keyDetail.rename ? '&nbsp;rename' : '&nbsp;cancel'"></span>
+        </el-col>
+        <el-col :span="6" class="delete radio-kgt" @click.stop="deleteKey"><i class="el-icon-delete-solid"/><span v-html="'&nbsp;delete'"></span></el-col>
+        <el-col :span="6" class="ttl bkg-radio-kgt">TTL:<span v-html="'&nbsp;'+this.current.keyDetail.ttl"></span></el-col>
+      </el-row>
     </div>
     <div class="body bkg-radio-kgt">
       <div class="detail-head radio-kgt">
@@ -64,11 +72,15 @@ export default {
     },
     keyName() {
       return this.$store.state.hostView.current.keyDetail.keyName
+    },
+    rename() {
+      return this.$store.state.hostView.current.keyDetail.rename
     }
   },
   data: function () {
     return {
       keyType: 'HASH',
+      newKeyName: '',
       textType: [
         { value: 'text', key: 1 },
         { value: 'json', key: 2 },
@@ -86,6 +98,7 @@ export default {
     // 重加载key详情
     reload() {
       this.$store.commit('redis/keyDetail', { time: this.current.time, key: this.current.keyDetail.keyName })
+      if (this.current.keyDetail.rename) this.current.keyDetail.rename = !this.current.keyDetail.rename
     },
     // 删除key
     deleteKey() {
@@ -95,6 +108,13 @@ export default {
       e.preventDefault();
       const text = e.clipboardData.getData('Text')
       document.execCommand('insertText', false, text)
+    },
+    renameClick() {
+      this.current.keyDetail.rename = !this.current.keyDetail.rename
+      this.newKeyName = this.keyName
+      this.$nextTick(() => {
+        this.$refs.rename.focus()
+      })
     }
   }
 }
@@ -115,20 +135,40 @@ export default {
     .left {
       width: 40%;
       font-size: 14px;
-      display: flex;
-      align-items: center;
       box-sizing: border-box;
       padding: 0 10px;
-      justify-content: flex-start;
-      margin-right: 10px;
-      .key-type {
-        margin-right: 5px;
+      margin-right: 5px;
+      .box {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        justify-content: flex-start;
+        flex-direction: row;
+        margin-right: 10px;
+        .key-type {
+          margin-right: 5px;
+        }
+        .key-name {
+          color: #fff;
+          cursor: pointer;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
-      .key-name {
-        color: #fff;
-        cursor: pointer;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      .input-name {
+        height: 100%;
+        .el-input {
+          height: 100%;
+          width: 100%;
+          /deep/ .el-input__inner {
+            font-size: 13px;
+            height: 100%;
+            border: none;
+            background-color: #4f6d8c;
+            outline: none;
+            color: #00de7e;
+          }
+        }
       }
     }
     .right {
@@ -152,18 +192,20 @@ export default {
       .rename {
         margin-right: 5px;
         cursor: pointer;
+        background-color: #00de7e;
         &:hover {
-          background-color: #52789f;
+          background-color: #01c671;
         }
+        
       }
       .ttl {
       }
       .reload {
         margin-right: 5px;
-        background-color: #00de7e;
         cursor: pointer;
+        background-color: #5894cf;
         &:hover {
-          background-color: #01c671;
+          background-color: #52789f;
         }
       }
       .delete {
