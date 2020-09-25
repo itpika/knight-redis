@@ -2,7 +2,7 @@
 # knight
 ```
 一款整洁的redis桌面可视化程序，支持windows、linux、mac操作系统
-目前处于初始0.1版本，可构建二进制可执行程序，功能还不完善，暂时只有查看key，添加key，和命令行功能
+目前处于初始1.0版本，可构建二进制可执行程序，功能还不完善，暂时只有查看key，添加key，和命令行功能
 ```
 ## 安装
 ```
@@ -23,3 +23,6 @@ npm run serve
 ![avatar](./public/image/overview/knight1.png)
 
 ![avatar](./public/image/overview/knight2.png)
+
+## LICENSE
+MIT
