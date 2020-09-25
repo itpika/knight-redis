@@ -1,3 +1,4 @@
+![avatar](./public/image/posters/posters2.png)
 # knight
 ```
 一款整洁的redis桌面可视化程序，支持windows、linux、mac操作系统
