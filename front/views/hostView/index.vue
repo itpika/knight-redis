@@ -351,6 +351,9 @@ export default {
           .selectBox {
             height: 100%;
             width: 50%;
+            .el-select {
+              width: 100%;
+            }
             /deep/ .el-input__inner {
               border: none;
               background-color: #4f6d8c;
