@@ -21,6 +21,7 @@
                   :value="item.value">
                 </el-option>
               </el-select>
+              <span class="key-number fontColor2"><span>{{keyCount || ''}}</span></span>
             </div>
             <div class="opertionsBox bgkColor">
               <el-tooltip class="item" content="NEW KEY" placement="top">
@@ -56,7 +57,7 @@
             </ul>
           </div>
         </div>
-        <div :class="['key-detail-box', 'bgdColor-radio-kgt',  keyDetailBoxShow]">
+        <div :class="['key-detail-box', 'bgdColor-radio-kgt',  { 'hiddenClass': keyDetailShow }]">
           <KeyDetail @deleteKey="deleteKey" />
         </div>
       </div>
@@ -94,6 +95,9 @@ export default {
     current() {
       return this.$store.state.hostView.current
     },
+    keyDetailShow() {
+      return !this.$store.state.hostView.current.keyDetailShow
+    },
     hosts() {
       return this.$store.state.host.openHost
     },
@@ -102,6 +106,9 @@ export default {
     },
     deleteKeyOK() {
       return this.$store.state.hostView.current.deleteKeyOK
+    },
+    keyCount() {
+      return this.$store.state.hostView.current.dbData.length
     },
     drawer: {
       get () {
@@ -115,7 +122,6 @@ export default {
   data () {
     return {
       terminal: false,
-      keyDetailBoxShow: 'hiddenClass',
       dbs: [
         { value: 0, label: 'DB0' }, { value: 1, label: 'DB1' },
         { value: 2, label: 'DB2' }, { value: 3, label: 'DB3' },
@@ -136,10 +142,13 @@ export default {
   },
   methods: {
     keyDetail(k) { // 点击查看key详情
-      this.$data.keyDetailBoxShow = ''
+      this.current.keyDetailShow = true
       this.current.keyDetail.keyName = k
-      console.log('a', this.current.keyDetail.keyName)
       this.$store.commit('redis/keyDetail', { time: this.current.time, key: k })
+      // 重置重命名key相关的状态
+      this.current.keyDetail.renameStatus = 0
+      this.current.keyDetail.rename = false
+      this.current.keyDetail.newKeyName = ''
     },
     openTerminal() {
       this.terminal = true
@@ -202,14 +211,16 @@ export default {
         liveUpdate: this.current.realTime === '1'
       })
       // 重制key详情组件数据
-      this.$data.keyDetailBoxShow = 'hiddenClass'
+      this.current.keyDetailShow = false
       this.current.keyDetail = {
         keyName: '',
         type: '-',
         ttl: -1,
-        value: ''
+        value: '',
+        rename: false,
+        renameStatus: 0,
+        newKeyName: ''
       }
-
       this.current.dbData = this.current.dbData.filter(v => {
         return this.toDeleteKey !== v
       })
@@ -338,7 +349,6 @@ export default {
             }
           }
           .selectBox {
-            display: flex;
             height: 100%;
             width: 50%;
             /deep/ .el-input__inner {
@@ -346,6 +356,18 @@ export default {
               background-color: #4f6d8c;
               outline: none;
               color: #00de7e;
+            }
+            position: relative;
+            .key-number {
+              height: 100%;
+              position: absolute;
+              font-size: 10px;
+              right: 30%;
+              span {
+                display: flex;
+                align-items: center;
+                height: 100%;
+              }
             }
           }
         }

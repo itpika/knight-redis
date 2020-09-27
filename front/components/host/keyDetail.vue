@@ -39,7 +39,7 @@
       <div class="detail-head radio-kgt">
         <div class="left"></div>
         <div class="right">
-          <el-select v-model="keyViewType" size="mini">
+          <el-select v-model="keyViewType" size="mini" @change="keyShowTypechange">
             <el-option
               v-for="item in textType"
               :key="item.key"
@@ -82,6 +82,9 @@ export default {
     keyName() {
       return this.$store.state.hostView.current.keyDetail.keyName
     },
+    keyType() {
+      return this.$store.state.hostView.current.keyDetail.type
+    },
     renameStatus() {
       return this.$store.state.hostView.current.keyDetail.renameStatus
     },
@@ -99,10 +102,8 @@ export default {
   },
   data: function () {
     return {
-      keyType: 'HASH',
       textType: [
         { value: 'text', key: 1 },
-        { value: 'json', key: 2 },
         { value: 'hex', key: 3 }
       ],
       keyViewType: 1,
@@ -148,10 +149,13 @@ export default {
         index: this.current.selectDB,
         realTime: this.current.realTime
       })
+    },
+    keyShowTypechange(val) { // key展示类型变化
+      // this.keyShowType = val
     }
   },
   watch: {
-    renameStatus(newVal, old) {
+    renameStatus(newVal, old) { // 重命名key状态提示通知
       if (newVal === 0) return
       if (newVal === 1) {
         this.$notify.success({
@@ -167,6 +171,68 @@ export default {
         })
       }
       this.current.keyDetail.renameStatus = 0
+    },
+    keyType(newVal, old) { // key类型变化，数据展示形式变化
+      if (newVal === STRING.upName) {
+        this.textType = [
+          { value: 'text', key: 1 },
+          { value: 'hex', key: 3 }
+        ]
+      } else if (newVal === HASH.upName) {
+        this.textType = [
+          { value: 'text', key: 1 },
+          { value: 'json', key: 2 },
+          { value: 'hex', key: 3 }
+        ]
+      } else if (newVal === LIST.upName) {
+        this.textType = [
+          { value: 'text', key: 1 },
+          { value: 'json', key: 2 },
+          { value: 'hex', key: 3 }
+        ]
+      } else if (newVal === SET.upName) {
+        this.textType = [
+          { value: 'text', key: 1 },
+          { value: 'hex', key: 3 }
+        ]
+      } else if (newVal === ZSET.upName) {
+        this.textType = [
+          { value: 'text', key: 1 },
+          { value: 'json', key: 2 },
+          { value: 'hex', key: 3 }
+        ]
+      }
+    }
+  },
+  created() {
+    if (this.current.keyDetail.type === STRING.upName) {
+      this.textType = [
+        { value: 'text', key: 1 },
+        { value: 'hex', key: 3 }
+      ]
+    } else if (this.current.keyDetail.type === HASH.upName) {
+      this.textType = [
+        { value: 'text', key: 1 },
+        { value: 'json', key: 2 },
+        { value: 'hex', key: 3 }
+      ]
+    } else if (this.current.keyDetail.type === LIST.upName) {
+      this.textType = [
+        { value: 'text', key: 1 },
+        { value: 'json', key: 2 },
+        { value: 'hex', key: 3 }
+      ]
+    } else if (this.current.keyDetail.type === SET.upName) {
+      this.textType = [
+        { value: 'text', key: 1 },
+        { value: 'hex', key: 3 }
+      ]
+    } else if (this.current.keyDetail.type === ZSET.upName) {
+      this.textType = [
+        { value: 'text', key: 1 },
+        { value: 'json', key: 2 },
+        { value: 'hex', key: 3 }
+      ]
     }
   }
 }
@@ -179,7 +245,8 @@ export default {
   display: flex;
   flex-direction: column;
   .header {
-    height: 10%;
+    // height: 10%;
+    flex: 1;
     max-height: 40px;
     min-height: 25px;
     display: flex;
@@ -286,8 +353,8 @@ export default {
   .body {
     box-sizing: border-box;
     margin-top: 10px;
-    flex: 1;
-    padding: 10px 10px;
+    flex: 12;
+    padding: 5px 10px 10px 10px;
     display: flex;
     flex-direction: column;
     .detail-head {

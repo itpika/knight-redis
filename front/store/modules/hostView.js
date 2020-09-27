@@ -24,6 +24,7 @@ export default {
         clipboardText: '', // 剪切板内容
         paste: 0 // 获取剪切板内容(ctrl+v触发)
       },
+      keyDetailShow: false, // key详情窗口是否展示
       keyDetail: {
         keyName: '', // key name
         type: '-', // key类型
@@ -70,22 +71,23 @@ export default {
           clipboardText: '', // 剪切板内容
           paste: 0 // 获取剪切板内容(ctrl+v触发)
         },
+        keyDetailShow: false,
         keyDetail: {
           keyName: '',
-          type: 'ZSET',
+          type: 'HASH',
           rename: false,
           renameStatus: 0,
           ttl: -1,
           // value: '12889838jndnahxa9121'
           // value: [1, 'http://www.mamicode.com/info-detail2983524.html111111111123121', 'pika', 'md;osajdo;fmn;jfkdfjlksdhreihdjbvliubgfugfdjhfjfudufhjkjhfksndnskasdasdasxsxq1ewq141223']
-          // value: {
-          //   keys: ['name', 'asxasxssssssssaaaaaaaaaaaaa'],
-          //   values: ['euumxkasxlasxjuiqwxlm;maxla;iwxmaxawlxksdjhfuhsaxansxkalshxuixmohdkadkak', '20']
-          // }
           value: {
-            scores: ['11', '2', '31'],
-            values: ['euumxkasxlasxjuiqwxlm;maxla;iwxmaxawlxksdjhfuhsaxansxkalshxuixmohdkadkak', '20', 'pika']
+            keys: ['name', 'asxasxssssssssaaaaaaaaaaaaa'],
+            values: ['euumxkasxlasxjuiqwxlm;maxla;iwxmaxawlxksdjhfuhsaxansxkalshxuixmohdkadkak', '20']
           },
+          // value: {
+          //   scores: ['11', '2', '31'],
+          //   values: ['euumxkasxlasxjuiqwxlm;maxla;iwxmaxawlxksdjhfuhsaxansxkalshxuixmohdkadkak', '20', 'pika']
+          // },
           newKeyName: ''
         }
       }

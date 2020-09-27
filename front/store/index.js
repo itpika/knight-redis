@@ -131,7 +131,6 @@ if (window.ipcRenderer) {
         hostView.state.all[i].keyDetail.type = data.data.type
         hostView.state.all[i].keyDetail.ttl = data.data.ttl
         hostView.state.all[i].keyDetail.value = data.data.value
-        console.log('data.data.value', data.data.value)
         break
       }
     }
