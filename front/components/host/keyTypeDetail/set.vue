@@ -36,7 +36,7 @@ export default {
       this.value = this.current.keyDetail.value[index]
     },
     filterText(e) {
-      e.preventDefault();
+      e.preventDefault()
       const text = e.clipboardData.getData('Text')
       document.execCommand('insertText', false, text)
     }

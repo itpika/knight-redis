@@ -279,11 +279,11 @@ export default {
     // todo something
     // })
     // document.getElementById('shellBody')
-    // document.querySelector('#shellBody').addEventListener('mousedown', e => {
-    //   // this.term.focus()
-    //   console.log(1)
-    //   e.preventDefault()
-    // })
+    document.querySelector('#shellBody').addEventListener('mousedown', e => {
+      // console.log(1)
+      this.term.focus()
+      e.preventDefault()
+    })
   },
   created() {
     // 处理鼠标按下默认事件，后续处理

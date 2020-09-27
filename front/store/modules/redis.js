@@ -24,6 +24,10 @@ export default {
     keyDetail: function (state, data) {
       send.keyDetail(data)
     },
+    // 重命名key
+    rename: function (state, data) {
+      send.rename(data)
+    },
     // 获取剪切板内容
     getClipboard: function (state, data) {
       send.getClipboard(data)

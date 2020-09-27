@@ -63,6 +63,7 @@ if (window.ipcRenderer) {
       if (hostView.state.all[i].time === data.time) {
         hostView.state.all[i].dbLoading = false
         hostView.state.all[i].dbData = data.keys
+        break
       }
     }
   })
@@ -75,6 +76,36 @@ if (window.ipcRenderer) {
         if (data.keys) hostView.state.all[i].dbData = data.keys
         hostView.state.all[i].dbLoading = false
         hostView.state.all[i].deleteKeyOK = 1
+        break
+      }
+    }
+  })
+  /**
+   * 重命名key通知
+   */
+  window.ipcRenderer.on('renameKey', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        if (!data.ret) { // 更新失败
+          hostView.state.all[i].keyDetail.renameStatus = -1
+        } else {
+          if (data.realTime) { // 实时更新
+            hostView.state.all[i].dbData = data.keys
+          } else { // 手动更新
+            for (let i = 0; i < hostView.state.all[i].dbData.length; i++) {
+              if (data.key === hostView.state.all[i].dbData[i]) {
+                hostView.state.all[i].dbData[i] = data.newKey
+                break
+              }
+            }
+          }
+          hostView.state.all[i].keyDetail.renameStatus = 1
+          hostView.state.all[i].keyDetail.rename = false
+          hostView.state.all[i].keyDetail.newKeyName = ''
+          hostView.state.all[i].keyDetail.keyName = data.newKey
+        }
+        hostView.state.all[i].dbLoading = false
+        break
       }
     }
   })
@@ -87,6 +118,7 @@ if (window.ipcRenderer) {
         hostView.state.all[i].dbLoading = false
         hostView.state.all[i].dbData = data.keys
         newKey.state.ok = true
+        break
       }
     }
   })
@@ -100,6 +132,7 @@ if (window.ipcRenderer) {
         hostView.state.all[i].keyDetail.ttl = data.data.ttl
         hostView.state.all[i].keyDetail.value = data.data.value
         console.log('data.data.value', data.data.value)
+        break
       }
     }
   })
@@ -112,6 +145,7 @@ if (window.ipcRenderer) {
       if (hostView.state.all[i].time === data.time) {
         hostView.state.all[i].shellState.commandExecCode = 1
         hostView.state.all[i].shellState.commandExecData = data.text
+        break
       }
     }
   })
@@ -123,6 +157,7 @@ if (window.ipcRenderer) {
       if (hostView.state.all[i].time === data.time) {
         hostView.state.all[i].shellState.clipboardText = data.text
         hostView.state.all[i].shellState.paste = 1
+        break
       }
     }
   })

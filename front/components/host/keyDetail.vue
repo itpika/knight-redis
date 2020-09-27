@@ -14,17 +14,26 @@
         </div>
         <div :class="['input-name', { 'displayHidden': !rename }]">
           <el-input v-model="newKeyName" size="mini" placeholder="key name" ref="rename"></el-input>
+          <i @click.stop="renameKey" class="el-icon-circle-check"></i>
         </div>
       </div>
-      <el-row :gutter="10" class="right">
-        <el-col :span="6" class="reload radio-kgt" @click.stop="reload"><i class="el-icon-refresh-right"/><span v-html="'&nbsp;reload'"></span></el-col>
-        <el-col :span="6" class="rename bkg-radio-kgt" @click.stop="renameClick">
+      <div class="right">
+        <div @click.stop="reload" class="reload radio-kgt">
+          <i class="el-icon-refresh-right"/>
+          <span class="hidden-sm-and-down" v-html="'&nbsp;reload'"></span>
+        </div>
+        <div class="rename bkg-radio-kgt" @click.stop="renameClick">
           <i v-if="!current.keyDetail.rename" class="el-icon-edit"/>
-          <span class="hidden-md-and-down" v-html="!current.keyDetail.rename ? '&nbsp;rename' : '&nbsp;cancel'"></span>
-        </el-col>
-        <el-col :span="6" class="delete radio-kgt" @click.stop="deleteKey"><i class="el-icon-delete-solid"/><span v-html="'&nbsp;delete'"></span></el-col>
-        <el-col :span="6" class="ttl bkg-radio-kgt">TTL:<span v-html="'&nbsp;'+this.current.keyDetail.ttl"></span></el-col>
-      </el-row>
+          <span class="hidden-sm-and-down" v-html="!current.keyDetail.rename ? '&nbsp;rename' : '&nbsp;cancel'"></span>
+        </div>
+        <div class="delete radio-kgt" @click.stop="deleteKey">
+          <i class="el-icon-delete-solid"/>
+          <span class="hidden-sm-and-down" v-html="'&nbsp;delete'"></span>
+        </div>
+        <div class="ttl bkg-radio-kgt hidden-xs-only">
+          TTL:<span v-html="'&nbsp;'+this.current.keyDetail.ttl"></span>
+        </div>
+      </div>
     </div>
     <div class="body bkg-radio-kgt">
       <div class="detail-head radio-kgt">
@@ -73,6 +82,17 @@ export default {
     keyName() {
       return this.$store.state.hostView.current.keyDetail.keyName
     },
+    renameStatus() {
+      return this.$store.state.hostView.current.keyDetail.renameStatus
+    },
+    newKeyName: {
+      get() {
+        return this.$store.state.hostView.current.keyDetail.newKeyName
+      },
+      set(newVal) {
+        this.$store.state.hostView.current.keyDetail.newKeyName = newVal
+      }
+    },
     rename() {
       return this.$store.state.hostView.current.keyDetail.rename
     }
@@ -80,7 +100,6 @@ export default {
   data: function () {
     return {
       keyType: 'HASH',
-      newKeyName: '',
       textType: [
         { value: 'text', key: 1 },
         { value: 'json', key: 2 },
@@ -97,24 +116,57 @@ export default {
   methods: {
     // 重加载key详情
     reload() {
-      this.$store.commit('redis/keyDetail', { time: this.current.time, key: this.current.keyDetail.keyName })
+      this.$store.commit('redis/keyDetail', { 
+        time: this.current.time,
+        key: this.current.keyDetail.keyName,
+        index: this.current.selectDB 
+      })
       if (this.current.keyDetail.rename) this.current.keyDetail.rename = !this.current.keyDetail.rename
     },
     // 删除key
     deleteKey() {
       this.$emit('deleteKey', this.current.keyDetail.keyName)
     },
-    filterText(e) {
-      e.preventDefault();
+    filterText(e) { // 过滤粘贴文本多余的样式
+      e.preventDefault()
       const text = e.clipboardData.getData('Text')
       document.execCommand('insertText', false, text)
     },
-    renameClick() {
+    renameClick() { // 重命名key，ui展示
       this.current.keyDetail.rename = !this.current.keyDetail.rename
-      this.newKeyName = this.keyName
+      this.current.keyDetail.newKeyName = this.keyName
       this.$nextTick(() => {
         this.$refs.rename.focus()
       })
+    },
+    renameKey() { // 重命名key，新名字不能已存在
+      this.current.dbLoading = true
+      this.$store.commit('redis/rename', {
+        time: this.current.time,
+        key: this.current.keyDetail.keyName,
+        newKey: this.current.keyDetail.newKeyName,
+        index: this.current.selectDB,
+        realTime: this.current.realTime
+      })
+    }
+  },
+  watch: {
+    renameStatus(newVal, old) {
+      if (newVal === 0) return
+      if (newVal === 1) {
+        this.$notify.success({
+          duration: 2000,
+          customClass: 'notifyBox',
+          message: 'Rename Success!'
+        })
+      } else if (newVal === -1) {
+        this.$notify.error({
+          duration: 2000,
+          customClass: 'notifyBox',
+          message: 'The Fail, Key already exists!'
+        })
+      }
+      this.current.keyDetail.renameStatus = 0
     }
   }
 }
@@ -157,9 +209,12 @@ export default {
       }
       .input-name {
         height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         .el-input {
           height: 100%;
-          width: 100%;
+          width: 95%;
           /deep/ .el-input__inner {
             font-size: 13px;
             height: 100%;
@@ -167,6 +222,16 @@ export default {
             background-color: #4f6d8c;
             outline: none;
             color: #00de7e;
+          }
+        }
+        i {
+          flex: 1;
+          color: #909399;
+          font-size: 18px;
+          transition: color 0.2s;
+          &:hover {
+            color: #00de7e;
+            cursor: pointer;
           }
         }
       }

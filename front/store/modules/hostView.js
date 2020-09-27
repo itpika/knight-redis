@@ -28,7 +28,9 @@ export default {
         keyName: '', // key name
         type: '-', // key类型
         ttl: -1, // 有效期
+        renameStatus: 0, // 重命名成功与否, 0:初始状态，1：成功，-1：失败
         rename: false, // 重命名key
+        newKeyName: '', // 新key的名字
         value: '' // 值
       }
     },
@@ -72,6 +74,7 @@ export default {
           keyName: '',
           type: 'ZSET',
           rename: false,
+          renameStatus: 0,
           ttl: -1,
           // value: '12889838jndnahxa9121'
           // value: [1, 'http://www.mamicode.com/info-detail2983524.html111111111123121', 'pika', 'md;osajdo;fmn;jfkdfjlksdhreihdjbvliubgfugfdjhfjfudufhjkjhfksndnskasdasdasxsxq1ewq141223']
@@ -82,7 +85,8 @@ export default {
           value: {
             scores: ['11', '2', '31'],
             values: ['euumxkasxlasxjuiqwxlm;maxla;iwxmaxawlxksdjhfuhsaxansxkalshxuixmohdkadkak', '20', 'pika']
-          }
+          },
+          newKeyName: ''
         }
       }
       if (process.env.NODE_ENV === 'development') {

@@ -32,7 +32,7 @@
               <el-tooltip class="item" content="CLEAR ALL" placement="top">
                 <i class="el-icon-delete delete"></i>
               </el-tooltip>
-              <el-tooltip :content="(current.realTime === '0' ? 'Enable':'Disable')+' Live Update'" placement="top">
+              <el-tooltip class="hidden-sm-and-down" :content="(current.realTime === '0' ? 'Enable':'Disable')+' Live Update'" placement="top">
                 <el-switch
                   v-model="current.realTime"
                   active-color="#13ce66"

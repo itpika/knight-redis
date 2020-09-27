@@ -48,6 +48,11 @@ export default {
       window.ipcRenderer.send('keyDetail', data)
     }
   },
+  rename(data) {
+    if (window.ipcRenderer) {
+      window.ipcRenderer.send('rename', data)
+    }
+  },
   getClipboard(data) {
     if (window.ipcRenderer) {
       window.ipcRenderer.send('getClipboard', data)
