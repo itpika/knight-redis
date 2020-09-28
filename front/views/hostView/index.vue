@@ -24,30 +24,39 @@
               <span class="key-number fontColor2"><span>{{keyCount || ''}}</span></span>
             </div>
             <div class="opertionsBox bgkColor">
-              <el-tooltip class="item" content="NEW KEY" placement="top">
-                <i class="el-icon-plus add" @click.stop="addKey"></i>
-              </el-tooltip>
-              <el-tooltip class="item" content="REFRESH" placement="top">
-                <i class="el-icon-refresh refresh" @click.stop="refreshDB"></i>
-              </el-tooltip>
-              <el-tooltip class="item" content="CLEAR ALL" placement="top">
-                <i class="el-icon-delete delete"></i>
-              </el-tooltip>
-              <el-tooltip class="hidden-sm-and-down" :content="(current.realTime === '0' ? 'Enable':'Disable')+' Live Update'" placement="top">
-                <el-switch
-                  v-model="current.realTime"
-                  active-color="#13ce66"
-                  inactive-color="#152435"
-                  active-value="1"
-                  inactive-value="0">
-                </el-switch>
-              </el-tooltip>
+              <div :class="['opertion-icon', { 'displayHidden': searchBoxShow }]">
+                <el-tooltip class="item" content="NEW KEY" placement="top">
+                  <i class="el-icon-plus add" @click.stop="addKey"></i>
+                </el-tooltip>
+                <el-tooltip class="item" content="REFRESH" placement="top">
+                  <i class="el-icon-refresh refresh" @click.stop="refreshDB"></i>
+                </el-tooltip>
+                <el-tooltip class="item" content="FILTER" placement="top">
+                  <i class="el-icon-search search" @click.stop="searchKey"></i>
+                </el-tooltip>
+                <el-tooltip class="item hidden-sm-and-down" content="CLEAR ALL" placement="top">
+                  <i class="el-icon-delete delete"></i>
+                </el-tooltip>
+                <el-tooltip class="hidden-sm-and-down" :content="(current.realTime === '0' ? 'Enable':'Disable')+' Live Update'" placement="top">
+                  <el-switch
+                    v-model="current.realTime"
+                    active-color="#13ce66"
+                    inactive-color="#152435"
+                    active-value="1"
+                    inactive-value="0">
+                  </el-switch>
+                </el-tooltip>
+              </div>
+              <div :class="['search-box', { 'displayHidden': !searchBoxShow }]">
+                <el-input v-model="searchValue" size="mini" @input="searchChange" placeholder="key name" ref="searchBoxShow"></el-input>
+                <i @click.stop="cloesSearchKey" class="el-icon-close"></i>
+              </div>
             </div>
           </div>
           <!-- 数据展示body -->
           <div class="dbBoxBody bkg-radio-kgt" ref="dbBoxBody">
             <ul>
-              <li v-for="(v, i) of current.dbData" :key="i" @click.stop="keyDetail(v)">
+              <li v-for="(v, i) of current.searchDate.length === 0 ? current.dbData : current.searchDate" :key="i" @click.stop="keyDetail(v)">
                 <div class="left">
                   <i class="el-icon-key brightBlueColor"></i>
                   <span>{{ v }}</span>
@@ -104,6 +113,17 @@ export default {
     saveKeyOK() {
       return this.$store.state.newKey.ok
     },
+    searchBoxShow() {
+      return this.$store.state.hostView.current.searchBoxShow
+    },
+    searchValue: {
+      get() {
+        return this.$store.state.hostView.current.searchValue
+      },
+      set(val) {
+        this.$store.state.hostView.current.searchValue = val
+      }
+    },
     deleteKeyOK() {
       return this.$store.state.hostView.current.deleteKeyOK
     },
@@ -152,6 +172,26 @@ export default {
     },
     openTerminal() {
       this.terminal = true
+    },
+    searchKey() {
+      this.current.searchBoxShow = !this.current.searchBoxShow
+      this.$nextTick(() => {
+        this.$refs.searchBoxShow.focus()
+      })
+    },
+    cloesSearchKey() {
+      this.current.searchBoxShow = false
+      this.current.searchValue = ''
+      this.current.searchDate = []
+    },
+    searchChange(val) {
+      val = val.trim()
+      this.current.searchDate = []
+      for (const v of this.current.dbData) {
+        if (v.indexOf(val) !== -1) {
+          this.current.searchDate.push(v)
+        }
+      }
     },
     addKey() {
       if (this.current.selectDB === null) {
@@ -322,29 +362,68 @@ export default {
             color: #fff;
             box-sizing: border-box;
             flex: 1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             border-radius: 5px;
-            .add {
-              transition: all 500ms;
-              &:hover {
-                cursor: pointer;
-                color: #00de7e;
+            .opertion-icon {
+              height: 100%;
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              .add {
+                transition: all 500ms;
+                &:hover {
+                  cursor: pointer;
+                  color: #00de7e;
+                }
+              }
+              .refresh {
+                transition: all 500ms ease-out;
+                &:hover {
+                  cursor: pointer;
+                  color: #00fff3;
+                }
+              }
+              .search {
+                transition: all 200ms ease-out;
+                &:hover {
+                  color: #E6A23C;
+                  cursor: pointer;
+                }
+              }
+              .delete {
+                transition: all 200ms ease-out;
+                &:hover {
+                  color: #fa4c4c;
+                  cursor: pointer;
+                }
               }
             }
-            .refresh {
-              transition: all 500ms ease-out;
-              &:hover {
-                cursor: pointer;
-                color: #00fff3;
+            .search-box {
+              height: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              .el-input {
+                height: 100%;
+                width: 95%;
+                /deep/ .el-input__inner {
+                  font-size: 13px;
+                  height: 100%;
+                  border: none;
+                  background-color: #4f6d8c;
+                  outline: none;
+                  color: #E6A23C;
+                }
               }
-            }
-            .delete {
-              transition: all 200ms ease-out;
-              &:hover {
-                color: #fa4c4c;
-                cursor: pointer;
+              i {
+                flex: 1;
+                color: #909399;
+                font-size: 16px;
+                transition: color 0.2s;
+                &:hover {
+                  color: #F56C6C;
+                  cursor: pointer;
+                }
               }
             }
           }

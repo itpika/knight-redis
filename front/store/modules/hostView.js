@@ -24,6 +24,9 @@ export default {
         clipboardText: '', // 剪切板内容
         paste: 0 // 获取剪切板内容(ctrl+v触发)
       },
+      searchBoxShow: false, // 过滤key输入框是否展示
+      searchValue: '', // 过滤key值
+      searchDate: [], // 过滤key后的结果key
       keyDetailShow: false, // key详情窗口是否展示
       keyDetail: {
         keyName: '', // key name
@@ -71,6 +74,9 @@ export default {
           clipboardText: '', // 剪切板内容
           paste: 0 // 获取剪切板内容(ctrl+v触发)
         },
+        searchBoxShow: false,
+        searchValue: '',
+        searchDate: [], // 过滤key后的结果key
         keyDetailShow: false,
         keyDetail: {
           keyName: '',
