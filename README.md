@@ -5,8 +5,11 @@
 ![avatar](./public/image/os/linux.png)
 ![avatar](./public/image/os/mac.png)
 
+[![release](https://img.shields.io/github/v/release/itpika/knight)](https://github.com/itpika/knight/releases)
+[![license](https://img.shields.io/github/license/itpika/knight)](https://github.com/itpika/knight/blob/master/LICENSE)
 
-# knight
+-----
+
 ```
 一款整洁的redis桌面可视化程序，支持windows、linux、mac操作系统
 目前处于初始1.0版本，可构建二进制可执行程序，功能还不完善，暂时只有查看key，添加key，和命令行功能
