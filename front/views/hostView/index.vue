@@ -107,6 +107,9 @@ export default {
     keyDetailShow() {
       return !this.$store.state.hostView.current.keyDetailShow
     },
+    keyExists() {
+      return this.$store.state.hostView.current.keyExists
+    },
     hosts() {
       return this.$store.state.host.openHost
     },
@@ -164,7 +167,7 @@ export default {
     keyDetail(k) { // 点击查看key详情
       this.current.keyDetailShow = true
       this.current.keyDetail.keyName = k
-      this.$store.commit('redis/keyDetail', { time: this.current.time, key: k })
+      this.$store.commit('redis/keyDetail', { time: this.current.time, key: k, index: this.current.selectDB, liveUpdate: this.current.realTime })
       // 重置重命名key相关的状态
       this.current.keyDetail.renameStatus = 0
       this.current.keyDetail.rename = false
@@ -298,6 +301,19 @@ export default {
         })
         this.current.deleteKeyOK = 0
       }
+    },
+    keyExists(val, old) {
+      if (val === 0) return
+      if (val === 1) {
+        this.$notify.error({
+          iconClass: 'el-icon-close',
+          duration: 5000,
+          customClass: 'notifyBox',
+          message: `The ${this.current.existsKeyName} doesn't exist!`
+        })
+        this.current.existsKeyName = ''
+      }
+      this.current.keyExists = 0
     }
   },
   created: function () {

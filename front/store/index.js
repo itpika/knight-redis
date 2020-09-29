@@ -128,6 +128,22 @@ if (window.ipcRenderer) {
   window.ipcRenderer.on('keyDetail', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
+        if (data.keys) { // 是否热更新数据
+          hostView.state.all[i].dbData = data.keys
+        }
+        if (data.data.exists === 0) { // key不存在
+          hostView.state.all[i].keyExists = 1
+          hostView.state.all[i].existsKeyName = data.data.name
+          hostView.state.all[i].keyDetailShow = false
+          if (!data.keys) { // 没有热更新，手动删除不存在的key
+            const db = []
+            for (const v of hostView.state.all[i].dbData) {
+              if (v !== data.data.name) db.push(v)
+            }
+            hostView.state.all[i].dbData = db
+          }
+          return
+        }
         hostView.state.all[i].keyDetail.type = data.data.type
         hostView.state.all[i].keyDetail.ttl = data.data.ttl
         hostView.state.all[i].keyDetail.value = data.data.value

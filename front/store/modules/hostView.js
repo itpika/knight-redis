@@ -28,6 +28,7 @@ export default {
       searchValue: '', // 过滤key值
       searchDate: [], // 过滤key后的结果key
       keyDetailShow: false, // key详情窗口是否展示
+      keyExists: 0, // key是否存在
       keyDetail: {
         keyName: '', // key name
         type: '-', // key类型
@@ -57,6 +58,7 @@ export default {
         time: data.time,
         conf: data.conf,
         label: data.label,
+        realTime: '0',
         connectState: process.env.NODE_ENV === 'development' ? 0 : -1,
         // connectState: 2,
         deleteKeyOK: 0,
@@ -78,6 +80,7 @@ export default {
         searchValue: '',
         searchDate: [], // 过滤key后的结果key
         keyDetailShow: false,
+        keyExists: 0,
         keyDetail: {
           keyName: '',
           type: 'HASH',
