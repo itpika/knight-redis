@@ -61,8 +61,8 @@ if (window.ipcRenderer) {
   window.ipcRenderer.on('getAllKey', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
-        hostView.state.all[i].dbLoading = false
         hostView.state.all[i].dbData = data.keys
+        hostView.state.all[i].dbLoading = false
         break
       }
     }
@@ -89,12 +89,12 @@ if (window.ipcRenderer) {
         if (!data.ret) { // 更新失败
           hostView.state.all[i].keyDetail.renameStatus = -1
         } else {
-          if (data.realTime) { // 实时更新
+          if (data.realTime === '1') { // 实时更新
             hostView.state.all[i].dbData = data.keys
           } else { // 手动更新
-            for (let i = 0; i < hostView.state.all[i].dbData.length; i++) {
-              if (data.key === hostView.state.all[i].dbData[i]) {
-                hostView.state.all[i].dbData[i] = data.newKey
+            for (let j = 0; j < hostView.state.all[i].dbData.length; j++) {
+              if (data.key === hostView.state.all[i].dbData[j]) {
+                hostView.state.all[i].dbData[j] = data.newKey
                 break
               }
             }

@@ -66,9 +66,11 @@
             </ul>
           </div>
         </div>
-        <div :class="['key-detail-box', 'bgdColor-radio-kgt',  { 'hiddenClass': keyDetailShow }]">
-          <KeyDetail @deleteKey="deleteKey" />
-        </div>
+        <transition name="el-fade-in-linear">
+          <div class="transition-box key-detail-box bgdColor-radio-kgt" v-show="!keyDetailShow">
+            <KeyDetail @deleteKey="deleteKey" />
+          </div>
+        </transition>
       </div>
     </div>
     <!-- 遮罩层 -->
@@ -275,9 +277,10 @@ export default {
     },
     // 获取当前选择db的所有key
     selectDBChange: function (index) {
-      // this.current.dbLoading = true
+      this.current.dbLoading = true
       this.current.dbData = []
       this.$store.commit('redis/getAllKey', { index, time: this.current.time })
+      this.current.keyDetailShow = false
     }
   },
   watch: {
