@@ -4,7 +4,7 @@
       <div class="left bkg-radio-kgt">
         <div :class="['box', { 'displayHidden': rename }]">
           <div class="key-type greenColor">
-            <span>{{this.current.keyDetail.type}}:</span>
+            <span>{{this.keyType}}:</span>
           </div>
           <span class="key-name">
             <el-tooltip :content="keyName" effect="dark" offset="0" placement="top-start">
@@ -30,14 +30,17 @@
           <i class="el-icon-delete-solid"/>
           <span class="hidden-sm-and-down" v-html="'&nbsp;delete'"></span>
         </div>
-        <div class="ttl bkg-radio-kgt hidden-xs-only">
-          TTL:<span v-html="'&nbsp;'+this.current.keyDetail.ttl"></span>
+        <div class="save bkg-radio-kgt hidden-xs-only" @click.stop="saveKey">
+          <i class="el-icon-document-checked"/>
+          <div class="hidden-sm-and-down" v-html="'&nbsp;save'"></div>
         </div>
       </div>
     </div>
     <div class="body bkg-radio-kgt">
       <div class="detail-head radio-kgt">
-        <div class="left"></div>
+        <div class="left">
+          <div class="ttl">TTL :<span v-html="'&nbsp;'+this.current.keyDetail.ttl"></span></div>
+        </div>
         <div class="right">
           <el-select v-model="keyViewType" size="mini" @change="keyShowTypechange">
             <el-option
@@ -51,12 +54,12 @@
       </div>
       <div class="detail-text radio-kgt">
         <div v-text="current.keyDetail.value" class="string-box bgdColor-radio-kgt" 
-         @paste="filterText" v-if="this.current.keyDetail.type === string" contenteditable="true">
+         @paste="filterText" v-if="this.keyType === string" contenteditable="true">
         </div>
-        <HashDetail v-else-if="this.current.keyDetail.type === hash"/>
-        <ListDetail v-else-if="this.current.keyDetail.type === list"/>
-        <SetDetail v-else-if="this.current.keyDetail.type === set"/>
-        <ZSetDetail v-else-if="this.current.keyDetail.type === zset"/>
+        <HashDetail v-else-if="this.keyType === hash"/>
+        <ListDetail v-else-if="this.keyType === list"/>
+        <SetDetail v-else-if="this.keyType === set"/>
+        <ZSetDetail v-else-if="this.keyType === zset"/>
       </div>
     </div>
   </div>
@@ -83,7 +86,7 @@ export default {
       return this.$store.state.hostView.current.keyDetail.keyName
     },
     keyType() {
-      return this.$store.state.hostView.current.keyDetail.type
+      return this.current.keyDetail.type
     },
     renameStatus() {
       return this.$store.state.hostView.current.keyDetail.renameStatus
@@ -152,6 +155,8 @@ export default {
     },
     keyShowTypechange(val) { // key展示类型变化
       // this.keyShowType = val
+    },
+    saveKey() {
     }
   },
   watch: {
@@ -205,29 +210,29 @@ export default {
     }
   },
   created() {
-    if (this.current.keyDetail.type === STRING.upName) {
+    if (this.keyType === STRING.upName) {
       this.textType = [
         { value: 'text', key: 1 },
         { value: 'hex', key: 3 }
       ]
-    } else if (this.current.keyDetail.type === HASH.upName) {
-      this.textType = [
-        { value: 'text', key: 1 },
-        { value: 'json', key: 2 },
-        { value: 'hex', key: 3 }
-      ]
-    } else if (this.current.keyDetail.type === LIST.upName) {
+    } else if (this.keyType === HASH.upName) {
       this.textType = [
         { value: 'text', key: 1 },
         { value: 'json', key: 2 },
         { value: 'hex', key: 3 }
       ]
-    } else if (this.current.keyDetail.type === SET.upName) {
+    } else if (this.keyType === LIST.upName) {
+      this.textType = [
+        { value: 'text', key: 1 },
+        { value: 'json', key: 2 },
+        { value: 'hex', key: 3 }
+      ]
+    } else if (this.keyType === SET.upName) {
       this.textType = [
         { value: 'text', key: 1 },
         { value: 'hex', key: 3 }
       ]
-    } else if (this.current.keyDetail.type === ZSET.upName) {
+    } else if (this.keyType === ZSET.upName) {
       this.textType = [
         { value: 'text', key: 1 },
         { value: 'json', key: 2 },
@@ -324,13 +329,18 @@ export default {
       .rename {
         margin-right: 5px;
         cursor: pointer;
+        background-color: #E6A23C;
+        &:hover {
+          background-color: #c58e3b;
+        }
+      }
+      .save {
+        margin-right: 5px;
+        cursor: pointer;
         background-color: #00de7e;
         &:hover {
           background-color: #01c671;
         }
-        
-      }
-      .ttl {
       }
       .reload {
         margin-right: 5px;
@@ -341,6 +351,8 @@ export default {
         }
       }
       .delete {
+        display: flex;
+        align-items: center;
         margin-right: 5px;
         background-color: #fa4c4c;
         cursor: pointer;
@@ -363,6 +375,15 @@ export default {
       justify-content: space-between;
       font-size: 12px;
       color: #00de7e;
+      .left {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        .ttl {
+          padding: 0 5px;
+          color: #fff;
+        }
+      }
       .right {
         display: flex;
         justify-content: flex-end;
