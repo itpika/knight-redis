@@ -32,7 +32,7 @@
         </div>
         <div class="save bkg-radio-kgt hidden-xs-only" @click.stop="saveKey">
           <i class="el-icon-document-checked"/>
-          <div class="hidden-sm-and-down" v-html="'&nbsp;save'"></div>
+          <span class="hidden-sm-and-down" v-html="'&nbsp;save'"></span>
         </div>
       </div>
     </div>
@@ -53,7 +53,7 @@
         </div>
       </div>
       <div class="detail-text radio-kgt">
-        <div v-text="current.keyDetail.value" class="string-box bgdColor-radio-kgt" 
+        <div id="string-input" v-text="current.keyDetail.value" class="string-box bgdColor-radio-kgt" 
          @paste="filterText" v-if="this.keyType === string" contenteditable="true">
         </div>
         <HashDetail v-else-if="this.keyType === hash"/>
@@ -83,13 +83,16 @@ export default {
       return this.$store.state.hostView.current
     },
     keyName() {
-      return this.$store.state.hostView.current.keyDetail.keyName
+      return this.current.keyDetail.keyName
     },
     keyType() {
       return this.current.keyDetail.type
     },
     renameStatus() {
       return this.$store.state.hostView.current.keyDetail.renameStatus
+    },
+    saveKeyCode() {
+      return this.$store.state.hostView.current.keyDetail.saveKeyCode
     },
     newKeyName: {
       get() {
@@ -157,6 +160,16 @@ export default {
       // this.keyShowType = val
     },
     saveKey() {
+      switch (this.keyType) {
+        case this.string:
+          this.$store.commit('saveKey/string', {
+            time: this.current.time, index: this.current.selectDB,
+            key: this.keyName, value: document.querySelector('#string-input').textContent
+          })
+          break
+        default:
+          break
+      }
     }
   },
   watch: {
@@ -176,6 +189,23 @@ export default {
         })
       }
       this.current.keyDetail.renameStatus = 0
+    },
+    saveKeyCode(newVal, old) { // 保存key值状态提示通知
+      if (newVal === 0) return
+      if (newVal === 1) {
+        this.$notify.success({
+          duration: 2000,
+          customClass: 'notifyBox',
+          message: 'SAVE SUCCESS!'
+        })
+      } else if (newVal === -1) {
+        this.$notify.error({
+          duration: 4000,
+          customClass: 'notifyBox',
+          message: 'FAIL!'
+        })
+      }
+      this.current.keyDetail.saveKeyCode = 0
     },
     keyType(newVal, old) { // key类型变化，数据展示形式变化
       if (newVal === STRING.upName) {

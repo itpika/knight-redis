@@ -5,6 +5,7 @@ import host from './modules/host.js'
 import hostView from './modules/hostView.js'
 import newKey from './modules/newKey.js'
 import redis from './modules/redis.js'
+import saveKey from './modules/saveKey.js'
 import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT, FAIL } from '../../lib/redis/singal'
 
 Vue.use(Vuex)
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     host,
     hostView,
     redis,
+    saveKey,
     newKey
   }
 })
@@ -189,6 +191,17 @@ if (window.ipcRenderer) {
     console.log(event, data)
     if (data && data instanceof Array && data.length > 0) {
       host.state.hosts = data
+    }
+  })
+  // 设置key值，保存key通知
+  window.ipcRenderer.on('saveKey', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        if (data.code === 1) {
+          hostView.state.all[i].keyDetail.saveKeyCode = data.code
+        }
+        break
+      }
     }
   })
 }

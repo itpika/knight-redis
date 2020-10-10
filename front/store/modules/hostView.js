@@ -36,7 +36,8 @@ export default {
         renameStatus: 0, // 重命名成功与否, 0:初始状态，1：成功，-1：失败
         rename: false, // 重命名key
         newKeyName: '', // 新key的名字
-        value: '' // 值
+        value: '', // 值
+        saveKeyCode: 0 // 保存key成功与否, 1:ok， -1:fail
       }
     },
     all: [] // 所有打开的host的连接
@@ -83,12 +84,12 @@ export default {
         keyExists: 0,
         keyDetail: {
           keyName: '',
-          type: 'LIST',
+          type: 'STRING',
           rename: false,
           renameStatus: 0,
           ttl: -1,
-          // value: '12889838jndnahxa9121'
-          value: [1, 'http://www.mamicode.com/info-detail2983524.html111111111123121', 'pika', 'md;osajdo;fmn;jfkdfjlksdhreihdjbvliubgfugfdjhfjfudufhjkjhfksndnskasdasdasxsxq1ewq141223'],
+          value: '12889838jndnahxa9121',
+          // value: [1, 'http://www.mamicode.com/info-detail2983524.html111111111123121', 'pika', 'md;osajdo;fmn;jfkdfjlksdhreihdjbvliubgfugfdjhfjfudufhjkjhfksndnskasdasdasxsxq1ewq141223'],
           // value: {
           //   keys: ['name', 'asxasxssssssssaaaaaaaaaaaaa'],
           //   values: ['euumxkasxlasxjuiqwxlm;maxla;iwxmaxawlxksdjhfuhsaxansxkalshxuixmohdkadkak', '20']
@@ -97,7 +98,8 @@ export default {
           //   scores: ['11', '2', '31'],
           //   values: ['euumxkasxlasxjuiqwxlm;maxla;iwxmaxawlxksdjhfuhsaxansxkalshxuixmohdkadkak', '20', 'pika']
           // },
-          newKeyName: ''
+          newKeyName: '',
+          saveKeyCode: 0
         }
       }
       if (process.env.NODE_ENV === 'development') {

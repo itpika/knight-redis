@@ -21,7 +21,7 @@
                   :value="item.value">
                 </el-option>
               </el-select>
-              <span class="key-number fontColor2"><span>{{keyCount || ''}}</span></span>
+              <span class="key-number fontColor2 hidden-sm-and-down"><span>{{keyCount || ''}}</span></span>
             </div>
             <div class="opertionsBox bgkColor">
               <div :class="['opertion-icon', { 'displayHidden': searchBoxShow }]">

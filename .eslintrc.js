@@ -22,6 +22,7 @@ module.exports = {
     'no-unreachable': 'warn',
     'vue/no-unused-components': 'warn',
     'object-curly-spacing': 'warn',
+    'object-property-newline': 'off',
     'indent': 'off'
   }
 }
