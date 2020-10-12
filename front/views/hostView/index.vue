@@ -167,6 +167,20 @@ export default {
   },
   methods: {
     keyDetail(k) { // 点击查看key详情
+      this.current.keyDetail.ketData = { // 重置key内容的数据暂存
+        string: null,
+        list: null,
+        hash: {
+          key: null,
+          value: null
+        },
+        set: null,
+        zset: {
+          score: null,
+          value: null
+        }
+      }
+      this.current.keyDetail.saveDrop = true // 重置save按钮的禁止状态
       this.current.keyDetailShow = true
       this.current.keyDetail.keyName = k
       this.$store.commit('redis/keyDetail', { time: this.current.time, key: k, index: this.current.selectDB, liveUpdate: this.current.realTime })

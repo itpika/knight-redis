@@ -8,12 +8,13 @@
       </li>
       <li class="radio-kgt select" v-for="(item, i) in this.current.keyDetail.value.values" :key="i" @click.stop="keyShow(item, i)">
         <div class="row">{{i+1}}</div>
-        <div class="value" v-html="item"></div>
-        <div class="score" v-html="current.keyDetail.value.scores[i]"></div>
+        <div class="value">{{item}}</div>
+        <div class="score">{{current.keyDetail.value.scores[i]}}</div>
       </li>
     </ul>
-    <div @paste="filterText" class="select-key-score bgdColor-radio-kgt" contenteditable="true">{{score}}</div>
-    <div @paste="filterText" class="select-key bgdColor-radio-kgt" contenteditable="true">{{value}}</div>
+    <span id="zset-old-input" style="visibility: hidden; height: 0;">{{this.current.keyDetail.ketData.zset.value}}</span>
+    <div id="zset-score-input" @paste="filterText" class="select-key-score bgdColor-radio-kgt" contenteditable="true">{{this.current.keyDetail.ketData.zset.score}}</div>
+    <div id="zset-value-input" @paste="filterText" class="select-key bgdColor-radio-kgt" contenteditable="true">{{this.current.keyDetail.ketData.zset.value}}</div>
   </div>
 </template>
 <script>
@@ -29,16 +30,11 @@ export default {
       return this.$store.state.hostView.current.keyDetail.keyName
     }
   },
-  data: function () {
-    return {
-      value: '',
-      score: ''
-    }
-  },
   methods: {
     keyShow(key, index) { // key数据展示
-      this.value = this.current.keyDetail.value.values[index]
-      this.score = this.current.keyDetail.value.scores[index]
+      this.current.keyDetail.ketData.zset.score = this.current.keyDetail.value.scores[index]
+      this.current.keyDetail.ketData.zset.value = this.current.keyDetail.value.values[index]
+      this.current.keyDetail.saveDrop = false
     },
     filterText(e) {
       e.preventDefault()
@@ -96,7 +92,7 @@ export default {
   .select-key-score {
     font-size: 12px;
     margin-bottom: 5px;
-    flex: 2;
+    flex: 1;
     text-align: left;
     align-items: center;
     box-sizing: border-box;

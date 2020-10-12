@@ -6,14 +6,14 @@
         <div class="key greenColor">key</div>
         <div class="value greenColor">value</div>
       </li>
-      <li class="radio-kgt select" v-for="(item, i) in this.current.keyDetail.value.keys" :key="i" @click.stop="keyShow(item, i)">
+      <li class="radio-kgt select" v-for="(item, i) in this.current.keyDetail.value.values" :key="item" @click.stop="keyShow(item, i)">
         <div class="row">{{i+1}}</div>
-        <div class="key">{{item}}</div>
-        <div class="value">{{current.keyDetail.value.values[i]}}</div>
+        <div class="key">{{current.keyDetail.value.keys[i]}}</div>
+        <div class="value">{{item}}</div>
       </li>
     </ul>
-    <div @paste="filterText" class="select-key bgdColor-radio-kgt" contenteditable="true">{{key}}</div>
-    <div @paste="filterText" class="select-key-value bgdColor-radio-kgt" contenteditable="true">{{value}}</div>
+    <div id="hash-key-input" @paste="filterText" class="select-key bgdColor-radio-kgt">{{this.current.keyDetail.ketData.hash.key}}</div>
+    <div id="hash-value-input" @paste="filterText" class="select-key-value bgdColor-radio-kgt" contenteditable="true">{{this.current.keyDetail.ketData.hash.value}}</div>
   </div>
 </template>
 <script>
@@ -29,16 +29,11 @@ export default {
       return this.$store.state.hostView.current.keyDetail.keyName
     }
   },
-  data: function () {
-    return {
-      key: '',
-      value: ''
-    }
-  },
   methods: {
-    keyShow(key, index) { // key数据展示
-      this.key = key
-      this.value = this.current.keyDetail.value.values[index]
+    keyShow(item, index) { // key数据展示
+      this.current.keyDetail.ketData.hash.value = item
+      this.current.keyDetail.ketData.hash.key = this.current.keyDetail.value.keys[index]
+      this.current.keyDetail.saveDrop = false
     },
     filterText(e) {
       e.preventDefault()

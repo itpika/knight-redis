@@ -30,7 +30,7 @@
           <i class="el-icon-delete-solid"/>
           <span class="hidden-sm-and-down" v-html="'&nbsp;delete'"></span>
         </div>
-        <div class="save bkg-radio-kgt hidden-xs-only" @click.stop="saveKey">
+        <div :class="[{'save': !saveDrop}, 'bkg-radio-kgt', 'hidden-xs-only', {'no-drop': saveDrop}]" @click.stop="saveKey">
           <i class="el-icon-document-checked"/>
           <span class="hidden-sm-and-down" v-html="'&nbsp;save'"></span>
         </div>
@@ -93,6 +93,9 @@ export default {
     },
     saveKeyCode() {
       return this.$store.state.hostView.current.keyDetail.saveKeyCode
+    },
+    saveDrop() {
+      return this.$store.state.hostView.current.keyDetail.saveDrop
     },
     newKeyName: {
       get() {
@@ -160,11 +163,46 @@ export default {
       // this.keyShowType = val
     },
     saveKey() {
+      if (this.current.keyDetail.saveDrop) return // 是否允许保存
+      let value
       switch (this.keyType) {
         case this.string:
           this.$store.commit('saveKey/string', {
             time: this.current.time, index: this.current.selectDB,
             key: this.keyName, value: document.querySelector('#string-input').textContent
+          })
+          break
+        case this.hash:
+          const hkey = document.querySelector('#hash-key-input').textContent
+          const hvalue = document.querySelector('#hash-value-input').textContent.trim()
+          this.$store.commit('saveKey/hash', {
+            time: this.current.time, index: this.current.selectDB, type: 1, // type=1, hset是修改原来的key
+            realTime: this.current.realTime, key: this.keyName, hkey, hvalue
+          })
+          break
+        case this.list:
+          value = document.querySelector('#list-input').textContent.trim()
+          const listIndex = document.querySelector('#list-index-input').textContent.trim()
+          this.$store.commit('saveKey/list', {
+            time: this.current.time, index: this.current.selectDB,
+            realTime: this.current.realTime, key: this.keyName, value, listIndex: parseInt(listIndex)
+          })
+          break
+        case this.set:
+          value = document.querySelector('#set-input').textContent.trim()
+          const oldValue = document.querySelector('#set-old-input').textContent
+          this.$store.commit('saveKey/set', {
+            time: this.current.time, index: this.current.selectDB, 
+            realTime: this.current.realTime, key: this.keyName, value, oldValue
+          })
+          break
+        case this.zset:
+          const score = document.querySelector('#zset-score-input').textContent.trim()
+          value = document.querySelector('#zset-value-input').textContent.trim()
+          this.$store.commit('saveKey/zset', {
+            time: this.current.time, index: this.current.selectDB, 
+            realTime: this.current.realTime, key: this.keyName, value, score, 
+            oldValue: document.querySelector('#zset-old-input').textContent.trim()
           })
           break
         default:
@@ -204,6 +242,25 @@ export default {
           customClass: 'notifyBox',
           message: 'FAIL!'
         })
+      } else if (newVal === -2) {
+        this.current.keyDetailShow = false // 关闭key详情窗口
+        this.$notify.error({
+          duration: 3000,
+          customClass: 'notifyBox',
+          message: 'The key doesn\'t exist!'
+        })
+        // 刷新key列表
+        this.current.dbLoading = true
+        this.$store.commit('redis/getAllKey', { index: this.current.selectDB, time: this.current.time })
+      } else if (newVal === -3) { // key的长度发生变化，操作中断, 针对list
+        this.$notify.error({
+          duration: 5000,
+          customClass: 'notifyBox',
+          message: 'The key length changes!'
+        })
+        this.current.keyDetail.saveDrop = true
+        this.current.keyDetail.ketData.list = ''
+        this.reload() // 重载key
       }
       this.current.keyDetail.saveKeyCode = 0
     },
@@ -371,6 +428,11 @@ export default {
         &:hover {
           background-color: #01c671;
         }
+      }
+      .no-drop {
+        margin-right: 5px;
+        background-color: #6fb899;
+        cursor: no-drop;
       }
       .reload {
         margin-right: 5px;

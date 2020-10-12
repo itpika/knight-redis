@@ -6,7 +6,7 @@ import hostView from './modules/hostView.js'
 import newKey from './modules/newKey.js'
 import redis from './modules/redis.js'
 import saveKey from './modules/saveKey.js'
-import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT, FAIL } from '../../lib/redis/singal'
+import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT, FAIL, STRING } from '../../lib/redis/singal'
 
 Vue.use(Vuex)
 
@@ -146,6 +146,7 @@ if (window.ipcRenderer) {
           }
           return
         }
+        if (data.data.type === STRING.upName) hostView.state.all[i].keyDetail.saveDrop = false // 如果是string类型，进入详情可以直接保存
         hostView.state.all[i].keyDetail.type = data.data.type
         hostView.state.all[i].keyDetail.ttl = data.data.ttl
         hostView.state.all[i].keyDetail.value = data.data.value
@@ -194,11 +195,99 @@ if (window.ipcRenderer) {
     }
   })
   // 设置key值，保存key通知
-  window.ipcRenderer.on('saveKey', (event, data) => {
+  window.ipcRenderer.on('saveString', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
-        if (data.code === 1) {
-          hostView.state.all[i].keyDetail.saveKeyCode = data.code
+        hostView.state.all[i].keyDetail.saveKeyCode = data.code
+        break
+      }
+    }
+  })
+  window.ipcRenderer.on('saveHash', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        hostView.state.all[i].keyDetail.saveKeyCode = data.code
+        if (data.code !== 1) return // 没有成功
+        if (data.realTime === '1') { // 实时更新hash的键值
+          hostView.state.all[i].keyDetail.value.keys = data.keys
+          hostView.state.all[i].keyDetail.value.values = data.values
+        } else {
+          const val = []
+          for (let j = 0; j < hostView.state.all[i].keyDetail.value.keys.length; j++) {
+            if (hostView.state.all[i].keyDetail.value.keys[j] === data.hkey) {
+              hostView.state.all[i].keyDetail.value.values[j] = data.hvalue
+            }
+            val.push(hostView.state.all[i].keyDetail.value.values[j])
+          }
+          hostView.state.all[i].keyDetail.value.values = val
+        }
+        break
+      }
+    }
+  })
+  window.ipcRenderer.on('saveList', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        hostView.state.all[i].keyDetail.saveKeyCode = data.code
+        if (data.code !== 1) return // 没有成功
+        if (data.realTime === '1') { // 实时更新值
+          hostView.state.all[i].keyDetail.value = data.keys
+        } else {
+          const val = []
+          for (let j = 0; j < hostView.state.all[i].keyDetail.value.length; j++) {
+            if (j === data.listIndex) {
+              hostView.state.all[i].keyDetail.value[j] = data.value
+            }
+            val.push(hostView.state.all[i].keyDetail.value[j])
+          }
+          hostView.state.all[i].keyDetail.value = val
+        }
+        break
+      }
+    }
+  })
+  window.ipcRenderer.on('saveSet', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        hostView.state.all[i].keyDetail.saveKeyCode = data.code
+        if (data.code !== 1) return // 没有成功
+        if (data.realTime === '1') { // 实时更新值
+          hostView.state.all[i].keyDetail.value = data.keys
+        } else {
+          const val = []
+          for (let j = 0; j < hostView.state.all[i].keyDetail.value.length; j++) {
+            if (hostView.state.all[i].keyDetail.value[j] === data.oldValue) {
+              hostView.state.all[i].keyDetail.value[j] = data.value
+            }
+            val.push(hostView.state.all[i].keyDetail.value[j])
+          }
+          hostView.state.all[i].keyDetail.value = val
+        }
+        break
+      }
+    }
+  })
+  window.ipcRenderer.on('saveZSet', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        hostView.state.all[i].keyDetail.saveKeyCode = data.code
+        if (data.code !== 1) return // 没有成功
+        if (data.realTime === '1') { // 实时更新值
+          hostView.state.all[i].keyDetail.value.values = data.values
+          hostView.state.all[i].keyDetail.value.scores = data.scores
+        } else {
+          const scores = []
+          const values = []
+          for (let j = 0; j < hostView.state.all[i].keyDetail.value.values.length; j++) {
+            if (hostView.state.all[i].keyDetail.value.values[j] === data.oldValue) {
+              hostView.state.all[i].keyDetail.value.values[j] = data.value
+              hostView.state.all[i].keyDetail.value.scores[j] = data.score
+            }
+            scores.push(hostView.state.all[i].keyDetail.value.scores[j])
+            values.push(hostView.state.all[i].keyDetail.value.values[j])
+          }
+          hostView.state.all[i].keyDetail.scores = scores
+          hostView.state.all[i].keyDetail.values = values
         }
         break
       }

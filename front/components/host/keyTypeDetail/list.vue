@@ -7,10 +7,11 @@
       </li>
       <li class="radio-kgt select" v-for="(item, i) in this.current.keyDetail.value" :key="i" @click.stop="keyShow(item, i)">
         <div class="row">{{i+1}}</div>
-        <div class="value" v-html="current.keyDetail.value[i]"></div>
+        <div class="value">{{item}}</div>
       </li>
     </ul>
-    <div @paste="filterText" class="select-key bgdColor-radio-kgt" contenteditable="true">{{value}}</div>
+    <span id="list-index-input" style="visibility: hidden; height: 0;">{{index}}</span>
+    <div id="list-input" @paste="filterText" class="select-key bgdColor-radio-kgt" contenteditable="true">{{current.keyDetail.ketData.list}}</div>
   </div>
 </template>
 <script>
@@ -26,14 +27,16 @@ export default {
       return this.$store.state.hostView.current.keyDetail.keyName
     }
   },
-  data: function () {
+  data() {
     return {
-      value: ''
+      index: 0
     }
   },
   methods: {
     keyShow(key, index) { // key数据展示
-      this.value = this.current.keyDetail.value[index]
+      this.current.keyDetail.ketData.list = this.current.keyDetail.value[index]
+      this.current.keyDetail.saveDrop = false
+      this.index = index
     },
     filterText(e) {
       e.preventDefault()
