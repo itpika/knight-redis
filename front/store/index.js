@@ -250,6 +250,7 @@ if (window.ipcRenderer) {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
         hostView.state.all[i].keyDetail.saveKeyCode = data.code
+        hostView.state.all[i].keyDetail.ketData.set = data.value
         if (data.code !== 1) return // 没有成功
         if (data.realTime === '1') { // 实时更新值
           hostView.state.all[i].keyDetail.value = data.keys
@@ -259,7 +260,9 @@ if (window.ipcRenderer) {
             if (hostView.state.all[i].keyDetail.value[j] === data.oldValue) {
               hostView.state.all[i].keyDetail.value[j] = data.value
             }
-            val.push(hostView.state.all[i].keyDetail.value[j])
+            if (val.indexOf(hostView.state.all[i].keyDetail.value[j]) === -1) { // 手动去重
+              val.push(hostView.state.all[i].keyDetail.value[j])
+            }
           }
           hostView.state.all[i].keyDetail.value = val
         }
@@ -271,11 +274,13 @@ if (window.ipcRenderer) {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
         hostView.state.all[i].keyDetail.saveKeyCode = data.code
+        hostView.state.all[i].keyDetail.ketData.zset.value = data.value
         if (data.code !== 1) return // 没有成功
         if (data.realTime === '1') { // 实时更新值
           hostView.state.all[i].keyDetail.value.values = data.values
           hostView.state.all[i].keyDetail.value.scores = data.scores
         } else {
+          const flag = []
           const scores = []
           const values = []
           for (let j = 0; j < hostView.state.all[i].keyDetail.value.values.length; j++) {
@@ -283,11 +288,19 @@ if (window.ipcRenderer) {
               hostView.state.all[i].keyDetail.value.values[j] = data.value
               hostView.state.all[i].keyDetail.value.scores[j] = data.score
             }
-            scores.push(hostView.state.all[i].keyDetail.value.scores[j])
-            values.push(hostView.state.all[i].keyDetail.value.values[j])
+            // 不是热更新，zset数据手动去重
+            if (values.indexOf(hostView.state.all[i].keyDetail.value.values[j]) === -1) {
+              flag.push({ value: hostView.state.all[i].keyDetail.value.values[j], score: hostView.state.all[i].keyDetail.value.scores[j] })
+            }
           }
-          hostView.state.all[i].keyDetail.scores = scores
-          hostView.state.all[i].keyDetail.values = values
+          // 排序
+          flag.sort((a, b) => a.score - b.score)
+          for (const v of flag) {
+            scores.push(v.score)
+            values.push(v.value)
+          }
+          hostView.state.all[i].keyDetail.value.scores = scores
+          hostView.state.all[i].keyDetail.value.values = values
         }
         break
       }

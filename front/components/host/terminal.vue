@@ -280,7 +280,6 @@ export default {
     // })
     // document.getElementById('shellBody')
     document.querySelector('#shellBody').addEventListener('mousedown', e => {
-      // console.log(1)
       this.term.focus()
       e.preventDefault()
     })

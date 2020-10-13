@@ -10,7 +10,7 @@
         <div class="value">{{item}}</div>
       </li>
     </ul>
-    <span id="set-old-input" style="visibility: hidden; height: 0;">{{oldValue}}</span>
+    <span id="set-old-input" style="visibility: hidden; height: 0;">{{this.current.keyDetail.ketData.set}}</span>
     <div id="set-input" @paste="filterText" class="select-key bgdColor-radio-kgt" contenteditable="true">{{this.current.keyDetail.ketData.set}}</div>
   </div>
 </template>
@@ -27,16 +27,10 @@ export default {
       return this.$store.state.hostView.current.keyDetail.keyName
     }
   },
-  data() {
-    return {
-      oldValue: ''
-    }
-  },
   methods: {
     keyShow(key, index) { // key数据展示
       this.current.keyDetail.ketData.set = this.current.keyDetail.value[index]
       this.current.keyDetail.saveDrop = false
-      this.oldValue = this.current.keyDetail.ketData.set
     },
     filterText(e) {
       e.preventDefault()
