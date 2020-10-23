@@ -474,6 +474,7 @@ export default {
         .ttl {
           padding: 0 5px;
           color: #fff;
+
         }
       }
       .right {

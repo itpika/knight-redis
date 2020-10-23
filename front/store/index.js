@@ -128,6 +128,7 @@ if (window.ipcRenderer) {
    * 接收key详情数据
    */
   window.ipcRenderer.on('keyDetail', (event, data) => {
+    if (hostView.state.current.keyDetail.ttlTimer) clearInterval(hostView.state.current.keyDetail.ttlTimer) // 打开新key详情，清除上一次key可能存在的ttl定时器
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
         if (data.keys) { // 是否热更新数据
@@ -150,6 +151,22 @@ if (window.ipcRenderer) {
         hostView.state.all[i].keyDetail.type = data.data.type
         hostView.state.all[i].keyDetail.ttl = data.data.ttl
         hostView.state.all[i].keyDetail.value = data.data.value
+        if (hostView.state.all[i].keyDetail.ttl > 0) { // ttl 定时器
+            ((current) => {
+              current.keyDetail.ttlTimer = setInterval(() => {
+                if (current.keyDetail.ttl > 0) { // key过期刷新key列表
+                  current.keyDetail.ttl--
+                } else {
+                  clearInterval(current.keyDetail.ttlTimer)
+                  // 刷新key列表
+                  current.dbLoading = true
+                  current.keyDetailShow = false // 关闭key详情窗口
+                  redis.mutations.getAllKey(redis.state, { index: current.selectDB, time: current.time })
+                  current.keyDetail.ttlTimer = null
+                }
+              }, 1000)
+            })(hostView.state.all[i])
+        }
         break
       }
     }
