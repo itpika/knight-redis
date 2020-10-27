@@ -102,7 +102,7 @@ export default {
           type: 'ZSET',
           rename: false,
           renameStatus: 0,
-          ttl: 10,
+          ttl: 1000000111111,
           ttlTimer: null,
           // value: '12889838jndnahxa9121',
           // value: [1, 'http://www.mamicode.com/info-detail2983524.html111111111123121', 'pika', 'md;osajdo;fmn;jfkdfjlksdhreihdjbvliubgfugfdjhfjfudufhjkjhfksndnskasdasdasxsxq1ewq141223'],

@@ -39,7 +39,8 @@
     <div class="body bkg-radio-kgt">
       <div class="detail-head radio-kgt">
         <div class="left">
-          <div class="ttl">TTL :<span v-html="'&nbsp;'+this.current.keyDetail.ttl"></span></div>
+          <div class="ttl bgdColor"><div class="text" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl"></div></div>
+          <!-- <div class="ttl bgdColor" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl">></div> -->
         </div>
         <div class="right">
           <el-select v-model="keyViewType" size="mini" @change="keyShowTypechange">
@@ -471,13 +472,32 @@ export default {
         display: flex;
         align-items: center;
         box-sizing: border-box;
+        flex: 6;
         .ttl {
-          padding: 0 5px;
-          color: #fff;
-
+          &:hover {
+            cursor: pointer;
+            color: #fff;
+          }
+          box-sizing: border-box;
+          width: 15%;
+          border-radius: 15px;
+          color: #C0C4CC;
+          height: 100%;
+          .text {
+            padding: 0 5px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            position: relative;
+            transform: translateY(-50%);
+            top: 50%;
+          }
         }
       }
       .right {
+        flex: 1;
         display: flex;
         justify-content: flex-end;
         align-items: center;
