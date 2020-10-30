@@ -183,6 +183,7 @@ export default {
       this.current.keyDetail.saveDrop = true // 重置save按钮的禁止状态
       this.current.keyDetailShow = true
       this.current.keyDetail.keyName = k
+      this.current.keyDetail.ttlShow = true
       this.$store.commit('redis/keyDetail', { time: this.current.time, key: k, index: this.current.selectDB, liveUpdate: this.current.realTime })
       // 重置重命名key相关的状态
       this.current.keyDetail.renameStatus = 0

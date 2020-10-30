@@ -39,7 +39,10 @@
     <div class="body bkg-radio-kgt">
       <div class="detail-head radio-kgt">
         <div class="left">
-          <div class="ttl bgdColor"><div class="text" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl"></div></div>
+          <div class="ttl ttl-box bgdColor" v-show="current.keyDetail.ttlShow" @click="editTTL"><div class="text" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl"></div></div>
+          <div class="ttl ttl-input" v-show="!current.keyDetail.ttlShow" @click="editTTL">
+            <el-input ref="ttl-input" v-model="current.keyDetail.ttl" placeholder="TTL" size="mini"></el-input>
+          </div>
           <!-- <div class="ttl bgdColor" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl">></div> -->
         </div>
         <div class="right">
@@ -125,6 +128,12 @@ export default {
     }
   },
   methods: {
+    editTTL() { // ttl编辑
+      this.current.keyDetail.ttlShow = false
+      this.$nextTick(() => {
+        this.$refs['ttl-input'].focus()
+      })
+    },
     // 重加载key详情
     reload() {
       this.$store.commit('redis/keyDetail', { 
@@ -474,15 +483,29 @@ export default {
         box-sizing: border-box;
         flex: 6;
         .ttl {
+          box-sizing: border-box;
+          width: 15%;
+          border-radius: 15px;
+          height: 100%;
+        }
+        .ttl-input {
+          /deep/ .el-input__inner {
+            border-radius: 15px;
+            border: 0;
+            background-color: #152435;
+            color: #fff;
+            height: 100%;
+          }
+          /deep/ .el-input {
+            height: 100%;
+          }
+        }
+        .ttl-box {
+          color: #C0C4CC;
           &:hover {
             cursor: pointer;
             color: #fff;
           }
-          box-sizing: border-box;
-          width: 15%;
-          border-radius: 15px;
-          color: #C0C4CC;
-          height: 100%;
           .text {
             padding: 0 5px;
             width: 100%;

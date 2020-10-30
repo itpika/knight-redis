@@ -34,6 +34,7 @@ export default {
         type: '-', // key类型
         ttl: -1, // 有效期
         ttlTimer: null, // ttl自减定时器
+        ttlShow: true, // ttl数值是否展示
         renameStatus: 0, // 重命名成功与否, 0:初始状态，1：成功，-1：失败
         rename: false, // 重命名key
         newKeyName: '', // 新key的名字
@@ -104,6 +105,7 @@ export default {
           renameStatus: 0,
           ttl: 1000000111111,
           ttlTimer: null,
+          ttlShow: true,
           // value: '12889838jndnahxa9121',
           // value: [1, 'http://www.mamicode.com/info-detail2983524.html111111111123121', 'pika', 'md;osajdo;fmn;jfkdfjlksdhreihdjbvliubgfugfdjhfjfudufhjkjhfksndnskasdasdasxsxq1ewq141223'],
           // value: {
