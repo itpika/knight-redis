@@ -220,6 +220,14 @@ if (window.ipcRenderer) {
       }
     }
   })
+  window.ipcRenderer.on('saveTTL', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        hostView.state.all[i].keyDetail.ttlShow = (data.data === 1)
+        break
+      }
+    }
+  })
   window.ipcRenderer.on('saveHash', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {

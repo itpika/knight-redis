@@ -39,9 +39,11 @@
     <div class="body bkg-radio-kgt">
       <div class="detail-head radio-kgt">
         <div class="left">
-          <div class="ttl ttl-box bgdColor" v-show="current.keyDetail.ttlShow" @click="editTTL"><div class="text" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl"></div></div>
-          <div class="ttl ttl-input" v-show="!current.keyDetail.ttlShow" @click="editTTL">
-            <el-input ref="ttl-input" v-model="current.keyDetail.ttl" placeholder="TTL" size="mini"></el-input>
+          <div class="ttl ttl-box bgdColor" v-show="ttlShow" @click="editTTL"><div class="text" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl"></div></div>
+          <div class="ttl ttl-input" v-show="!ttlShow" @click="editTTL">
+            <el-input ref="ttl-input" v-model="current.keyDetail.ttl" placeholder="TTL" size="mini">
+            </el-input>
+            <div class="ttl-save bgdColor" @click.stop="ttlSave"><i class="el-icon-check"/></div>
           </div>
           <!-- <div class="ttl bgdColor" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl">></div> -->
         </div>
@@ -74,6 +76,7 @@ import HashDetail from '@/front/components/host/keyTypeDetail/hash'
 import ListDetail from '@/front/components/host/keyTypeDetail/list'
 import SetDetail from '@/front/components/host/keyTypeDetail/set'
 import ZSetDetail from '@/front/components/host/keyTypeDetail/zset'
+import send from '@/front/lib/channel/send.js'
 export default {
   name: 'keyDetail',
   components: {
@@ -111,6 +114,9 @@ export default {
     },
     rename() {
       return this.$store.state.hostView.current.keyDetail.rename
+    },
+    ttlShow() {
+      return this.$store.state.hostView.current.keyDetail.ttlShow
     }
   },
   data: function () {
@@ -128,6 +134,23 @@ export default {
     }
   },
   methods: {
+    ttlSave() { // save ttl
+      const ttl = parseInt(this.current.keyDetail.ttl)
+      if (isNaN(ttl)) {
+        this.$notify.error({
+          duration: 2000,
+          customClass: 'notifyBox',
+          message: 'Invalid value!'
+        })
+        return
+      }
+      send.sendEvent('saveTTL', { 
+        time: this.current.time,
+        key: this.current.keyDetail.keyName,
+        ttl,
+        index: this.current.selectDB 
+      })
+    },
     editTTL() { // ttl编辑
       this.current.keyDetail.ttlShow = false
       this.$nextTick(() => {
@@ -221,6 +244,14 @@ export default {
     }
   },
   watch: {
+    ttlShow(newVal, old) {
+      if (!newVal) return
+      this.$notify.success({
+          duration: 2000,
+          customClass: 'notifyBox',
+          message: 'SUCCESS'
+        })
+    },
     renameStatus(newVal, old) { // 重命名key状态提示通知
       if (newVal === 0) return
       if (newVal === 1) {
@@ -489,8 +520,12 @@ export default {
           height: 100%;
         }
         .ttl-input {
+          width: 20%;
           /deep/ .el-input__inner {
-            border-radius: 15px;
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+            border-top-right-radius: 0px;
+            border-bottom-right-radius: 0px;
             border: 0;
             background-color: #152435;
             color: #fff;
@@ -498,6 +533,21 @@ export default {
           }
           /deep/ .el-input {
             height: 100%;
+          }
+          display: flex;
+          .ttl-save {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+            width: 30px;
+            color: #fff;
+            &:hover {
+              cursor: pointer;
+              color: #00de7e;
+            }
           }
         }
         .ttl-box {
