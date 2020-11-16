@@ -7,7 +7,7 @@
       <i @click.stop="current.shellState.open = false" class="el-icon-close"/>
     </div>
     <!-- 主体 -->
-    <div id="shellBody" ref="terminal">
+    <div id="shellBody" ref="terminal" @click.stop="term.focus()">
     </div>
   </div>
 </template>
@@ -278,11 +278,6 @@ export default {
     // term.on('data', function(data){
     // todo something
     // })
-    // document.getElementById('shellBody')
-    document.querySelector('#shellBody').addEventListener('mousedown', e => {
-      this.term.focus()
-      e.preventDefault()
-    })
   },
   created() {
     // 处理鼠标按下默认事件，后续处理
