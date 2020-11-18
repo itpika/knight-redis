@@ -170,6 +170,7 @@ export default {
       this.current.keyDetail.ketData = { // 重置key内容的数据暂存
         string: null,
         list: null,
+        ttlShow: true,
         hash: {
           key: null,
           value: null

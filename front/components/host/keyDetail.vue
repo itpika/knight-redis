@@ -152,6 +152,7 @@ export default {
       })
     },
     editTTL() { // ttl编辑
+      if (this.current.keyDetail.ttlTimer) clearInterval(this.current.keyDetail.ttlTimer) // 停掉ttl定时器具
       this.current.keyDetail.ttlShow = false
       this.$nextTick(() => {
         this.$refs['ttl-input'].focus()

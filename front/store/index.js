@@ -224,6 +224,22 @@ if (window.ipcRenderer) {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
         hostView.state.all[i].keyDetail.ttlShow = (data.data === 1)
+        if (hostView.state.all[i].keyDetail.ttl > 0) { // ttl 定时器
+          ((current) => {
+            current.keyDetail.ttlTimer = setInterval(() => {
+              if (current.keyDetail.ttl > 0) { // key过期刷新key列表
+                current.keyDetail.ttl--
+              } else {
+                clearInterval(current.keyDetail.ttlTimer)
+                // 刷新key列表
+                current.dbLoading = true
+                current.keyDetailShow = false // 关闭key详情窗口
+                redis.mutations.getAllKey(redis.state, { index: current.selectDB, time: current.time })
+                current.keyDetail.ttlTimer = null
+              }
+            }, 1000)
+          })(hostView.state.all[i])
+        }
         break
       }
     }
