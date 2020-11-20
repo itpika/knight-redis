@@ -39,11 +39,11 @@
     <div class="body bkg-radio-kgt">
       <div class="detail-head radio-kgt">
         <div class="left">
-          <div class="ttl ttl-box bgdColor" v-show="ttlShow" @click="editTTL"><div class="text" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl"></div></div>
-          <div class="ttl ttl-input" v-show="!ttlShow" @click="editTTL">
-            <el-input ref="ttl-input" v-model="current.keyDetail.ttl" placeholder="TTL" size="mini">
+          <div class="ttl ttl-box bgdColor" v-show="current.keyDetail.ttlShow" @click="editTTL"><div class="text" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl"></div></div>
+          <div class="ttl ttl-input" v-show="!current.keyDetail.ttlShow" @click="editTTL">
+            <el-input ref="ttl-input" @keyup.esc.native="esclTTL" v-model="this.ttlValue" placeholder="TTL" size="mini">
             </el-input>
-            <div class="ttl-save bgdColor" @click.stop="ttlSave"><i class="el-icon-check"/></div>
+            <div class="ttl-save bgdColor" @click.stop="ttlKeep"><i class="el-icon-check"/></div>
           </div>
           <!-- <div class="ttl bgdColor" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl">></div> -->
         </div>
@@ -115,8 +115,8 @@ export default {
     rename() {
       return this.$store.state.hostView.current.keyDetail.rename
     },
-    ttlShow() {
-      return this.$store.state.hostView.current.keyDetail.ttlShow
+    ttlSave() {
+      return this.$store.state.hostView.current.keyDetail.ttlSave
     }
   },
   data: function () {
@@ -130,11 +130,12 @@ export default {
       hash: HASH.upName,
       list: LIST.upName,
       set: SET.upName,
-      zset: ZSET.upName
+      zset: ZSET.upName,
+      ttlValue: 0
     }
   },
   methods: {
-    ttlSave() { // save ttl
+    ttlKeep() { // save ttl
       const ttl = parseInt(this.current.keyDetail.ttl)
       if (isNaN(ttl)) {
         this.$notify.error({
@@ -152,11 +153,15 @@ export default {
       })
     },
     editTTL() { // ttl编辑
-      if (this.current.keyDetail.ttlTimer) clearInterval(this.current.keyDetail.ttlTimer) // 停掉ttl定时器具
+      // if (this.current.keyDetail.ttlTimer) clearInterval(this.current.keyDetail.ttlTimer) // 停掉ttl定时器具
+      this.ttlValue = this.current.keyDetail.ttl
       this.current.keyDetail.ttlShow = false
       this.$nextTick(() => {
         this.$refs['ttl-input'].focus()
       })
+    },
+    esclTTL() { // esc按键 取消ttl修改
+      this.current.keyDetail.ttlShow = true
     },
     // 重加载key详情
     reload() {
@@ -245,13 +250,16 @@ export default {
     }
   },
   watch: {
-    ttlShow(newVal, old) {
+    ttlSave(newVal, old) {
       if (!newVal) return
-      this.$notify.success({
+      if (newVal) {
+        this.$notify.success({
           duration: 2000,
           customClass: 'notifyBox',
           message: 'SUCCESS'
         })
+      }
+      this.current.keyDetail.ttlSave = false
     },
     renameStatus(newVal, old) { // 重命名key状态提示通知
       if (newVal === 0) return

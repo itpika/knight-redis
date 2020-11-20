@@ -224,6 +224,7 @@ if (window.ipcRenderer) {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
         hostView.state.all[i].keyDetail.ttlShow = (data.data === 1)
+        hostView.state.all[i].keyDetail.ttlSave = (data.data === 1)
         if (hostView.state.all[i].keyDetail.ttl > 0) { // ttl 定时器
           ((current) => {
             current.keyDetail.ttlTimer = setInterval(() => {
