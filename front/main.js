@@ -8,8 +8,8 @@ import 'element-ui/lib/theme-chalk/display.css' // 基于断点的隐藏类样�
 import 'element-ui/lib/theme-chalk/base.css' // 内置过度动画
 Vue.config.productionTip = false
 
-// global.os_platform = 'macOS'
-global.os_platform = 'win'
+global.os_platform = 'macOS'
+// global.os_platform = 'win'
 
 new Vue({
   router,

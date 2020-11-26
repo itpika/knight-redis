@@ -41,7 +41,7 @@
         <div class="left">
           <div class="ttl ttl-box bgdColor" v-show="current.keyDetail.ttlShow" @click="editTTL"><div class="text" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl"></div></div>
           <div class="ttl ttl-input" v-show="!current.keyDetail.ttlShow" @click="editTTL">
-            <el-input ref="ttl-input" @keyup.esc.native="esclTTL" v-model="this.ttlValue" placeholder="TTL" size="mini">
+            <el-input ref="ttl-input" @keyup.esc.native="esclTTL" @keyup.enter.native="ttlKeep" v-model="ttlValue" placeholder="TTL" size="mini">
             </el-input>
             <div class="ttl-save bgdColor" @click.stop="ttlKeep"><i class="el-icon-check"/></div>
           </div>
@@ -136,8 +136,8 @@ export default {
   },
   methods: {
     ttlKeep() { // save ttl
-      const ttl = parseInt(this.current.keyDetail.ttl)
-      if (isNaN(ttl)) {
+      const ttl = parseInt(this.ttlValue)
+      if (isNaN(ttl) || ttl === 0) {
         this.$notify.error({
           duration: 2000,
           customClass: 'notifyBox',
@@ -153,15 +153,16 @@ export default {
       })
     },
     editTTL() { // ttl编辑
-      // if (this.current.keyDetail.ttlTimer) clearInterval(this.current.keyDetail.ttlTimer) // 停掉ttl定时器具
       this.ttlValue = this.current.keyDetail.ttl
       this.current.keyDetail.ttlShow = false
+      this.current.keyDetail.ttlSave = false
       this.$nextTick(() => {
         this.$refs['ttl-input'].focus()
       })
     },
     esclTTL() { // esc按键 取消ttl修改
       this.current.keyDetail.ttlShow = true
+      this.current.keyDetail.ttlSave = false
     },
     // 重加载key详情
     reload() {
