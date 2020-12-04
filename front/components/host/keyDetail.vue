@@ -45,9 +45,12 @@
             </el-input>
             <div class="ttl-save bgdColor" @click.stop="ttlKeep"><i class="el-icon-check"/></div>
           </div>
-          <!-- <div class="ttl bgdColor" v-html="'TTL :'+'&nbsp;'+this.current.keyDetail.ttl">></div> -->
         </div>
         <div class="right">
+          <div v-show="newValueShow" @click.stop="newValue" class="newValue bgdColor">
+            <i class="el-icon-add"/>
+            <span v-html="'&nbsp;add&nbsp;row'"></span>
+          </div>
           <el-select v-model="keyViewType" size="mini" @change="keyShowTypechange">
             <el-option
               v-for="item in textType"
@@ -68,6 +71,7 @@
         <ZSetDetail v-else-if="this.keyType === zset"/>
       </div>
     </div>
+    <KeyNewValue :drawer="drawer" @closeNewValueDrawer="drawer=false"/>
   </div>
 </template>
 <script>
@@ -76,6 +80,7 @@ import HashDetail from '@/front/components/host/keyTypeDetail/hash'
 import ListDetail from '@/front/components/host/keyTypeDetail/list'
 import SetDetail from '@/front/components/host/keyTypeDetail/set'
 import ZSetDetail from '@/front/components/host/keyTypeDetail/zset'
+import KeyNewValue from '@/front/components/host/keyNewValue/index.vue'
 import send from '@/front/lib/channel/send.js'
 export default {
   name: 'keyDetail',
@@ -83,7 +88,8 @@ export default {
     HashDetail,
     ListDetail,
     SetDetail,
-    ZSetDetail
+    ZSetDetail,
+    KeyNewValue
   },
   computed: {
     current() {
@@ -117,6 +123,21 @@ export default {
     },
     ttlSave() {
       return this.$store.state.hostView.current.keyDetail.ttlSave
+    },
+    newValueShow() {
+      switch (this.keyType) {
+        case this.$data.hash:
+          break
+        case this.$data.list:
+          break
+        case this.$data.set:
+          break
+        case this.$data.zset:
+          break
+        default:
+          return false
+      }
+      return true
     }
   },
   data: function () {
@@ -131,10 +152,14 @@ export default {
       list: LIST.upName,
       set: SET.upName,
       zset: ZSET.upName,
-      ttlValue: 0
+      ttlValue: 0,
+      drawer: false
     }
   },
   methods: {
+    newValue() { // key新增值
+      this.drawer = true
+    },
     ttlKeep() { // save ttl
       const ttl = parseInt(this.ttlValue)
       if (isNaN(ttl) || ttl === 0) {
@@ -600,6 +625,20 @@ export default {
           background-color: #152435;
           outline: none;
           color: #00de7e;
+          border-radius: 15px;
+        }
+        .newValue {
+          height: 100%;
+          box-sizing: border-box;
+          align-items: center;
+          display: flex;
+          justify-content: center;
+          font-size: 13px;
+          transition: background-color 0.3s;
+          margin-right: 5px;
+          padding: 0 5px;
+          border-radius: 15px;
+          cursor: pointer;
         }
       }
     }
