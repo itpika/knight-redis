@@ -23,6 +23,9 @@ export default {
     // 保存zset
     zset: function (state, data) {
       send.sendEvent('saveZSet', data)
+    },
+    addRow: function(state, data) {
+      send.sendEvent('addRow', data)
     }
   },
   actions: {

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { HASH, ZSET } from '../../../../lib/redis/singal'
+import { LIST, HASH, SET, ZSET } from '../../../../lib/redis/singal'
 export default {
   name: 'KeyNewValue',
   props: {
@@ -45,20 +45,12 @@ export default {
   data() {
     return {
       row: {
-        score: 0,
         key: '',
         value: ''
       },
       rules: {
-        key: [
-          { required: true, message: 'Please enter the key', trigger: 'blur' }
-        ],
         value: [
           { required: true, message: 'Please enter the value', trigger: 'blur' }
-        ],
-        score: [
-          { required: true, message: 'Please enter the score' },
-          { type: 'number', message: 'The score must be number' }
         ]
       }
     }
@@ -68,25 +60,10 @@ export default {
       return this.$store.state.hostView.current
     },
     secondaryKey() {
-      if (this.current.keyDetail.type === HASH.upName) {
-        delete this.$data.rules.score
-        this.$data.rules.key = [
-          { required: true, message: 'Please enter the key', trigger: 'blur' }
-        ]
-        return true
-      }
-      return false
+      return this.current.keyDetail.type === HASH.upName
     },
     secondaryScore() {
-      if (this.current.keyDetail.type === ZSET.upName) {
-        delete this.$data.rules.key
-        this.$data.rules.score = [
-          { required: true, message: 'Please enter the score' },
-          { type: 'number', message: 'The score must be number' }
-        ]
-        return true
-      }
-      return false
+      return this.current.keyDetail.type === ZSET.upName
     },
     secondary() {
       switch (this.current.keyDetail.type) {
@@ -108,9 +85,50 @@ export default {
       this.$emit('closeNewValueDrawer')
     },
     submitForm() {
+      if (this.secondaryKey) {
+        delete this.$data.rules.score
+        this.$data.rules.key = [
+          { required: true, message: 'Please enter the key', trigger: 'blur' }
+        ]
+      }
+      if (this.secondaryScore) {
+        delete this.$data.rules.key
+        this.$data.rules.score = [
+          { required: true, message: 'Please enter the score' },
+          { type: 'number', message: 'The score must be number' }
+        ]
+      }
       this.$refs.row.validate((valid) => {
         if (valid) {
-          // this.$store.commit('host/editHost', Object.assign({ id: Date.now() + '' }, Object.assign({}, this.host)))
+          this.$store.commit('saveKey/addRow', {
+            time: this.current.time,
+            key: this.current.keyDetail.keyName,
+            index: this.current.selectDB,
+            type: this.current.keyDetail.type,
+            realTime: this.current.realTime,
+            data: this.row
+          })
+          
+          if (this.current.realTime !== '1') {
+            switch (this.current.keyDetail.type) {
+              case LIST.upName:
+                console.log('1', this.current.keyDetail.value)
+                this.current.keyDetail.value.push(this.row.value)
+                console.log('2', this.current.keyDetail.value)
+                break
+              case SET.upName:
+                this.current.keyDetail.value.push(this.row.value)
+                break
+              case HASH.upName:
+                this.current.keyDetail.value.push(this.row.value)
+                break
+              case ZSET.upName:
+                this.current.keyDetail.value.push(this.row.value)
+                break
+              default:
+                break
+            }
+          }
           this.handleClose()
           this.$refs.row.resetFields()
           this.row = {}

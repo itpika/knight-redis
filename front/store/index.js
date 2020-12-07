@@ -10,8 +10,10 @@ import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT, FAIL, STRING } from '../../lib/
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const appStore = new Vuex.Store({
   state: {
+    successAlert: false,
+    keyExists: false
   },
   mutations: {
   },
@@ -26,6 +28,8 @@ export default new Vuex.Store({
     newKey
   }
 })
+
+export default appStore
 
 if (window.ipcRenderer) {
   /**
@@ -310,6 +314,25 @@ if (window.ipcRenderer) {
           }
           hostView.state.all[i].keyDetail.value = val
         }
+        break
+      }
+    }
+  })
+  window.ipcRenderer.on('addRow', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        appStore.state.successAlert = true
+        if (data.realTime) {
+          hostView.state.all[i].keyDetail.value = data.data
+        }
+        break
+      }
+    }
+  })
+  window.ipcRenderer.on('keyNotFound', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        appStore.state.keyExists = true
         break
       }
     }
