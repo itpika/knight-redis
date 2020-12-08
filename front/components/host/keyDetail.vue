@@ -306,28 +306,12 @@ export default {
     },
     saveKeyCode(newVal, old) { // 保存key值状态提示通知
       if (newVal === 0) return
-      if (newVal === 1) {
-        this.$notify.success({
-          duration: 2000,
-          customClass: 'notifyBox',
-          message: 'SAVE SUCCESS!'
-        })
-      } else if (newVal === -1) {
+      if (newVal === -1) {
         this.$notify.error({
           duration: 4000,
           customClass: 'notifyBox',
           message: 'FAIL!'
         })
-      } else if (newVal === -2) {
-        this.current.keyDetailShow = false // 关闭key详情窗口
-        this.$notify.error({
-          duration: 3000,
-          customClass: 'notifyBox',
-          message: 'The key doesn\'t exist!'
-        })
-        // 刷新key列表
-        this.current.dbLoading = true
-        this.$store.commit('redis/getAllKey', { index: this.current.selectDB, time: this.current.time })
       } else if (newVal === -3) { // key的长度发生变化，操作中断, 针对list
         this.$notify.error({
           duration: 5000,

@@ -37,4 +37,4 @@ npm run serve
 ## LICENSE
 MIT
 ## Location
-- github: https://github.com/itpika/knight
+- github: https://github.com/itpika/knight-redis

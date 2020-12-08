@@ -219,6 +219,7 @@ if (window.ipcRenderer) {
   window.ipcRenderer.on('saveString', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
+        appStore.state.successAlert = true
         hostView.state.all[i].keyDetail.saveKeyCode = data.code
         break
       }
@@ -254,6 +255,7 @@ if (window.ipcRenderer) {
   window.ipcRenderer.on('saveHash', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
+        appStore.state.successAlert = true
         hostView.state.all[i].keyDetail.saveKeyCode = data.code
         if (data.code !== 1) return // 没有成功
         if (data.realTime === '1') { // 实时更新hash的键值
@@ -276,6 +278,7 @@ if (window.ipcRenderer) {
   window.ipcRenderer.on('saveList', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
+        appStore.state.successAlert = true
         hostView.state.all[i].keyDetail.saveKeyCode = data.code
         if (data.code !== 1) return // 没有成功
         if (data.realTime === '1') { // 实时更新值
@@ -297,6 +300,7 @@ if (window.ipcRenderer) {
   window.ipcRenderer.on('saveSet', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
+        appStore.state.successAlert = true
         hostView.state.all[i].keyDetail.saveKeyCode = data.code
         hostView.state.all[i].keyDetail.ketData.set = data.value
         if (data.code !== 1) return // 没有成功
@@ -322,9 +326,7 @@ if (window.ipcRenderer) {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
         appStore.state.successAlert = true
-        if (data.realTime) {
-          hostView.state.all[i].keyDetail.value = data.data
-        }
+        hostView.state.all[i].keyDetail.value = data.data
         break
       }
     }
@@ -340,6 +342,7 @@ if (window.ipcRenderer) {
   window.ipcRenderer.on('saveZSet', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
+        appStore.state.successAlert = true
         hostView.state.all[i].keyDetail.saveKeyCode = data.code
         hostView.state.all[i].keyDetail.ketData.zset.value = data.value
         if (data.code !== 1) return // 没有成功

@@ -98,6 +98,10 @@ export default {
           { type: 'number', message: 'The score must be number' }
         ]
       }
+      if (!this.secondaryKey && !this.secondaryScore) {
+        delete this.$data.rules.key
+        delete this.$data.rules.score
+      }
       this.$refs.row.validate((valid) => {
         if (valid) {
           this.$store.commit('saveKey/addRow', {
@@ -108,27 +112,6 @@ export default {
             realTime: this.current.realTime,
             data: this.row
           })
-          
-          if (this.current.realTime !== '1') {
-            switch (this.current.keyDetail.type) {
-              case LIST.upName:
-                console.log('1', this.current.keyDetail.value)
-                this.current.keyDetail.value.push(this.row.value)
-                console.log('2', this.current.keyDetail.value)
-                break
-              case SET.upName:
-                this.current.keyDetail.value.push(this.row.value)
-                break
-              case HASH.upName:
-                this.current.keyDetail.value.push(this.row.value)
-                break
-              case ZSET.upName:
-                this.current.keyDetail.value.push(this.row.value)
-                break
-              default:
-                break
-            }
-          }
           this.handleClose()
           this.$refs.row.resetFields()
           this.row = {}
