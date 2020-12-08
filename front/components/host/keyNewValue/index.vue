@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { LIST, HASH, SET, ZSET } from '../../../../lib/redis/singal'
+import { HASH, ZSET } from '../../../../lib/redis/singal'
 export default {
   name: 'KeyNewValue',
   props: {
