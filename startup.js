@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, globalShortcut } = require('electron')
 
 require('./lib/channel/event.js')
 require('./lib/channel/disk.js')
@@ -26,4 +26,11 @@ app.on('activate', () => {
   }
   BrowserWindow.re
 })
-app.whenReady().then(createWindow)
+
+app.whenReady().then(() => {
+  globalShortcut.register('Command+Q', () => {
+    if (process.platform === 'darwin') { // 手动处理mac的退出程序
+      app.quit()
+    }
+  })
+}).then(createWindow)

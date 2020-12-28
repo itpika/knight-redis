@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div class="menu" style="-webkit-app-region: drag" @mouseleave.stop="mouseleave" @mouseenter="mouseenter">
+    <div class="menu" @dblclick.stop="maxWindow" style="-webkit-app-region: drag" @mouseleave.stop="mouseleave" @mouseenter="mouseenter">
       <div class="left" v-if="os != 'macOS'">
         <div class="logo">
           <!-- <el-image

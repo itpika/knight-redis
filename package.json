@@ -43,7 +43,7 @@
     "mac": {
       "target": "dmg",
       "category": "public.app-category.developer-tools",
-      "icon": "dist/image/mac-icon.png"
+      "icon": "dist/image/icon.png"
     }
   },
   "dependencies": {
