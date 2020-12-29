@@ -1,5 +1,5 @@
 {
-  "name": "knight",
+  "name": "knight-redis",
   "version": "0.1.0",
   "private": true,
   "main": "startup.js",
@@ -17,7 +17,7 @@
   },
   "build": {
     "appId": "com.electron.knight",
-    "productName": "KnightRedis",
+    "productName": "Knight Redis",
     "copyright": "Copyright © 2020 itpika",
     "directories": {
       "buildResources": "dist",
