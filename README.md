@@ -30,9 +30,9 @@ npm run serve
 ```
 
 ### Preview
-![avatar](./public/image/overview/knight1.png)
+![avatar](./public/image/overview/1.png)
 
-![avatar](./public/image/overview/knight2.png)
+![avatar](./public/image/overview/2.png)
 
 ## LICENSE
 MIT
