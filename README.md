@@ -1,12 +1,11 @@
-<!-- ![avatar]() 	 -->
 <img src="./public/image/icon.png" width="80">
 <img src="./public/image/posters/posters2.png" width="250">
 
 <br/>
 
-<img src="./public/image/os/windows.png" width="100">
-<img src="./public/image/os/linux.png" width="100">
-<img src="./public/image/os/mac.png" width="100">
+![avatar](./public/image/os/windows.png)
+![avatar](./public/image/os/mac.png)
+![avatar](./public/image/os/linux.png)
 
 [![release](https://img.shields.io/github/v/release/itpika/knight)](https://github.com/itpika/knight/releases)
 [![license](https://img.shields.io/github/license/itpika/knight)](https://github.com/itpika/knight/blob/master/LICENSE)
@@ -33,9 +32,9 @@ npm run serve
 ```
 
 ### Preview
+![avatar](./public/image/overview/2.png)
 ![avatar](./public/image/overview/1.png)
 
-![avatar](./public/image/overview/2.png)
 
 ## LICENSE
 MIT
