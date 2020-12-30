@@ -1,5 +1,7 @@
-<img src="./public/image/icon.png" width="80">
-<img src="./public/image/posters/posters2.png" width="250">
+<!-- <img src="./public/image/icon.png" width="80"/> -->
+
+![avatar](./public/image/posters/posters2.png)
+<!-- <img src="./public/image/posters/posters2.png" width="250"> -->
 
 <br/>
 
