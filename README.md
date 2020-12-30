@@ -1,9 +1,12 @@
-![avatar](./public/image/posters/posters2.png) ![avatar](./public/image/icon.png)
+<!-- ![avatar]() 	 -->
+<img src="./public/image/icon.png" width="80">
+<img src="./public/image/posters/posters2.png" width="250">
 
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-![avatar](./public/image/os/windows.png)
-![avatar](./public/image/os/linux.png)
-![avatar](./public/image/os/mac.png)
+<br/>
+
+<img src="./public/image/os/windows.png" width="100">
+<img src="./public/image/os/linux.png" width="100">
+<img src="./public/image/os/mac.png" width="100">
 
 [![release](https://img.shields.io/github/v/release/itpika/knight)](https://github.com/itpika/knight/releases)
 [![license](https://img.shields.io/github/license/itpika/knight)](https://github.com/itpika/knight/blob/master/LICENSE)
