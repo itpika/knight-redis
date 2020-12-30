@@ -1,4 +1,4 @@
-![avatar](./public/image/posters/posters2.png)
+![avatar](./public/image/posters/posters2.png) ![avatar](./public/image/icon.png)
 
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
 ![avatar](./public/image/os/windows.png)
