@@ -3,14 +3,14 @@ export default {
   namespaced: true,
   state: {
     hostState: false, // host菜单栏的显示状态
-    hosts: [],
-    // hosts: [{
-    //   id: '1',
-    //   label: 'localhost',
-    //   address: '10.10.1.43',
-    //   port: 6380,
-    //   passwd: '123456'
-    // }],
+    // hosts: [],
+    hosts: [{
+      id: '1',
+      label: 'localhost',
+      address: '10.10.1.43',
+      port: 6380,
+      passwd: '123456'
+    }],
     openHost: [] // 打开的host连接
   },
   mutations: {
