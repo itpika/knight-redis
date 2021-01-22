@@ -12,7 +12,7 @@
 [![release](https://img.shields.io/github/v/release/itpika/knight)](https://github.com/itpika/knight/releases)
 [![license](https://img.shields.io/github/license/itpika/knight)](https://github.com/itpika/knight/blob/master/LICENSE)
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/knight-redis/community#)
+[![Gitter](https://badges.gitter.im/Join/Chat.svg)](https://gitter.im/knight-redis/community#)
 
 
 
