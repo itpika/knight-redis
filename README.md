@@ -12,6 +12,11 @@
 [![release](https://img.shields.io/github/v/release/itpika/knight)](https://github.com/itpika/knight/releases)
 [![license](https://img.shields.io/github/license/itpika/knight)](https://github.com/itpika/knight/blob/master/LICENSE)
 
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/knight-redis/community#)
+
+
+
+
 -----
 
 ```
@@ -20,7 +25,7 @@ Currently in the initial 1.0 version, can build binary executable program, the f
 ```
 ## Install
 ```
-npm install
+yarn
 ```
 
 ### Build an executable program
@@ -28,9 +33,14 @@ npm install
 -   mac: yarn dist-mac
 -   linux: yarn dist-linux
 
-### Compilation run
+### Compilation run（web）
 ```
 npm run serve
+```
+
+### Compilation run（application）
+```
+npm run start
 ```
 
 ### Preview
