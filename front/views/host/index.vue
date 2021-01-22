@@ -58,6 +58,27 @@
           <el-form-item label="Passwd" prop="passwd">
             <el-input v-model="host.passwd" clearable placeholder="password"></el-input>
           </el-form-item>
+          <el-form-item label="TLS" prop="tls">
+            <el-switch v-model="host.tls" active-color="#13ce66"></el-switch>
+          </el-form-item>
+          <el-form-item v-show="host.tls" label="Cert" prop="cert">
+            <div class="ssl-file">
+              <span>saasa</span>
+              <el-button type="success" size="medium" round @click="upFile('init_host_cert')"><i class="el-icon-upload"></i></el-button>
+            </div>
+          </el-form-item>
+          <el-form-item v-show="host.tls" label="Key" prop="key">
+            <div class="ssl-file">
+              <span>saasa</span>
+              <el-button type="success" size="medium" round @click="upFile('init_host_key')"><i class="el-icon-upload"></i></el-button>
+            </div>
+          </el-form-item>
+          <el-form-item v-show="host.tls" label="Cacert" prop="cacert">
+            <div class="ssl-file">
+              <span>saasa</span>
+              <el-button type="success" size="medium" round @click="upFile('init_host_cacert')"><i class="el-icon-upload"></i></el-button>
+            </div>
+          </el-form-item>
         </el-form>
       </div>
     </el-drawer>
@@ -66,6 +87,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import send from '@/front/lib/channel/send.js'
 export default {
   name: 'host',
   data () {
@@ -74,7 +96,8 @@ export default {
       saveType: 'info',
       fromOperation: 0,
       visible: false,
-      host: {},
+      host: {
+      },
       rules: {
         address: [
           { required: true, message: 'Please enter the address', trigger: 'blur' }
@@ -92,6 +115,11 @@ export default {
   components: {
   },
   methods: {
+    upFile (fileType) {
+      send.sendEvent('selectSystemFile', {
+        type: fileType
+      })
+    },
     handleClose (done) {
       this.$refs.host.resetFields()
       this.fromOperation = 0
@@ -271,6 +299,16 @@ export default {
     margin: 15px;
     background-color: #fff;
     padding: 15px;
+    .el-switch {
+      position: absolute;
+      left: 0;
+      transform: translateY(50%);
+    }
+    div.ssl-file {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 }
 </style>
