@@ -5,7 +5,6 @@ import host from './modules/host.js'
 import hostView from './modules/hostView.js'
 import newKey from './modules/newKey.js'
 import redis from './modules/redis.js'
-import saveKey from './modules/saveKey.js'
 import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT, FAIL, STRING } from '../../lib/redis/singal'
 
 Vue.use(Vuex)
@@ -24,7 +23,6 @@ const appStore = new Vuex.Store({
     host,
     hostView,
     redis,
-    saveKey,
     newKey
   }
 })

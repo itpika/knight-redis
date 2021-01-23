@@ -232,7 +232,7 @@ export default {
       let value
       switch (this.keyType) {
         case this.string:
-          this.$store.commit('saveKey/string', {
+          send.sendEvent('saveString', {
             time: this.current.time, index: this.current.selectDB,
             key: this.keyName, value: document.querySelector('#string-input').textContent
           })
@@ -240,7 +240,7 @@ export default {
         case this.hash:
           const hkey = document.querySelector('#hash-key-input').textContent
           const hvalue = document.querySelector('#hash-value-input').textContent.trim()
-          this.$store.commit('saveKey/hash', {
+          send.sendEvent('saveHash', {
             time: this.current.time, index: this.current.selectDB, type: 1, // type=1, hset是修改原来的key
             realTime: this.current.realTime, key: this.keyName, hkey, hvalue
           })
@@ -248,7 +248,7 @@ export default {
         case this.list:
           value = document.querySelector('#list-input').textContent.trim()
           const listIndex = document.querySelector('#list-index-input').textContent.trim()
-          this.$store.commit('saveKey/list', {
+          send.sendEvent('saveList', {
             time: this.current.time, index: this.current.selectDB,
             realTime: this.current.realTime, key: this.keyName, value, listIndex: parseInt(listIndex)
           })
@@ -256,7 +256,7 @@ export default {
         case this.set:
           value = document.querySelector('#set-input').textContent.trim()
           const oldValue = document.querySelector('#set-old-input').textContent
-          this.$store.commit('saveKey/set', {
+          send.sendEvent('saveSet', {
             time: this.current.time, index: this.current.selectDB, 
             realTime: this.current.realTime, key: this.keyName, value, oldValue
           })
@@ -264,7 +264,7 @@ export default {
         case this.zset:
           const score = document.querySelector('#zset-score-input').textContent.trim()
           value = document.querySelector('#zset-value-input').textContent.trim()
-          this.$store.commit('saveKey/zset', {
+          send.sendEvent('saveZSet', {
             time: this.current.time, index: this.current.selectDB, 
             realTime: this.current.realTime, key: this.keyName, value, score, 
             oldValue: document.querySelector('#zset-old-input').textContent.trim()

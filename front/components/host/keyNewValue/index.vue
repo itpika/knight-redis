@@ -37,6 +37,7 @@
 
 <script>
 import { HASH, ZSET } from '../../../../lib/redis/singal'
+import send from '@/front/lib/channel/send.js'
 export default {
   name: 'KeyNewValue',
   props: {
@@ -104,7 +105,7 @@ export default {
       }
       this.$refs.row.validate((valid) => {
         if (valid) {
-          this.$store.commit('saveKey/addRow', {
+          send.sendEvent('addRow', {
             time: this.current.time,
             key: this.current.keyDetail.keyName,
             index: this.current.selectDB,
