@@ -339,6 +339,7 @@ if (window.ipcRenderer) {
       }
     }
   })
+  
   window.ipcRenderer.on('saveZSet', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
@@ -375,5 +376,10 @@ if (window.ipcRenderer) {
         break
       }
     }
+  })
+
+  window.ipcRenderer.on('selectSystemFile', (event, data) => {
+    host.state.hostForm[data.type] = data.val
+    host.state.hostFormRenderKey[data.type] += 1
   })
 }

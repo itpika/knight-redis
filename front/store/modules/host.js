@@ -11,6 +11,15 @@ export default {
       port: 6380,
       passwd: '123456'
     }],
+    addHost: {
+      fontColor: 'fontColor2'
+    },
+    hostForm: {},
+    hostFormRenderKey: {
+      clientCert: 0,
+      clientKey: 0,
+      clientCacert: 0
+    },
     openHost: [] // 打开的host连接
   },
   mutations: {
@@ -36,13 +45,13 @@ export default {
     },
     addHost (state, host) {
       state.hosts.push(host)
-      send.addHost(host) // 持久化到磁盘
+      send.sendEvent('addHost', host) // 持久化到磁盘
     },
     editHost (state, host) {
       for (let i = 0; i < state.hosts.length; i++) {
         if (state.hosts[i].id === host.id) {
           state.hosts[i] = host
-          send.addHost(host) // 持久化到磁盘
+          send.sendEvent('addHost', host) // 持久化到磁盘
           break
         }
       }
@@ -55,7 +64,7 @@ export default {
         }
       }
       state.hosts = arr
-      send.delete(id) // 持久化到磁盘
+      send.sendEvent('deleteHost', id) // 持久化到磁盘
     },
     closeHost (state, time) {
       const arr = []

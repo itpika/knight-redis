@@ -2,11 +2,11 @@
   <div class="host">
     <div class="header">
       <el-button type="primary" icon="el-icon-plus"
-      @click.stop="drawer = true" size="mini" round>NEW HOST</el-button>
+      @click.stop="addHost" size="mini" round>NEW HOST</el-button>
       <el-button type="primary" icon="el-icon-plus" size="mini" round>NEW GROUP</el-button>
     </div>
     <div class="body">
-      <div class="line" v-for="(item, index) of hosts"  :key="index">
+      <div class="line" v-for="(item, index) of host.hosts"  :key="index">
         <div class="lineLeft">
           <div class="lineLeftIcon bgdColor"><i class="el-icon-s-platform"></i></div>
           <span>{{item.label}}</span>
@@ -37,7 +37,7 @@
           <div class="closeLeft radio-kgt fontColor">
             <i class="el-icon-back" @click.stop="leftBack"></i>
           </div>
-          <div class="addTitle">addHost</div>
+          <div class="addTitle">{{hostDrawerTitle}}</div>
         </div>
         <div>
           <el-button @click.stop="submitForm" type="primary" size="mini" round>SAVE</el-button>
@@ -45,38 +45,50 @@
       </div>
       <!-- 右侧抽屉主体 -->
       <div class="addHostBody radio-kgt">
-        <el-form ref="host" label-position="left" label-width="80px" :model="host" :rules="rules">
+        <el-form ref="hostForm" label-position="left" label-width="80px" :model="hostForm" :rules="rules">
           <el-form-item label="Lable" prop="label">
-            <el-input v-model="host.label" clearable placeholder="label"></el-input>
+            <el-input v-model="hostForm.label" clearable placeholder="label"></el-input>
           </el-form-item>
           <el-form-item label="Address" prop="address" clearable>
-            <el-input v-model="host.address" clearable placeholder="host address"></el-input>
+            <el-input v-model="hostForm.address" clearable placeholder="host address"></el-input>
           </el-form-item>
           <el-form-item label="Port" prop="port">
-            <el-input v-model.number="host.port" clearable placeholder="port"></el-input>
+            <el-input v-model.number="hostForm.port" clearable placeholder="port"></el-input>
           </el-form-item>
           <el-form-item label="Passwd" prop="passwd">
-            <el-input v-model="host.passwd" clearable placeholder="password"></el-input>
+            <el-input v-model="hostForm.passwd" clearable placeholder="password"></el-input>
           </el-form-item>
           <el-form-item label="TLS" prop="tls">
-            <el-switch v-model="host.tls" active-color="#13ce66"></el-switch>
+            <el-switch v-model="hostForm.tls" active-color="#13ce66" @change="tlsChange"></el-switch>
           </el-form-item>
-          <el-form-item v-show="host.tls" label="Cert" prop="cert">
+          <el-form-item v-show="hostForm.tls" label="Cert" prop="cert">
             <div class="ssl-file">
-              <span>saasa</span>
-              <el-button type="success" size="medium" round @click="upFile('init_host_cert')"><i class="el-icon-upload"></i></el-button>
+                <el-tooltip class="item" effect="dark" :content="hostForm.clientCert || 'clientCert'" :key="host.hostFormRenderKey.clientCert" placement="top-start">
+                  <span :class="host.addHost.fontColor">
+                    {{hostForm.clientCert || 'clientCert'}}
+                  </span>
+                </el-tooltip>
+              <el-button type="success" size="medium" round @click="upFile('clientCert')"><i class="el-icon-upload"></i></el-button>
             </div>
           </el-form-item>
-          <el-form-item v-show="host.tls" label="Key" prop="key">
+          <el-form-item v-show="hostForm.tls" label="Key" prop="key">
             <div class="ssl-file">
-              <span>saasa</span>
-              <el-button type="success" size="medium" round @click="upFile('init_host_key')"><i class="el-icon-upload"></i></el-button>
+              <el-tooltip class="item" effect="dark" :content="hostForm.clientKey || 'clientKey'" :key="host.hostFormRenderKey.clientKey" placement="top-start">
+                <span :class="host.addHost.fontColor">
+                  {{hostForm.clientKey || 'clientKey'}}
+                </span>
+              </el-tooltip>
+              <el-button type="success" size="medium" round @click="upFile('clientKey')"><i class="el-icon-upload"></i></el-button>
             </div>
           </el-form-item>
-          <el-form-item v-show="host.tls" label="Cacert" prop="cacert">
+          <el-form-item v-show="hostForm.tls" label="Cacert" prop="cacert">
             <div class="ssl-file">
-              <span>saasa</span>
-              <el-button type="success" size="medium" round @click="upFile('init_host_cacert')"><i class="el-icon-upload"></i></el-button>
+              <el-tooltip class="item" effect="dark" :content="hostForm.clientCacert || 'clientCacert'" :key="host.hostFormRenderKey.clientCacert" placement="top-start">
+                <span :class="host.addHost.fontColor">
+                  {{hostForm.clientCacert || 'clientCacert'}}
+                </span>
+              </el-tooltip>
+              <el-button type="success" size="medium" round @click="upFile('clientCacert')"><i class="el-icon-upload"></i></el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -86,7 +98,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import send from '@/front/lib/channel/send.js'
 export default {
   name: 'host',
@@ -96,8 +107,7 @@ export default {
       saveType: 'info',
       fromOperation: 0,
       visible: false,
-      host: {
-      },
+      hostDrawerTitle: 'addHost',
       rules: {
         address: [
           { required: true, message: 'Please enter the address', trigger: 'blur' }
@@ -109,40 +119,64 @@ export default {
       }
     }
   },
-  computed: mapState({
-    hosts: state => state.host.hosts
-  }),
-  components: {
+  computed: {
+    host () {
+      return this.$store.state.host
+    },
+    clientKey () {
+      return this.$store.state.host.hostForm.clientKey
+    },
+    hostForm: {
+      get() {
+        return this.$store.state.host.hostForm
+      },
+      set(val) {
+        console.log(val)
+        this.$store.state.host.hostForm = val
+      }
+    }
   },
   methods: {
+    tlsChange (val) {
+      if (!val) {
+        this.hostForm.clientCert = ''
+        this.hostForm.clientKey = ''
+        this.hostForm.clientCacert = ''
+      }
+    },
     upFile (fileType) {
       send.sendEvent('selectSystemFile', {
         type: fileType
       })
     },
     handleClose (done) {
-      this.$refs.host.resetFields()
+      this.$refs.hostForm.resetFields()
       this.fromOperation = 0
-      this.host = {}
+      this.hostForm = {}
       done()
     },
     leftBack () {
-      this.$refs.host.resetFields()
+      this.$refs.hostForm.resetFields()
       this.fromOperation = 0
-      this.host = {}
+      this.hostForm = {}
       this.drawer = false
     },
     submitForm() {
-      this.$refs.host.validate((valid) => {
+      this.$refs.hostForm.validate((valid) => {
         if (valid) {
+          if (this.hostForm.tls) {
+            if (!this.hostForm.clientCacert && !this.hostForm.clientCert && !this.hostForm.clientKey) {
+              this.hostForm.tls = false
+            }
+          }
           if (this.fromOperation === 0) { // add
-            this.$store.commit('host/addHost', Object.assign({ id: Date.now() + '' }, this.$data.host))
+            this.$store.commit('host/addHost', Object.assign({ id: Date.now() + '' }, this.hostForm))
           } else { // edit
-            this.$store.commit('host/editHost', Object.assign({ id: Date.now() + '' }, Object.assign({}, this.host)))
+            this.$store.commit('host/editHost', Object.assign({ id: Date.now() + '' }, Object.assign({}, this.hostForm)))
           }
           this.$data.drawer = false
-          this.$refs.host.resetFields()
-          this.host = {}
+          this.$refs.hostForm.resetFields()
+          this.hostForm = {}
         } else {
           return false
         }
@@ -152,15 +186,20 @@ export default {
     editHost(id) {
       this.fromOperation = 1
       this.drawer = true
-      for (let i = 0; i < this.hosts.length; i++) {
-        if (this.hosts[i].id === id) {
-          this.host = Object.assign({}, this.hosts[i])
+      this.hostDrawerTitle = 'editHost'
+      for (let i = 0; i < this.host.hosts.length; i++) {
+        if (this.host.hosts[i].id === id) {
+          this.hostForm = Object.assign({}, this.host.hosts[i])
           break
         }
       }
     },
     deleteHost(id) {
       this.$store.commit('host/deleteHost', id)
+    },
+    addHost () {
+      this.drawer = true
+      this.hostDrawerTitle = 'addHost'
     },
     // 连接host,打开一个页面
     connectionHost(id) {
@@ -172,7 +211,7 @@ export default {
         router: 'hostView'
       }
       const conf = {}
-      for (const h of this.hosts) {
+      for (const h of this.host.hosts) {
         if (h.id === id) {
           host.id = h.id
           host.label = h.label
@@ -308,6 +347,13 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      span {
+        text-align: left;
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
   }
 }
