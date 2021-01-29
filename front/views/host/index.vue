@@ -61,11 +61,23 @@
           <el-form-item label="TLS" prop="tls">
             <el-switch v-model="hostForm.tls" active-color="#13ce66" @change="tlsChange"></el-switch>
           </el-form-item>
-          <el-form-item v-show="hostForm.tls" label="Cert" prop="cert">
+          <el-form-item v-for="(item, i) in formTlsFile" :key="i" v-show="hostForm.tls" :label="item.name" :prop="item.name">
+            <div class="ssl-file">
+                <el-tooltip class="item" effect="dark" :content="hostForm[item.name] || item.name" :key="host.hostFormRenderKey[item.name]" placement="top-start">
+                  <span :class="host.addHost.fontColor">
+                    <span>{{hostForm[item.name] || item.name}}</span>
+                    <i @click="resetSelectFile(item.name)" v-show="hostForm[item.name]" class="el-icon-close"></i>
+                  </span>
+                </el-tooltip>
+              <el-button type="success" size="medium" round @click="upFile(item.name)"><i class="el-icon-upload"></i></el-button>
+            </div>
+          </el-form-item>
+          <!-- <el-form-item v-show="hostForm.tls" label="Cert" prop="cert">
             <div class="ssl-file">
                 <el-tooltip class="item" effect="dark" :content="hostForm.clientCert || 'clientCert'" :key="host.hostFormRenderKey.clientCert" placement="top-start">
                   <span :class="host.addHost.fontColor">
-                    {{hostForm.clientCert || 'clientCert'}}
+                    <span>{{hostForm.clientCert || 'clientCert'}}</span>
+                    <i v-show="hostForm.clientCert" class="el-icon-close"></i>
                   </span>
                 </el-tooltip>
               <el-button type="success" size="medium" round @click="upFile('clientCert')"><i class="el-icon-upload"></i></el-button>
@@ -75,7 +87,8 @@
             <div class="ssl-file">
               <el-tooltip class="item" effect="dark" :content="hostForm.clientKey || 'clientKey'" :key="host.hostFormRenderKey.clientKey" placement="top-start">
                 <span :class="host.addHost.fontColor">
-                  {{hostForm.clientKey || 'clientKey'}}
+                  <span>{{hostForm.clientKey || 'clientKey'}}</span>
+                  <i v-show="hostForm.clientKey" class="el-icon-close"></i>
                 </span>
               </el-tooltip>
               <el-button type="success" size="medium" round @click="upFile('clientKey')"><i class="el-icon-upload"></i></el-button>
@@ -85,12 +98,13 @@
             <div class="ssl-file">
               <el-tooltip class="item" effect="dark" :content="hostForm.clientCacert || 'clientCacert'" :key="host.hostFormRenderKey.clientCacert" placement="top-start">
                 <span :class="host.addHost.fontColor">
-                  {{hostForm.clientCacert || 'clientCacert'}}
+                  <span>{{hostForm.clientCacert || 'clientCacert'}}</span>
+                  <i v-show="hostForm.clientCacert" class="el-icon-close"></i>
                 </span>
               </el-tooltip>
               <el-button type="success" size="medium" round @click="upFile('clientCacert')"><i class="el-icon-upload"></i></el-button>
             </div>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
       </div>
     </el-drawer>
@@ -116,7 +130,12 @@ export default {
           { required: true, message: 'Please enter the port' },
           { type: 'number', message: 'The port must be number' }
         ]
-      }
+      },
+      formTlsFile: [
+        { name: 'clientCert' },
+        { name: 'clientKey' },
+        { name: 'clientCacert' }
+      ]
     }
   },
   computed: {
@@ -137,6 +156,10 @@ export default {
     }
   },
   methods: {
+    // 移除选择的文件
+    resetSelectFile (name) {
+      this.hostForm[name] = ''
+    },
     tlsChange (val) {
       if (!val) {
         this.hostForm.clientCert = ''
@@ -144,6 +167,7 @@ export default {
         this.hostForm.clientCacert = ''
       }
     },
+    // 选择本地文件
     upFile (fileType) {
       send.sendEvent('selectSystemFile', {
         type: fileType
@@ -348,11 +372,19 @@ export default {
       justify-content: space-between;
       align-items: center;
       span {
-        text-align: left;
         width: 100%;
+        padding-right: 10px;
+        align-items: center;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
+        display: flex;
+        justify-content: space-between;
+        i {
+          &:hover {
+            color: red;
+          }
+        }
       }
     }
   }
