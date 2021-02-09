@@ -12,12 +12,6 @@
  * 发送消息到主进程
  */
 export default {
-  // 初始化连接
-  initConnect(conf) {
-    if (window.ipcRenderer) {
-      window.ipcRenderer.send('initConnect', conf)
-    }
-  },
   closeConnect(time) {
     if (window.ipcRenderer) {
       window.ipcRenderer.send('closeConnect', time)

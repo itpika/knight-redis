@@ -148,7 +148,6 @@ export default {
     // term.onSelectionChange(() => {
     //   if (term.hasSelection()) {
     //     this.copy = term.getSelection()
-    //     // console.log(this.copy)
     //   }
     // })
     term.onKey(key => {
@@ -207,15 +206,11 @@ export default {
         // 方向盘下键
         case 40:
           if (this.histIndex < this.histCommandList.length - 1) this.histIndex++
-          console.log('------')
-          console.log(this.histCommandList)
-          console.log(this.histIndex)
           if (this.histCommandList[this.histIndex]) {
             // 将光标重置到末端
             term._core.buffer.x = fixation  
             let b1 = '', b2 = '', b3 = ''
             // 构造退格(模拟替换效果) \b \b标识退一格; \b\b  \b\b表示退两格...
-            console.log('==', this.histCommandList[this.histIndex].length)
             for (let i = 0; i < this.input.length; i++) {
               b1 = b1 + '\b'
               b2 = b2 + ' '
@@ -267,7 +262,6 @@ export default {
       }
       // ctrl+c
       if (ev.keyCode === 67 && (ev.ctrlKey || ev.metaKey) && ev.type === 'keydown') {
-        console.log('---')
         if (term.hasSelection()) {
           console.log('---', term.getSelection())
           // 设置系统剪切板内容

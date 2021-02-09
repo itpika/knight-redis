@@ -5,7 +5,7 @@ import host from './modules/host.js'
 import hostView from './modules/hostView.js'
 import newKey from './modules/newKey.js'
 import redis from './modules/redis.js'
-import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT, FAIL, STRING } from '../../lib/redis/singal'
+import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT, FAIL, STRING, PARAM_INVALID } from '../../lib/redis/singal'
 
 Vue.use(Vuex)
 
@@ -51,13 +51,15 @@ if (window.ipcRenderer) {
           case FAIL:
             hostView.state.all[i].dialogState.promptTest = 'Connection fail'
             break
+          case PARAM_INVALID:
+            hostView.state.all[i].dialogState.promptTest = data.msg
+            break
           default:
             break
         }
         break
       }
     }
-    console.log(hostView.state.current, data)
   })
   /**
    * 获取所有key
@@ -208,7 +210,6 @@ if (window.ipcRenderer) {
   })
   // 接收本地的host数据
   window.ipcRenderer.on('localHostData', (event, data) => {
-    console.log(event, data)
     if (data && data instanceof Array && data.length > 0) {
       host.state.hosts = data
     }

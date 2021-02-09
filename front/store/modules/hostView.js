@@ -145,12 +145,12 @@ export default {
       state.all.push(host)
       state.current = state.all[state.all.length - 1]
       // 通知主进程建立连接
-      send.initConnect(Object.assign({ time: data.time }, data.conf))
+      send.sendEvent('initConnect', Object.assign({ time: data.time }, data.conf))
     },
     // 重连
     reconnect(state) {
       // 通知主进程建立连接
-      send.initConnect(Object.assign({ time: state.current.time }, state.current.conf))
+      send.sendEvent('initConnect', Object.assign({ time: state.current.time }, state.current.conf))
     },
     closeHost(state, time) {
       const arr = []

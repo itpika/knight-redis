@@ -23,6 +23,7 @@ module.exports = {
     'vue/no-unused-components': 'warn',
     'object-curly-spacing': 'warn',
     'object-property-newline': 'off',
-    'indent': 'off'
+    'indent': 'off',
+    'semi': 'off'
   }
 }
