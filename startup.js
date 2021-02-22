@@ -17,6 +17,7 @@ function createWindow () {
   })
   // shell.openPath('/var/code')
   // win.webContents.openDevTools()
+  
 }
 app.on('activate', () => {
   // 在macOS上，当单击dock图标并且没有其他窗口打开时，
@@ -24,13 +25,24 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
   }
-  BrowserWindow.re
 })
-
 app.whenReady().then(() => {
   globalShortcut.register('Command+Q', () => {
     if (process.platform === 'darwin') { // 手动处理mac的退出程序
       app.quit()
     }
-  })
+  });
+  // 手动处理macOS复制粘贴无效
+  // if (process.platform === 'darwin') {
+  //   const win = require('./lib/windows/index.js');
+  //   globalShortcut.register('Command+C', () => {
+  //     if (win.isFocused()) win.webContents.copy();
+  //   });
+  //   globalShortcut.register('Command+V', () => {
+  //     if (win.isFocused()) win.webContents.paste();
+  //   });
+  //   globalShortcut.register('Command+A', () => {
+  //     if (win.isFocused()) win.webContents.selectAll();
+  //   });
+  // }
 }).then(createWindow)
