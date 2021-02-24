@@ -32,6 +32,8 @@ app.whenReady().then(() => {
       app.quit()
     }
   });
+  require('./lib/windows/index.js').setTouchBar(require('./lib/windows/touchbar.js'));
+  
   // 手动处理macOS复制粘贴无效
   // if (process.platform === 'darwin') {
   //   const win = require('./lib/windows/index.js');

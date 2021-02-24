@@ -2,7 +2,8 @@
   <div id="hostView" v-loading.lock="current.connectState === -1" element-loading-background="#4f6d8c" class="hostView bgkColor">
     <div :class="['content', {'hiddenClass': !(current.connectState === 0)}]">
       <div class="header">
-        <div class="terminalBtn"><el-button type="info" size="small" round @click.stop="current.shellState.open = !current.shellState.open">Terminal</el-button></div>
+        <div class="terminalBtn"><el-button type="info" size="small" round @click.stop="current.shellState.open = !current.shellState.open"><i class="el-icon-sort rotating90"/>Terminal</el-button></div>
+        <div class="terminalBtn"><el-button type="info" size="small" round @click.stop="serverInfoClick"><i class="el-icon-monitor"/>Server</el-button></div>
       </div>
       <div class="body">
         <div v-loading.lock="current.dbLoading"
@@ -66,11 +67,12 @@
             </ul>
           </div>
         </div>
-        <transition name="el-fade-in-linear">
-          <div class="transition-box key-detail-box bgdColor-radio-kgt" v-show="!keyDetailShow">
+        <transition-group tag="div" name="ketdetailbox">
+          <div key="1" class="transition-box key-detail-box bgdColor-radio-kgt" v-if="!keyDetailShow">
             <KeyDetail @deleteKey="deleteKey" />
           </div>
-        </transition>
+          <ServerInfo key="2" v-if="current.serverInfoShow"/>
+        </transition-group>
       </div>
     </div>
     <!-- 遮罩层 -->
@@ -100,6 +102,7 @@ import kdialog from '@/front/components/common/k-dialog.vue'
 import NewKey from '@/front/components/host/newKey.vue'
 import KeyDetail from '@/front/components/host/keyDetail.vue'
 import Terminal from '@/front/components/host/terminal.vue'
+import ServerInfo from '../../components/host/ServerInfo.vue'
 export default {
   name: 'hostView',
   computed: {
@@ -163,9 +166,14 @@ export default {
     kdialog,
     NewKey,
     Terminal,
-    KeyDetail
+    KeyDetail,
+    ServerInfo
   },
   methods: {
+    serverInfoClick() {
+      this.current.keyDetailShow = false;
+      this.current.serverInfoShow = !this.current.serverInfoShow;
+    },
     keyDetail(k) { // 点击查看key详情
       this.current.keyDetail.ketData = { // 重置key内容的数据暂存
         string: null,
@@ -182,6 +190,7 @@ export default {
       }
       this.current.keyDetail.saveDrop = true // 重置save按钮的禁止状态
       this.current.keyDetailShow = true
+      this.current.serverInfoShow = false
       this.current.keyDetail.keyName = k
       this.current.keyDetail.ttlShow = true
       this.$store.commit('redis/keyDetail', { time: this.current.time, key: k, index: this.current.selectDB, liveUpdate: this.current.realTime })
@@ -361,6 +370,10 @@ export default {
       padding-bottom: 10px;
       box-sizing: border-box;
       .terminalBtn {
+        margin-right: 5px;
+        i {
+          margin-right: 5px;
+        }
         /deep/ .el-button--info {
           border: 0;
           background-color: #152435;
@@ -378,6 +391,9 @@ export default {
       box-sizing: border-box;
       display: flex;
       justify-content: space-between;
+      > div:last-child {
+        width: 63%;
+      }
       .dbBox {
         padding: 10px;
         width: 35%;
@@ -394,6 +410,7 @@ export default {
             margin-left: 10px;
             padding: 0 10px;
             color: #fff;
+            width: 100%;
             box-sizing: border-box;
             flex: 1;
             border-radius: 5px;
@@ -493,6 +510,7 @@ export default {
           overflow: auto;
           flex: 1;
           position: relative;
+          width: 100%;
           > ul {
             position: absolute;
             height: 100%;
@@ -546,7 +564,9 @@ export default {
       }
       .key-detail-box {
         padding: 10px;
-        width: 63%;
+        // width: 63%;
+        widows: 100%;
+        height: 100%;
         display: flex;
         box-sizing: border-box;
       }
@@ -581,6 +601,12 @@ export default {
   }
   .terminal-enter, .terminal-leave-to {
     transform: translateY(100%);
+  }
+  .ketdetailbox-enter-active {
+    transition: all .3s ease;
+  }
+  .ketdetailbox-enter, .ketdetailbox-leave-to {
+    opacity: 0;
   }
 }
 </style>

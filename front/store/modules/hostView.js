@@ -28,6 +28,7 @@ export default {
       searchValue: '', // 过滤key值
       searchDate: [], // 过滤key后的结果key
       keyDetailShow: false, // key详情窗口是否展示
+      serverInfoShow: false, // server详情窗口是否展示
       keyExists: 0, // key是否存在
       keyDetail: {
         keyName: '', // key name
@@ -98,6 +99,7 @@ export default {
         searchValue: '',
         searchDate: [], // 过滤key后的结果key
         keyDetailShow: false,
+        serverInfoShow: false, // server详情窗口是否展示
         keyExists: 0,
         keyDetail: {
           keyName: '',
