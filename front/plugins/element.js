@@ -23,7 +23,9 @@ import {
   Image,
   Notification,
   Row,
-  Col
+  Col,
+  Tabs,
+  TabPane
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -32,6 +34,8 @@ Vue.use(Image)
 Vue.use(Button)
 Vue.use(Row)
 Vue.use(Col)
+Vue.use(Tabs)
+Vue.use(TabPane)
 Vue.use(Switch)
 Vue.use(Loading)
 Vue.use(Option)
