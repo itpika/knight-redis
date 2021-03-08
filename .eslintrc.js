@@ -24,6 +24,7 @@ module.exports = {
     'object-curly-spacing': 'warn',
     'object-property-newline': 'off',
     'indent': 'off',
-    'semi': 'off'
+    'semi': 'off',
+    'quote-props': 'off'
   }
 }

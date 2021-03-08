@@ -1,4 +1,3 @@
-import send from '../../lib/channel/send.js'
 export default {
   namespaced: true,
   state: {
@@ -41,12 +40,6 @@ export default {
     resetMenu(state) {
       state.currentMenu = ''
       state.clickMenu = false
-    },
-    openDevelopTool() { // 打开开发者工具
-      send.openDevelopTool()
-    },
-    openBrowserUri(state, uri) { // 打开浏览器访问一个地址
-      send.openBrowserUri(uri)
     }
   },
   actions: {

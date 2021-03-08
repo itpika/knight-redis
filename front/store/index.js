@@ -378,7 +378,15 @@ if (window.ipcRenderer) {
   })
 
   window.ipcRenderer.on('selectSystemFile', (event, data) => {
-    host.state.hostForm[data.type] = data.val
-    host.state.hostFormRenderKey[data.type] += 1
+    host.state.hostForm[data.type] = data.val;
+    host.state.hostFormRenderKey[data.type] += 1;
+  })
+  window.ipcRenderer.on('REDIS_VERSION', (event, data) => {
+    for (let i = 0; i < hostView.state.all.length; i++) {
+      if (hostView.state.all[i].time === data.time) {
+        hostView.state.all[i].serverInfo = data.data;
+        hostView.state.all[i].serverInfoKey++;
+      }
+    }
   })
 }

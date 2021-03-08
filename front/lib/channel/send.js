@@ -22,11 +22,6 @@ export default {
       window.ipcRenderer.send('getAllKey', data)
     }
   },
-  removeKey(data) {
-    if (window.ipcRenderer) {
-      window.ipcRenderer.send('removeKey', data)
-    }
-  },
   setKey(data) {
     if (window.ipcRenderer) {
       window.ipcRenderer.send('setKey', data)
@@ -59,12 +54,6 @@ export default {
   },
   windowsOpertion(event) {
     if (window.ipcRenderer) window.ipcRenderer.send(event)
-  },
-  openDevelopTool() {
-    if (window.ipcRenderer) window.ipcRenderer.send('openDevelopTool')
-  },
-  openBrowserUri(uri) {
-    if (window.ipcRenderer) window.ipcRenderer.send('openBrowserUri', uri)
   },
   sendEvent(event, data) {
     if (window.ipcRenderer) window.ipcRenderer.send(event, data)

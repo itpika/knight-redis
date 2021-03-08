@@ -40,8 +40,8 @@ export default {
         { 
           name: 'view',
           child: [
-            { name: 'open developer tools', icon: 'tool.png', click: () => this.$store.commit('app/openDevelopTool') },
-            { name: 'github', icon: 'github.png', click: () => this.$store.commit('app/openBrowserUri', 'https://github.com/itpika/knight') }
+            { name: 'open developer tools', icon: 'tool.png', click: () => send.sendEvent('openDevelopTool') },
+            { name: 'github', icon: 'github.png', click: () => send.sendEvent('openBrowserUri', 'https://github.com/itpika/knight') }
           ]
         }
       ]

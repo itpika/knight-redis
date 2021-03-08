@@ -3,7 +3,7 @@
 <template>
   <div class="Aside">
     <SelectBox :box="host" @active="active(0)"></SelectBox>
-    <SelectBox v-for="(item, i)  of hosts" v-bind:key="i" :box="item" @active="active" @removeHost="removeHost"></SelectBox>
+    <SelectBox v-for="(item, i)  of hosts" :key="i" :box="item" @active="active" @removeHost="removeHost"></SelectBox>
   </div>
 </template>
 

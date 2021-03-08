@@ -71,7 +71,9 @@
           <div key="1" class="transition-box key-detail-box bgdColor-radio-kgt" v-if="!keyDetailShow">
             <KeyDetail @deleteKey="deleteKey" />
           </div>
-          <ServerInfo key="2" v-if="current.serverInfoShow"/>
+          <div class="key-detail-box radio-kgt bgdColor" key="2" v-if="current.serverInfoShow">
+            <ServerInfo/>
+          </div>
         </transition-group>
       </div>
     </div>
@@ -100,6 +102,7 @@
 <script>
 import kdialog from '@/front/components/common/k-dialog.vue'
 import NewKey from '@/front/components/host/newKey.vue'
+import send from '@/front/lib/channel/send.js'
 import KeyDetail from '@/front/components/host/keyDetail.vue'
 import Terminal from '@/front/components/host/terminal.vue'
 import ServerInfo from '../../components/host/ServerInfo.vue'
@@ -273,7 +276,7 @@ export default {
       this.$store.commit('redis/getAllKey', { index: this.current.selectDB, time: this.current.time })
     },
     removeKey: function () { // 删除key
-      this.$store.commit('redis/removeKey', {
+      send.sendEvent('removeKey', {
         time: this.current.time,
         index: this.current.selectDB,
         key: this.toDeleteKey,
