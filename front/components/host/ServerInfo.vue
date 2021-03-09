@@ -1,16 +1,18 @@
 <template>
   <div class="pading-cu bgkColor radio-kgt">
     <el-tabs v-model="activeName" @tab-click="handleClick" :stretch="true">
-      <el-tab-pane label="Server" name="server">
-        <div class="tab-server">
-          <LiTable customClass="li-table" :key="current.serverInfoKey" :data="current.serverInfo ? current.serverInfo.s : {}"/>
-        </div>
+      <el-tab-pane label="Server" name="server" class="el-tab-pan-cls">
+        <LiTable customClass="li-table" :key="current.serverInfoKey" :data="current.serverInfo ? current.serverInfo.s : { 'User suas asa': '1\r\n999922222222299999922222', name: '111', age: 2222222, age15: 2222222, age14: 2222222, age13: 2222222, age12: 2222222, age11: 2222222, age10: 2222222, age9: 2222222, age8: 2222222, age7: 2222222, age6: 2222222, age5: 2222222, age4: 2222222, age3: 2222222, age2: 2222222}"/>
       </el-tab-pane>
       <el-tab-pane label="Clients" name="second">
           <LiTable customClass="li-table" :key="current.serverInfoKey" :data="current.serverInfo ? current.serverInfo.c : {}"/>
       </el-tab-pane>
-      <el-tab-pane label="Memory" name="third">Memory</el-tab-pane>
-      <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+      <el-tab-pane label="Memory" name="third">
+        <LiTable customClass="li-table" :key="current.serverInfoKey" :data="current.serverInfo ? current.serverInfo.m : {}"/>
+        </el-tab-pane>
+      <el-tab-pane label="DB" name="four">
+        <LiTable customClass="li-table" :key="current.serverInfoKey" :data="current.serverInfo ? current.serverInfo.o : {}"/>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -56,6 +58,9 @@ export default {
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
+    .el-tab-pan-cls {
+      // position: relative;
+    }
     > div {
       height: 100%;
       border-radius: 5px;
@@ -70,13 +75,6 @@ export default {
       }
       /deep/ .el-tabs__active-bar {
         background-color: #00de7e;
-      }
-      .tab-server {
-        display: flex;
-        justify-content: space-between;
-        .li-table {
-          width: 50%
-        }
       }
     }
   }
