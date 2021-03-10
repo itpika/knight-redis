@@ -3,7 +3,7 @@
     <div class="item-box radio-kgt bgdColor" v-for="(o, i) of data" :key="i">
       <!-- <i class="el-icon-info"></i> -->
       <span class="left">{{i}}</span>
-      <span class="right" v-html="o"></span>
+      <span class="right brand-color" v-html="o"></span>
     </div>
   </div>
 </template>
@@ -32,11 +32,12 @@ export default {
   margin: 0;
   display: flex;
   flex-flow: row wrap;
+  // flex-direction: column;
   width: 100%;
   justify-content: space-between;
-  overflow: auto;
-  position: relative;
-  // top: 0;
+  position: absolute;
+  height: 100%;
+  overflow-y: scroll;
   .item-box {
     i {
       margin-right: 5px;
@@ -48,9 +49,6 @@ export default {
     display: flex;
     align-items: center;
     padding: 0 10px;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
-    // white-space: nowrap;
     .left {
       flex: 1;
       text-align: left;
