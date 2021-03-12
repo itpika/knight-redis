@@ -196,7 +196,7 @@ export default {
       this.current.serverInfoShow = false
       this.current.keyDetail.keyName = k
       this.current.keyDetail.ttlShow = true
-      this.$store.commit('redis/keyDetail', { time: this.current.time, key: k, index: this.current.selectDB, liveUpdate: this.current.realTime })
+      send.sendEvent('keyDetail', { time: this.current.time, key: k, index: this.current.selectDB, liveUpdate: this.current.realTime })
       // 重置重命名key相关的状态
       this.current.keyDetail.renameStatus = 0
       this.current.keyDetail.rename = false
@@ -273,31 +273,17 @@ export default {
     refreshDB: function () {
       if (this.current.selectDB === null) return 0
       this.current.dbLoading = true
-      this.$store.commit('redis/getAllKey', { index: this.current.selectDB, time: this.current.time })
+      send.sendEvent('getAllKey', { index: this.current.selectDB, time: this.current.time })
     },
     removeKey: function () { // 删除key
+      this.current.dialogState.lucencyMaskShow = false // 关闭透明遮罩层
+      if (this.current.realTime === '1') this.current.dbLoading = true
       send.sendEvent('removeKey', {
         time: this.current.time,
         index: this.current.selectDB,
         key: this.toDeleteKey,
         liveUpdate: this.current.realTime === '1'
       })
-      // 重制key详情组件数据
-      this.current.keyDetailShow = false
-      this.current.keyDetail = {
-        keyName: '',
-        type: '-',
-        ttl: -1,
-        value: '',
-        rename: false,
-        renameStatus: 0,
-        newKeyName: ''
-      }
-      this.current.dbData = this.current.dbData.filter(v => {
-        return this.toDeleteKey !== v
-      })
-      if (this.current.realTime === '1') this.current.dbLoading = true
-      this.current.dialogState.lucencyMaskShow = false // 关闭透明遮罩层
     },
     closeInfoDialog: function () { // 取消删除key
       this.current.dialogState.lucencyMaskShow = false // 关闭透明遮罩层
@@ -306,7 +292,7 @@ export default {
     selectDBChange: function (index) {
       this.current.dbLoading = true
       this.current.dbData = []
-      this.$store.commit('redis/getAllKey', { index, time: this.current.time })
+      send.sendEvent('getAllKey', { index, time: this.current.time })
       this.current.keyDetailShow = false
     }
   },

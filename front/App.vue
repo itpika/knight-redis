@@ -5,7 +5,7 @@
 </template>
 <script>
 import Home from '@/front/views/Home.vue'
-
+import send from '@/front/lib/channel/send.js'
 export default {
   components: {
     Home
@@ -50,7 +50,7 @@ export default {
         this.$store.state.hostView.current.keyDetailShow = false // 关闭key详情窗口
         // 刷新key列表
         this.$store.state.hostView.current.dbLoading = true
-        this.$store.commit('redis/getAllKey', {
+        send.sendEvent('getAllKey', {
           index: this.$store.state.hostView.current.selectDB,
           time: this.$store.state.hostView.current.time
         })

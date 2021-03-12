@@ -191,7 +191,7 @@ export default {
     },
     // 重加载key详情
     reload() {
-      this.$store.commit('redis/keyDetail', { 
+      send.sendEvent('keyDetail', { 
         time: this.current.time,
         key: this.current.keyDetail.keyName,
         index: this.current.selectDB 
@@ -216,7 +216,7 @@ export default {
     },
     renameKey() { // 重命名key，新名字不能已存在
       this.current.dbLoading = true
-      this.$store.commit('redis/rename', {
+      send.sendEvent('rename', {
         time: this.current.time,
         key: this.current.keyDetail.keyName,
         newKey: this.current.keyDetail.newKeyName,

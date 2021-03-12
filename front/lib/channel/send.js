@@ -17,41 +17,6 @@ export default {
       window.ipcRenderer.send('closeConnect', time)
     }
   },
-  getAllKey(data) {
-    if (window.ipcRenderer) {
-      window.ipcRenderer.send('getAllKey', data)
-    }
-  },
-  setKey(data) {
-    if (window.ipcRenderer) {
-      window.ipcRenderer.send('setKey', data)
-    }
-  },
-  sendCommand(data) {
-    if (window.ipcRenderer) {
-      window.ipcRenderer.send('sendCommand', data)
-    }
-  },
-  keyDetail(data) {
-    if (window.ipcRenderer) {
-      window.ipcRenderer.send('keyDetail', data)
-    }
-  },
-  rename(data) {
-    if (window.ipcRenderer) {
-      window.ipcRenderer.send('rename', data)
-    }
-  },
-  getClipboard(data) {
-    if (window.ipcRenderer) {
-      window.ipcRenderer.send('getClipboard', data)
-    }
-  },
-  setClipboard(data) {
-    if (window.ipcRenderer) {
-      window.ipcRenderer.send('setClipboard', data)
-    }
-  },
   windowsOpertion(event) {
     if (window.ipcRenderer) window.ipcRenderer.send(event)
   },

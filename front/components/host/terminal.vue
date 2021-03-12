@@ -16,6 +16,7 @@ import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { WebLinksAddon } from 'xterm-addon-web-links'
 import { SearchAddon } from 'xterm-addon-search'
+import send from '@/front/lib/channel/send.js'
 export default {
   name: 'Terminal',
   props: {
@@ -84,7 +85,7 @@ export default {
       this.input = this.input.trim()
       if (this.input) {
         // 发送到后端
-        this.$store.commit('redis/sendCommand', { time: this.current.time, command: this.input, index: this.selectDB })
+        send.sendEvent('sendCommand', { time: this.current.time, command: this.input, index: this.selectDB })
         // 记录历史命令
         this.histCommandList.push(this.input)
         this.histIndex = this.histCommandList.length
@@ -258,14 +259,14 @@ export default {
       // ctrl+v
       if (ev.keyCode === 86 && (ev.ctrlKey || ev.metaKey) && ev.type === 'keydown') {
         // 从主进程获取系统剪切板内容
-        this.$store.commit('redis/getClipboard', { time: this.current.time })
+        send.sendEvent('getClipboard', { time: this.current.time })
       }
       // ctrl+c
       if (ev.keyCode === 67 && (ev.ctrlKey || ev.metaKey) && ev.type === 'keydown') {
         if (term.hasSelection()) {
           console.log('---', term.getSelection())
           // 设置系统剪切板内容
-          this.$store.commit('redis/setClipboard', { text: term.getSelection() })
+          send.sendEvent('setClipboard', { text: term.getSelection() })
         }
       }
     })

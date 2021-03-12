@@ -1,9 +1,9 @@
 <template>
   <div :class="['table-box', customClass]">
     <div class="item-box radio-kgt bgdColor" v-for="(o, i) of data" :key="i">
-      <!-- <i class="el-icon-info"></i> -->
-      <span class="left">{{i}}</span>
-      <span class="right brand-color" v-html="o"></span>
+      <i v-if="o.i" :class="[o.i, 'brand-color']"></i>
+      <span class="left fontColor3">{{o.k}}</span>
+      <span class="right greenColor" v-html="o.v"></span>
     </div>
   </div>
 </template>
@@ -41,6 +41,7 @@ export default {
   .item-box {
     i {
       margin-right: 5px;
+      // color: red;
     }
     box-sizing: border-box;
     width: 49%;

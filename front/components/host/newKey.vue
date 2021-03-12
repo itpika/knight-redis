@@ -75,6 +75,7 @@
 </template>
 <script>
 import { STRING, LIST, HASH, SET, ZSET } from '../../../lib/redis/singal'
+import send from '@/front/lib/channel/send.js'
 export default {
   name: 'NewKey',
   computed: {
@@ -144,7 +145,7 @@ export default {
             default:
               break
           }
-          this.$store.commit('redis/setKey', data) // 提交保存key
+          send.sendEvent('setKey', data) // 提交保存key
           this.current.dbLoading = true
           this.drawer = false
           this.$refs.key.resetFields()

@@ -4,7 +4,7 @@ import app from './modules/app.js'
 import host from './modules/host.js'
 import hostView from './modules/hostView.js'
 import newKey from './modules/newKey.js'
-import redis from './modules/redis.js'
+import send from '../lib/channel/send.js'
 import { NO_AUTH, PASSWD_ERROR, CONNECT_TIMEOUT, FAIL, STRING, PARAM_INVALID } from '../../lib/redis/singal'
 
 Vue.use(Vuex)
@@ -22,7 +22,6 @@ const appStore = new Vuex.Store({
     app,
     host,
     hostView,
-    redis,
     newKey
   }
 })
@@ -79,9 +78,30 @@ if (window.ipcRenderer) {
   window.ipcRenderer.on('removeKey', (event, data) => {
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
-        if (data.keys) hostView.state.all[i].dbData = data.keys
+        if (data.keys) {
+          hostView.state.all[i].dbData = data.keys;
+        } else {
+          hostView.state.all[i].dbData = hostView.state.all[i].dbData.filter(v => {
+            return data.k !== v
+          });
+        }
         hostView.state.all[i].dbLoading = false
         hostView.state.all[i].deleteKeyOK = 1
+        if (hostView.state.all[i].keyDetail.ttlTimer) {
+          // 删除ttl定时器
+          clearInterval(hostView.state.all[i].keyDetail.ttlTimer);
+        }
+        // 重制key详情组件数据
+        hostView.state.all[i].keyDetailShow = false
+        hostView.state.all[i].keyDetail = {
+          keyName: '',
+          type: '-',
+          ttl: -1,
+          value: '',
+          rename: false,
+          renameStatus: 0,
+          newKeyName: ''
+        };
         break
       }
     }
@@ -132,7 +152,11 @@ if (window.ipcRenderer) {
    * 接收key详情数据
    */
   window.ipcRenderer.on('keyDetail', (event, data) => {
-    if (hostView.state.current.keyDetail.ttlTimer) clearInterval(hostView.state.current.keyDetail.ttlTimer) // 打开新key详情，清除上一次key可能存在的ttl定时器
+    if (hostView.state.current.keyDetail.ttlTimer) {
+      // 打开新key详情，清除上一次key可能存在的ttl定时器
+      clearInterval(hostView.state.current.keyDetail.ttlTimer)
+      hostView.state.current.keyDetail.ttl = 0
+    }
     for (let i = 0; i < hostView.state.all.length; i++) {
       if (hostView.state.all[i].time === data.time) {
         if (data.keys) { // 是否热更新数据
@@ -165,7 +189,7 @@ if (window.ipcRenderer) {
                   // 刷新key列表
                   current.dbLoading = true
                   current.keyDetailShow = false // 关闭key详情窗口
-                  redis.mutations.getAllKey(redis.state, { index: current.selectDB, time: current.time })
+                  send.sendEvent('getAllKey', { index: current.selectDB, time: current.time })
                   current.keyDetail.ttlTimer = null
                 }
               }, 1000)
@@ -241,7 +265,7 @@ if (window.ipcRenderer) {
                 // 刷新key列表
                 current.dbLoading = true
                 current.keyDetailShow = false // 关闭key详情窗口
-                redis.mutations.getAllKey(redis.state, { index: current.selectDB, time: current.time })
+                send.sendEvent('getAllKey', { index: current.selectDB, time: current.time })
                 current.keyDetail.ttlTimer = null
               }
             }, 1000)
