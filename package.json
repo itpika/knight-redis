@@ -61,11 +61,11 @@
     "xterm-addon-web-links": "^0.4.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.4.0",
-    "@vue/cli-plugin-eslint": "~4.4.0",
+    "@vue/cli-plugin-babel": "~5.0.8",
+    "@vue/cli-plugin-eslint": "~5.0.8",
     "@vue/cli-plugin-router": "~4.4.0",
     "@vue/cli-plugin-vuex": "~4.4.0",
-    "@vue/cli-service": "~4.4.0",
+    "@vue/cli-service": "~5.0.8",
     "@vue/eslint-config-standard": "^5.1.2",
     "babel-eslint": "^10.1.0",
     "electron": "^15.5.5",
@@ -78,7 +78,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.0.4",
-    "less-loader": "^5.0.0",
+    "less-loader": "^11.1.0",
     "node-sass": "^4.9.2",
     "sass-loader": "^9.0.2",
     "vue-cli-plugin-element": "~1.0.1",
